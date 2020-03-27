@@ -16,7 +16,7 @@ class FedAvg(Server):
         total_users = len(data[0])
         for i in range(total_users):
             id, train , test = read_user_data(i, data, dataset)
-            user = UserAVG(id, train, test, model, batch_size, learning_rate, local_epochs, optimizer)
+            user = UserAVG(id, train, test, model, batch_size, learning_rate,meta_learning_rate,lamda, local_epochs, optimizer)
             self.users.append(user)
             self.total_train_samples += user.train_samples
         print("Finished creating server.")
