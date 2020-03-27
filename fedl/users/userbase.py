@@ -11,7 +11,7 @@ class User:
     """
     Base class for users in federated learning.
     """
-    def __init__(self, id, train_data, test_data, model, batch_size = 0, learning_rate = 0,meta_learning_rate = 0 , lamda = 0,local_epochs = 0):
+    def __init__(self, id, train_data, test_data, model, batch_size = 0, learning_rate = 0, meta_learning_rate = 0 , lamda = 0, local_epochs = 0):
         # from fedprox
         self.model = copy.deepcopy(model)
         self.id = id  # integer
@@ -24,7 +24,6 @@ class User:
         self.local_epochs = local_epochs
         self.trainloader = DataLoader(train_data, self.batch_size)
         self.testloader = DataLoader(test_data, self.test_samples)
-        
 
     def get_parameters(self):
         for param in self.model.parameters():

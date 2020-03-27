@@ -40,7 +40,7 @@ class Persionalized(Server):
             selected_users = self.select_users(glob_iter,self.num_users)
             for user in selected_users:
                 loss_ += user.train(self.local_epochs) * user.train_samples
-            self.aggregate_parameters()
+            self.persionalized_aggregate_parameters()
             loss_ /= self.total_train_samples
             loss.append(loss_)
             print(loss_)

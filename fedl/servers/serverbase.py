@@ -88,3 +88,17 @@ class Server:
         num_users = min(num_users, len(self.users))
         np.random.seed(round)
         return np.random.choice(self.users, num_users, replace=False) #, p=pk)
+
+    # define function for persionalized agegatation.    
+    def persionalized_aggregate_parameters(self):
+        assert (self.users is not None and len(self.users) > 0)
+        for param in self.model.parameters():
+            param.data = torch.zeros_like(param.data)
+        for user in self.users:
+            self.persionalized_add_parameters(user)
+
+    def persionalized_add_parameters(self, user):
+        for user_param in  user.get_parameters():
+            sum_user_param = sum_user_param + user_param.data.clone()
+        server_param = self.model.parameters()
+        server_param.data = server_param.data - self.meta_learning_rate * (server_param.data- 1/self.num_users * sum_user_param.clone())

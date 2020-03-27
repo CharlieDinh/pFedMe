@@ -45,21 +45,18 @@ class FEDLOptimizer(Optimizer):
         return loss
 
 class PersionalizedOptimizer(Optimizer):
-    def __init__(self, params, lr):
-        defaults = dict(lr=lr)
-        super(MySGD, self).__init__(params, defaults)
+    def __init__(self, params, lr=0.01, server_weight=None, lamda=0.1):
+        self.server_weight = server_weight
+        if lr < 0.0:
+            raise ValueError("Invalid learning rate: {}".format(lr))
+        defaults = dict(lr=lr, lamda=lamda)
+        super(PersionalizedOptimizer, self).__init__(params, defaults)
 
     def step(self, closure=None):
         loss = None
         if closure is not None:
             loss = closure
-
         for group in self.param_groups:
-            # print(group)
             for p in group['params']:
-                if p.grad is None:
-                    continue
-                d_p = p.grad.data
-                p.data.add_(-group['lr'], d_p)
-
+                p.data = p.data - (group['lr'] * p.grad.data + group['lamda'] * (self.server_weight - p.data))
         return loss

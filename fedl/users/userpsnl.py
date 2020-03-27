@@ -13,7 +13,7 @@ class UserPersionalized(User):
     """
     def __init__(self, numeric_id, train_data, test_data, model, batch_size, learning_rate,
                  local_epochs, optimizer):
-        super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate,meta_learning_rate, lamda,
+        super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, meta_learning_rate, lamda,
                          local_epochs)
         if(model[1] == "cnn"):
             self.loss = nn.NLLLoss()
