@@ -10,15 +10,15 @@ from fedl.servers.serveravg import FedAvg
 from fedl.servers.serverfedl import FEDL
 from fedl.trainmodel.models import Mclr,Net
 
-def main(dataset,numusers,algorithm, model, batch_size, learning_rate, num_glob_iters,
-         local_epochs, optimizer, eta):
+def main(dataset, algorithm, model, batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters,
+         local_epochs, optimizer,numusers):
 
     if(model == "cnn"):
         model = Net(), model
     else:
         model = Mclr() 
     if(algorithm == "FedAvg"):
-        server = FedAvg(dataset, model, batch_size, learning_rate,meta_learning_rate, lamda, num_glob_iters, local_epochs, optimizer, numusers)
+        server = FedAvg(dataset, model, batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters, local_epochs, optimizer, numusers)
     server.train()
     server.test()
 
@@ -50,13 +50,14 @@ if __name__ == "__main__":
 
     main(
         dataset=args.dataset,
-        numusers = args.numusers,
         algorithm = args.algorithm,
         model=args.model,
         batch_size=args.batch_size,
         learning_rate=args.learning_rate,
+        meta_learning_rate = args.meta_learning_rate, 
+        lamda = args.lamda,
         num_glob_iters=args.num_global_iters,
         local_epochs=args.local_epochs,
-        optimizer=args.optimizer,
-        eta=args.eta
+        optimizer= args.optimizer,
+        numusers = args.numusers
     )
