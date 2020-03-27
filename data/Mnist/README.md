@@ -27,7 +27,7 @@ The layout of the folders under `./mnist` should be:
 
 ---- ----| test_file_name.json
 
-| generate_niid.py
+| generate_niid_100users_updated.py
 | README.md
 ```
 
