@@ -6,9 +6,9 @@ from fedl.servers.serverbase import Server
 from utils.model_utils import read_data, read_user_data
 
 class Persionalized(Server):
-    def __init__(self, dataset, model, batch_size, learning_rate, num_glob_iters,
+    def __init__(self, dataset, model, batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters,
                  local_epochs, optimizer, num_users):
-        super().__init__(dataset, model[0], batch_size, learning_rate, num_glob_iters,
+        super().__init__(dataset, model[0], batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters,
                          local_epochs, optimizer, num_users)
 
         # Initialize data for all  users
@@ -16,7 +16,7 @@ class Persionalized(Server):
         total_users = len(data[0])
         for i in range(total_users):
             id, train , test = read_user_data(i, data, dataset)
-            user = UserAVG(id, train, test, model, batch_size, learning_rate, local_epochs, optimizer)
+            user = UserPersionalized(id, train, test, model, batch_size, learning_rate, local_epochs, optimizer)
             self.users.append(user)
             self.total_train_samples += user.train_samples
         print("Finished creating server.")

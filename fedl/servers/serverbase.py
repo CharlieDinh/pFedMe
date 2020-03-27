@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 class Server:
-    def __init__(self, dataset, model, batch_size, learning_rate,
+    def __init__(self, dataset, model, batch_size, learning_rate,meta_learning_rate, lamda,
                  num_glob_iters, local_epochs, optimizer,num_users):
 
         # Set up the main attributes
@@ -16,6 +16,8 @@ class Server:
         self.model = model
         self.users = []
         self.num_users = num_users
+        self.meta_learning_rate = meta_learning_rate
+        self.lamda = lamda
     
         # Initialize the server's grads to zeros
         for param in self.model.parameters():
