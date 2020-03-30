@@ -3,6 +3,7 @@ import os
 import numpy as np
 import h5py
 from utils.model_utils import Metrics
+import copy
 
 class Server:
     def __init__(self, dataset, model, batch_size, learning_rate,meta_learning_rate, lamda,
@@ -46,18 +47,15 @@ class Server:
             user.set_parameters(self.model)
 
     def add_parameters(self, user, ratio):
-        count = 0
         model = self.model.parameters()
         for server_param, user_param in zip(self.model.parameters(), user.get_parameters()):
-            count = count +1
             server_param.data = server_param.data + user_param.data.clone() * ratio
-        print(count)
 
     def aggregate_parameters(self):
         assert (self.users is not None and len(self.users) > 0)
         for param in self.model.parameters():
             param.data = torch.zeros_like(param.data)
-        for user in self.users:
+        for user in self.select_users:
             self.add_parameters(user, user.train_samples / self.total_train_samples)
 
     def test(self):
@@ -96,23 +94,27 @@ class Server:
         np.random.seed(round)
         return np.random.choice(self.users, num_users, replace=False) #, p=pk)
 
-    # define function for persionalized agegatation.    
+    # define function for persionalized agegatation.
+    def persionalized_update_parameters(self, sum_model):
+        for server_param,sum_params in zip(self.model.parameters(), sum_model):
+            server_param.data = server_param.data - self.meta_learning_rate * (server_param.data- 1/self.num_users * sum_params.data)
+
+    def sumall_parameters(self, sum_model, user):
+        for sum_params, user_param in zip(sum_model, user.get_parameters()):
+            sum_params.data = sum_params.data + user_param.data#.clone()
+        return sum_model
+
     def persionalized_aggregate_parameters(self):
         assert (self.users is not None and len(self.users) > 0)
-        for param in self.model.parameters():
+        sum_model = self.model.parameters()
+        # Clear sum_model
+        for param in sum_model:
             param.data = torch.zeros_like(param.data)
+
         for user in self.selected_users:
-            self.add_parameters(user,user.train_samples / self.total_train_samples)
-            #self.persionalized_add_parameters(user)
-
-    def persionalized_add_parameters(self, user):
-        server_param = self.model.parameters()
-
-        sum_user_param = torch.zeros_like(server_param.data)
-        for user_param in  user.get_parameters():
-            sum_user_param = sum_user_param + user_param.data.clone()
+            self.sumall_parameters(sum_model,user)
         
-        server_param.data = server_param.data - self.meta_learning_rate * (server_param.data- 1/self.num_users * sum_user_param.clone())
+        self.persionalized_update_parameters(sum_model)
 
     # Save loss, accurancy to h5 fiel
     def save(self):
