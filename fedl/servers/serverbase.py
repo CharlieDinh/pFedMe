@@ -17,6 +17,7 @@ class Server:
         self.total_train_samples = 0
         self.model = model
         self.users = []
+        self.selected_users = []
         self.num_users = num_users
         self.meta_learning_rate = meta_learning_rate
         self.lamda = lamda
@@ -45,8 +46,12 @@ class Server:
             user.set_parameters(self.model)
 
     def add_parameters(self, user, ratio):
+        count = 0
+        model = self.model.parameters()
         for server_param, user_param in zip(self.model.parameters(), user.get_parameters()):
+            count = count +1
             server_param.data = server_param.data + user_param.data.clone() * ratio
+        print(count)
 
     def aggregate_parameters(self):
         assert (self.users is not None and len(self.users) > 0)
@@ -96,13 +101,17 @@ class Server:
         assert (self.users is not None and len(self.users) > 0)
         for param in self.model.parameters():
             param.data = torch.zeros_like(param.data)
-        for user in self.users:
-            self.persionalized_add_parameters(user)
+        for user in self.selected_users:
+            self.add_parameters(user,user.train_samples / self.total_train_samples)
+            #self.persionalized_add_parameters(user)
 
     def persionalized_add_parameters(self, user):
+        server_param = self.model.parameters()
+
+        sum_user_param = torch.zeros_like(server_param.data)
         for user_param in  user.get_parameters():
             sum_user_param = sum_user_param + user_param.data.clone()
-        server_param = self.model.parameters()
+        
         server_param.data = server_param.data - self.meta_learning_rate * (server_param.data- 1/self.num_users * sum_user_param.clone())
 
     # Save loss, accurancy to h5 fiel

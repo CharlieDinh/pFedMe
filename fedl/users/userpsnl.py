@@ -6,6 +6,7 @@ import json
 from torch.utils.data import DataLoader
 from fedl.optimizers.fedoptimizer import MySGD, FEDLOptimizer,PersionalizedOptimizer
 from fedl.users.userbase import User
+import copy
 
 class UserPersionalized(User):
     """
@@ -24,18 +25,15 @@ class UserPersionalized(User):
             self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
         if optimizer == "PersionalizedOptimizer":
             self.optimizer = PersionalizedOptimizer(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
-            #self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
-
-        self.local_weight_updated = [torch.rand(self.model.fc1.weight.shape[0], self.model.fc1.weight.shape[1]),
-                             torch.rand(self.model.fc1.bias.shape)]
 
     def set_parameters(self, model):
+        x = self.model.parameters()
         for old_param, new_param in zip(self.model.parameters(), model.parameters()):
             old_param = new_param.clone().requires_grad_(True)
         self.optimizer = PersionalizedOptimizer(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
         #self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
-        self.local_weight_updated = self.model.fc1.weight.clone()
-        result = 0
+        # get all parameter from server.
+        self.local_weight_updated = copy.deepcopy(self.optimizer.param_groups[0]['params'])
 
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):
@@ -56,14 +54,18 @@ class UserPersionalized(User):
                 output = self.model(X)
                 loss = self.loss(output, y)
                 loss.backward()
-                self.optimizer.step(self.local_weight_updated)
+                new_params = self.optimizer.step(self.local_weight_updated)
                 #self.optimizer.step()
                 loss_per_epoch += loss.item() * X.shape[0]
             loss_per_epoch /= self.train_samples
             LOSS += loss_per_epoch
             # update local weight after finding aproximate theta
-            #self.local_weight_updated = self.local_weight_updated - self.lamda* self.learning_rate * (self.local_weight_updated - new_weight)
-            # then update the local weight
+            for new_param, localweight in zip(new_params, self.local_weight_updated):
+                localweight.data = localweight.data - self.lamda* self.learning_rate * (localweight.data - new_param.data)
+                #new_param.data = localweight.data.clone()
+        
+        # then update the new weight to the local weight
+        self.model.fc1.weight = self.local_weight_updated[0]
         result = LOSS / self.local_epochs
         #print(result)
         return result

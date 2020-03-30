@@ -38,10 +38,11 @@ class Persionalized(Server):
             loss_ = 0
             # send all parameter for users 
             self.send_parameters()
-            selected_users = self.select_users(glob_iter,self.num_users)
-            for user in selected_users:
+            self.selected_users = self.select_users(glob_iter,self.num_users)
+            for user in self.selected_users:
                 loss_ += user.train(self.local_epochs) * user.train_samples
             self.persionalized_aggregate_parameters()
+            #sum_user_paramself.aggregate_parameters()
             loss_ /= self.total_train_samples
             loss.append(loss_)
             print(loss_)
