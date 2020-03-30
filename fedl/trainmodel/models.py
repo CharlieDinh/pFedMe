@@ -10,10 +10,10 @@ class Mclr(nn.Module):
 
     def forward(self, x):
         # Assume that x is of shape (40, )
-        x = self.fc1(x)
+        X = self.fc1(x)
         # Squeeze the last dimension of x, which is 1 (to make it
         # compatible with y)
-        output = x.squeeze(1)
+        output = X.squeeze(1)
         return output
 
 class Net(nn.Module):

@@ -4,28 +4,38 @@ import torch.nn.functional as F
 import os
 import json
 from torch.utils.data import DataLoader
-from fedl.optimizers.fedoptimizer import MySGD, FEDLOptimizer
+from fedl.optimizers.fedoptimizer import MySGD, FEDLOptimizer,PersionalizedOptimizer
 from fedl.users.userbase import User
 
 class UserPersionalized(User):
     """
     User in FedAvg.dataset
     """
-    def __init__(self, numeric_id, train_data, test_data, model, batch_size, learning_rate,
+    def __init__(self, numeric_id, train_data, test_data, model, batch_size, learning_rate,meta_learning_rate,lamda,
                  local_epochs, optimizer):
         super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, meta_learning_rate, lamda,
                          local_epochs)
+
         if(model[1] == "cnn"):
             self.loss = nn.NLLLoss()
         else:
             self.loss = nn.BCEWithLogitsLoss(reduction="mean")
         if optimizer == "SGD":
             self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
+        if optimizer == "PersionalizedOptimizer":
+            self.optimizer = PersionalizedOptimizer(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
+            #self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
+
+        self.local_weight_updated = [torch.rand(self.model.fc1.weight.shape[0], self.model.fc1.weight.shape[1]),
+                             torch.rand(self.model.fc1.bias.shape)]
 
     def set_parameters(self, model):
         for old_param, new_param in zip(self.model.parameters(), model.parameters()):
             old_param = new_param.clone().requires_grad_(True)
-        self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
+        self.optimizer = PersionalizedOptimizer(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
+        #self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
+        self.local_weight_updated = self.model.fc1.weight.clone()
+        result = 0
 
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):
@@ -38,18 +48,22 @@ class UserPersionalized(User):
     def train(self, epochs):
         LOSS = 0
         self.model.train()
-        for epoch in range(1, self.local_epochs + 1):
+        for epoch in range(1, self.local_epochs + 1):  # local update 
             self.model.train()
             loss_per_epoch = 0
-            for batch_idx, (X, y) in enumerate(self.trainloader):
+            for batch_idx, (X, y) in enumerate(self.trainloader): # ~ t time update 
                 self.optimizer.zero_grad()
                 output = self.model(X)
                 loss = self.loss(output, y)
                 loss.backward()
-                self.optimizer.step()
+                self.optimizer.step(self.local_weight_updated)
+                #self.optimizer.step()
                 loss_per_epoch += loss.item() * X.shape[0]
             loss_per_epoch /= self.train_samples
             LOSS += loss_per_epoch
+            # update local weight after finding aproximate theta
+            #self.local_weight_updated = self.local_weight_updated - self.lamda* self.learning_rate * (self.local_weight_updated - new_weight)
+            # then update the local weight
         result = LOSS / self.local_epochs
         #print(result)
         return result
@@ -64,8 +78,6 @@ class UserFEDL(User):
 
         self.eta = eta
 
-        self.pre_grads = [torch.rand(self.model.fc1.weight.shape[0], self.model.fc1.weight.shape[1]),
-                          torch.rand(self.model.fc1.bias.shape)]
         self.server_grads = [torch.rand(self.model.fc1.weight.shape[0], self.model.fc1.weight.shape[1]),
                              torch.rand(self.model.fc1.bias.shape)]
 

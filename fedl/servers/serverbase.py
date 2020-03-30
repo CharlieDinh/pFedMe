@@ -1,6 +1,8 @@
 import torch
 import os
 import numpy as np
+import h5py
+from utils.model_utils import Metrics
 
 class Server:
     def __init__(self, dataset, model, batch_size, learning_rate,meta_learning_rate, lamda,
@@ -102,3 +104,43 @@ class Server:
             sum_user_param = sum_user_param + user_param.data.clone()
         server_param = self.model.parameters()
         server_param.data = server_param.data - self.meta_learning_rate * (server_param.data- 1/self.num_users * sum_user_param.clone())
+
+    # Save loss, accurancy to h5 fiel
+    def save(self):
+        alg = self.dataset 
+
+        alg = alg + "_" + str(self.learning_rate) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b"
+        with h5py.File("./results/"+'{}_{}.h5'.format(alg, self.local_epochs), 'w') as hf:
+            hf.create_dataset('rs_glob_acc', data=self.rs_glob_acc)
+            hf.create_dataset('rs_train_acc', data=self.rs_train_acc)
+            hf.create_dataset('rs_train_loss', data=self.rs_train_loss)
+            hf.close()
+
+    def test(self):
+        '''tests self.latest_model on given clients
+        '''
+        num_samples = []
+        tot_correct = []
+        self.client_model.set_params(self.latest_model)
+        for c in self.users:
+            ct, ns = c.test()
+            tot_correct.append(ct*1.0)
+            num_samples.append(ns)
+        ids = [c.id for c in self.clients]
+        groups = [c.group for c in self.clients]
+        return ids, groups, num_samples, tot_correct
+
+    def train_error_and_loss(self):
+        num_samples = []
+        tot_correct = []
+        losses = []
+        for c in self.users:
+            ct, cl, ns = c.train_error_and_loss() 
+            tot_correct.append(ct*1.0)
+            num_samples.append(ns)
+            losses.append(cl*1.0)
+        
+        ids = [c.id for c in self.clients]
+        groups = [c.group for c in self.clients]
+
+        return ids, groups, num_samples, tot_correct, losses

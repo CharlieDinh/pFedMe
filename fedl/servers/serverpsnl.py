@@ -16,7 +16,7 @@ class Persionalized(Server):
         total_users = len(data[0])
         for i in range(total_users):
             id, train , test = read_user_data(i, data, dataset)
-            user = UserPersionalized(id, train, test, model, batch_size, learning_rate, local_epochs, optimizer)
+            user = UserPersionalized(id, train, test, model, batch_size, learning_rate, meta_learning_rate, lamda, local_epochs, optimizer)
             self.users.append(user)
             self.total_train_samples += user.train_samples
         print("Finished creating server.")
@@ -36,6 +36,7 @@ class Persionalized(Server):
         loss = []
         for glob_iter in range(self.num_glob_iters):
             loss_ = 0
+            # send all parameter for users 
             self.send_parameters()
             selected_users = self.select_users(glob_iter,self.num_users)
             for user in selected_users:
@@ -46,3 +47,8 @@ class Persionalized(Server):
             print(loss_)
         print(loss)
         self.save_model()
+    
+    def train_error_and_loss(self):
+        tot_correct, loss=self.model.test(self.train_data)
+        return tot_correct, loss, self.num_samples
+  

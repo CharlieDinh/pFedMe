@@ -45,18 +45,21 @@ class FEDLOptimizer(Optimizer):
         return loss
 
 class PersionalizedOptimizer(Optimizer):
-    def __init__(self, params, lr=0.01, server_weight=None, lamda=0.1):
-        self.server_weight = server_weight
+    def __init__(self, params, lr=0.01, lamda=0.1):
+        #self.local_weight_updated = local_weight # w_i,K
         if lr < 0.0:
             raise ValueError("Invalid learning rate: {}".format(lr))
         defaults = dict(lr=lr, lamda=lamda)
         super(PersionalizedOptimizer, self).__init__(params, defaults)
-
-    def step(self, closure=None):
+    
+    def step(self, local_weight_updated, closure=None):
         loss = None
+        #self.local_weight_updated = local_weight_updated
         if closure is not None:
             loss = closure
         for group in self.param_groups:
             for p in group['params']:
-                p.data = p.data - (group['lr'] * p.grad.data + group['lamda'] * (self.server_weight - p.data))
-        return loss
+                temp = p.data
+                p.data = p.data - group['lr'] * (p.grad.data + group['lamda'] * (local_weight_updated - p.data))
+        #return  p.data
+        return  loss
