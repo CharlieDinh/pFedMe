@@ -55,7 +55,7 @@ class Server:
         assert (self.users is not None and len(self.users) > 0)
         for param in self.model.parameters():
             param.data = torch.zeros_like(param.data)
-        for user in self.select_users:
+        for user in self.selected_users:
             self.add_parameters(user, user.train_samples / self.total_train_samples)
 
     def test(self):
