@@ -3,9 +3,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-class Mclr(nn.Module):
+class Mclr_Synthetic(nn.Module):
     def __init__(self):
-        super(Mclr, self).__init__()
+        super(Mclr_Synthetic, self).__init__()
         self.fc1 = nn.Linear(40, 1)
 
     def forward(self, x):
@@ -39,5 +39,16 @@ class Net(nn.Module):
         x = self.fc1(x)
         x = nn.ReLU()(x)
         x = self.fc2(x)
+        output = F.log_softmax(x, dim=1)
+        return output
+
+class Mclr_Mnist(nn.Module):
+    def __init__(self):
+        super(Mclr_Mnist, self).__init__()
+        self.fc1 = nn.Linear(784, 10)
+
+    def forward(self, x):
+        x = torch.flatten(x, 1)
+        x = self.fc1(x)
         output = F.log_softmax(x, dim=1)
         return output
