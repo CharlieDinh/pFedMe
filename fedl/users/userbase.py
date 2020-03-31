@@ -48,7 +48,7 @@ class User:
             output = self.model(x)
             test_acc += (torch.sum(torch.argmax(output, dim=1) == y) * 1. / y.shape[0]).item()
             loss += self.loss(output, y)
-            print(self.id + ", Test Accuracy:", test_acc)
+            #print(self.id + ", Test Accuracy:", test_acc)
             #print(self.id + ", Test Loss:", loss)
         return test_acc, self.batch_size
 

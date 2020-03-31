@@ -41,19 +41,13 @@ class Persionalized(Server):
             self.send_parameters()
 
             # Evaluate model each interation
-            stats = self.test()  
-            stats_train = self.train_error_and_loss()
-
-
-            self.rs_glob_acc.append(np.sum(stats[2])*1.0/np.sum(stats[1]))
-            self.rs_train_acc.append(np.sum(stats_train[2])*1.0/np.sum(stats_train[1]))
-            self.rs_train_loss.append(np.dot(stats_train[3], stats_train[1])*1.0/np.sum(stats_train[1]))
+            self.evaluate()
             
             self.selected_users = self.select_users(glob_iter,self.num_users)
             for user in self.selected_users:
                 loss_ += user.train(self.local_epochs) * user.train_samples
             self.persionalized_aggregate_parameters()
-            #sum_user_paramself.aggregate_parameters()
+
             #loss_ /= self.total_train_samples
             #loss.append(loss_)
             #print(loss_)

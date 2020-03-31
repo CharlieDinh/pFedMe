@@ -4,6 +4,7 @@ import os
 from fedl.users.useravg import UserAVG
 from fedl.servers.serverbase import Server
 from utils.model_utils import read_data, read_user_data
+import numpy as np
 
 class FedAvg(Server):
     def __init__(self, dataset, model, batch_size, learning_rate,meta_learning_rate, lamda, num_glob_iters,
@@ -37,6 +38,10 @@ class FedAvg(Server):
         for glob_iter in range(self.num_glob_iters):
             loss_ = 0
             self.send_parameters()
+
+            # Evaluate model each interation
+            self.evaluate()
+
             self.selected_users = self.select_users(glob_iter,self.num_users)
             for user in self.selected_users:
                 loss_ += user.train(self.local_epochs) * user.train_samples

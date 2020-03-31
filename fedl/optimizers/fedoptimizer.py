@@ -62,7 +62,7 @@ class PersionalizedOptimizer(Optimizer):
                 temp = p.data
                 #print(localweight)
                 #print(p.data)
-                p.data = p.data - group['lr'] * (p.grad.data + group['lamda'] * (localweight.data - p.data))
+                p.data = p.data - group['lr'] * (p.grad.data + group['lamda'] * (p.data - localweight.data))
                 #print(p.data)
                 #print("-----------------------------------")
                 #print(p.data.shape, localweight.shape)

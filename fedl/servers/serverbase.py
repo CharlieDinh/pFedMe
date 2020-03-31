@@ -151,3 +151,16 @@ class Server:
         #groups = [c.group for c in self.clients]
 
         return ids, num_samples, tot_correct, losses
+    
+    def evaluate(self):
+        stats = self.test()  
+        stats_train = self.train_error_and_loss()
+        glob_acc = np.sum(stats[2])*1.0/np.sum(stats[1])
+        train_acc = np.sum(stats_train[2])*1.0/np.sum(stats_train[1])
+        train_loss = np.dot(stats_train[3], stats_train[1])*1.0/np.sum(stats_train[1])
+        self.rs_glob_acc.append(glob_acc)
+        self.rs_train_acc.append(train_acc)
+        self.rs_train_loss.append(train_loss)
+        print("Average Global Accurancy: ", glob_acc)
+        print("Average Trainning Accurancy: ", train_acc)
+        print("Average Trainning Loss: ",train_loss)
