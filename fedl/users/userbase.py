@@ -24,6 +24,7 @@ class User:
         self.local_epochs = local_epochs
         self.trainloader = DataLoader(train_data, self.batch_size)
         self.testloader = DataLoader(test_data, self.test_samples)
+        self.trainloaderfull = DataLoader(train_data, self.train_samples)
 
     def get_parameters(self):
         for param in self.model.parameters():
@@ -42,11 +43,26 @@ class User:
     def test(self):
         self.model.eval()
         test_acc = 0
+        loss = 0
         for x, y in self.testloader:
             output = self.model(x)
             test_acc += (torch.sum(torch.argmax(output, dim=1) == y) * 1. / y.shape[0]).item()
-            print(self.id + ", Accuracy:", test_acc)
-        return test_acc / self.batch_size
+            loss += self.loss(output, y)
+            print(self.id + ", Test Accuracy:", test_acc)
+            #print(self.id + ", Test Loss:", loss)
+        return test_acc, self.batch_size
+
+    def train_error_and_loss(self):
+        self.model.eval()
+        train_acc = 0
+        loss = 0
+        for x, y in self.trainloaderfull:
+            output = self.model(x)
+            train_acc += (torch.sum(torch.argmax(output, dim=1) == y) * 1. / y.shape[0]).item()
+            loss += self.loss(output, y)
+            #print(self.id + ", Train Accuracy:", train_acc)
+            #print(self.id + ", Train Loss:", loss)
+        return train_acc, loss , self.train_samples
     
     def save_model(self):
         model_path = os.path.join("models", self.dataset)

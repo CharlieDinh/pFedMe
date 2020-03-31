@@ -22,7 +22,8 @@ class Server:
         self.num_users = num_users
         self.meta_learning_rate = meta_learning_rate
         self.lamda = lamda
-    
+        self.rs_train_acc, self.rs_train_loss, self.rs_glob_acc = [], [], []
+        
         # Initialize the server's grads to zeros
         for param in self.model.parameters():
             param.data = torch.zeros_like(param.data)
@@ -57,10 +58,6 @@ class Server:
             param.data = torch.zeros_like(param.data)
         for user in self.selected_users:
             self.add_parameters(user, user.train_samples / self.total_train_samples)
-
-    def test(self):
-        for user in self.users:
-            user.test()
 
     def save_model(self):
         model_path = os.path.join("models", self.dataset)
@@ -117,9 +114,8 @@ class Server:
         self.persionalized_update_parameters(sum_model)
 
     # Save loss, accurancy to h5 fiel
-    def save(self):
+    def save_results(self):
         alg = self.dataset 
-
         alg = alg + "_" + str(self.learning_rate) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b"
         with h5py.File("./results/"+'{}_{}.h5'.format(alg, self.local_epochs), 'w') as hf:
             hf.create_dataset('rs_glob_acc', data=self.rs_glob_acc)
@@ -132,14 +128,14 @@ class Server:
         '''
         num_samples = []
         tot_correct = []
-        self.client_model.set_params(self.latest_model)
+        losses = []
         for c in self.users:
             ct, ns = c.test()
             tot_correct.append(ct*1.0)
             num_samples.append(ns)
-        ids = [c.id for c in self.clients]
-        groups = [c.group for c in self.clients]
-        return ids, groups, num_samples, tot_correct
+        ids = [c.id for c in self.users]
+
+        return ids, num_samples, tot_correct
 
     def train_error_and_loss(self):
         num_samples = []
@@ -151,7 +147,7 @@ class Server:
             num_samples.append(ns)
             losses.append(cl*1.0)
         
-        ids = [c.id for c in self.clients]
-        groups = [c.group for c in self.clients]
+        ids = [c.id for c in self.users]
+        #groups = [c.group for c in self.clients]
 
-        return ids, groups, num_samples, tot_correct, losses
+        return ids, num_samples, tot_correct, losses
