@@ -15,7 +15,7 @@ class UserAVG(User):
                  local_epochs, optimizer):
         super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, meta_learning_rate, lamda,
                          local_epochs)
-        if(model[1] == "cnn"):
+        if(model[1] == "cnn" or model[1] == "Mclr_Mnist"):
             self.loss = nn.NLLLoss()
         else:
             self.loss = nn.BCEWithLogitsLoss(reduction="mean")
