@@ -43,14 +43,13 @@ class User:
     def test(self):
         self.model.eval()
         test_acc = 0
-        loss = 0
         for x, y in self.testloader:
             output = self.model(x)
-            test_acc += (torch.sum(torch.argmax(output, dim=1) == y) * 1. / y.shape[0]).item()
-            loss += self.loss(output, y)
-            #print(self.id + ", Test Accuracy:", test_acc)
+            test_acc += (torch.sum(torch.argmax(output, dim=1) == y)).item()
+            #@loss += self.loss(output, y)
+            #print(self.id + ", Test Accuracy:", test_acc / y.shape[0] )
             #print(self.id + ", Test Loss:", loss)
-        return test_acc, self.batch_size
+        return test_acc, y.shape[0]
 
     def train_error_and_loss(self):
         self.model.eval()
@@ -58,7 +57,7 @@ class User:
         loss = 0
         for x, y in self.trainloaderfull:
             output = self.model(x)
-            train_acc += (torch.sum(torch.argmax(output, dim=1) == y) * 1. / y.shape[0]).item()
+            train_acc += (torch.sum(torch.argmax(output, dim=1) == y)).item()
             loss += self.loss(output, y)
             #print(self.id + ", Train Accuracy:", train_acc)
             #print(self.id + ", Train Loss:", loss)
