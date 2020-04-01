@@ -68,3 +68,13 @@ class PersionalizedOptimizer(Optimizer):
                 #print(p.data.shape, localweight.shape)
         #return  p.data
         return  group['params']
+    
+    def update_param(self, local_weight_updated, closure=None):
+        loss = None
+        if closure is not None:
+            loss = closure
+        for group in self.param_groups:
+            for p, localweight in zip( group['params'], local_weight_updated):
+                p.data = localweight.data
+        #return  p.data
+        return  group['params']

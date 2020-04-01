@@ -65,7 +65,9 @@ class UserPersionalized(User):
                 #new_param.data = localweight.data.clone()
         
         # then update the new weight to the local weight
-        self.model.fc1.weight = self.local_weight_updated[0]#.clone()
+        #self.model.fc1.weight = self.local_weight_updated[0]#.clone()
+        self.optimizer.update_param(self.local_weight_updated)
+        #self.optimizer.param_groups["params"]
         result = LOSS / self.local_epochs
         #print(result)
         return result
