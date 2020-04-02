@@ -19,8 +19,8 @@ class UserAVG(User):
             self.loss = nn.NLLLoss()
         else:
             self.loss = nn.BCEWithLogitsLoss(reduction="mean")
-        if optimizer == "SGD":
-            self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
+        #if optimizer == "SGD":
+        self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
 
     def set_parameters(self, model):
         for old_param, new_param in zip(self.model.parameters(), model.parameters()):

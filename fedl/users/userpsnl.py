@@ -21,10 +21,11 @@ class UserPersionalized(User):
             self.loss = nn.NLLLoss()
         else:
             self.loss = nn.BCEWithLogitsLoss(reduction="mean")
-        if optimizer == "SGD":
-            self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
-        if optimizer == "PersionalizedOptimizer":
-            self.optimizer = PersionalizedOptimizer(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
+        #if optimizer == "SGD":
+        #    self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
+        #if optimizer == "PersionalizedOptimizer":
+        
+        self.optimizer = PersionalizedOptimizer(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
 
     def set_parameters(self, model):
         x = self.model.parameters()

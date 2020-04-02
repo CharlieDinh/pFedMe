@@ -6,7 +6,7 @@ from utils.model_utils import Metrics
 import copy
 
 class Server:
-    def __init__(self, dataset, model, batch_size, learning_rate,meta_learning_rate, lamda,
+    def __init__(self, dataset,algorithm, model, batch_size, learning_rate,meta_learning_rate, lamda,
                  num_glob_iters, local_epochs, optimizer,num_users):
 
         # Set up the main attributes
@@ -22,6 +22,7 @@ class Server:
         self.num_users = num_users
         self.meta_learning_rate = meta_learning_rate
         self.lamda = lamda
+        self.algorithm = algorithm
         self.rs_train_acc, self.rs_train_loss, self.rs_glob_acc = [], [], []
         
         # Initialize the server's grads to zeros
@@ -115,8 +116,8 @@ class Server:
 
     # Save loss, accurancy to h5 fiel
     def save_results(self):
-        alg = self.dataset 
-        alg = alg + "_" + str(self.learning_rate) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b"
+        alg = self.dataset + "_" + self.algorithm
+        alg = alg + "_" + str(self.learning_rate) + "_" + str(self.meta_learning_rate) + "_" + str(self.lamda) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b"
         with h5py.File("./results/"+'{}_{}.h5'.format(alg, self.local_epochs), 'w') as hf:
             hf.create_dataset('rs_glob_acc', data=self.rs_glob_acc)
             hf.create_dataset('rs_train_acc', data=self.rs_train_acc)

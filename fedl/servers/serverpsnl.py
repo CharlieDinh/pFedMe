@@ -7,9 +7,9 @@ from utils.model_utils import read_data, read_user_data
 import numpy as np
 
 class Persionalized(Server):
-    def __init__(self, dataset, model, batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters,
+    def __init__(self, dataset,algorithm, model, batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters,
                  local_epochs, optimizer, num_users):
-        super().__init__(dataset, model[0], batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters,
+        super().__init__(dataset,algorithm, model[0], batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters,
                          local_epochs, optimizer, num_users)
 
         # Initialize data for all  users
@@ -36,7 +36,7 @@ class Persionalized(Server):
     def train(self):
         loss = []
         for glob_iter in range(self.num_glob_iters):
-            loss_ = 0
+            print("-------------Round number: ",glob_iter, " -------------")
             # send all parameter for users 
             self.send_parameters()
 
@@ -45,7 +45,7 @@ class Persionalized(Server):
             
             self.selected_users = self.select_users(glob_iter,self.num_users)
             for user in self.selected_users:
-                loss_ += user.train(self.local_epochs) * user.train_samples
+                user.train(self.local_epochs) * user.train_samples
             self.persionalized_aggregate_parameters()
 
             #loss_ /= self.total_train_samples
