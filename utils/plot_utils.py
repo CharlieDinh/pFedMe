@@ -11,27 +11,19 @@ def simple_read_data(loc_ep, alg):
     rs_train_loss = np.array(hf.get('rs_train_loss')[:])
     return rs_train_acc, rs_train_loss, rs_glob_acc
 
-def get_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[],hyper_learning_rate=[],algorithms_list=[], batch_size=0, dataset=""):
+def get_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[],meta_learning_rate=[],algorithms_list=[], batch_size=[], dataset=""):
     Numb_Algs = len(algorithms_list)
     train_acc = np.zeros((Numb_Algs, Numb_Glob_Iters))
     train_loss = np.zeros((Numb_Algs, Numb_Glob_Iters))
     glob_acc = np.zeros((Numb_Algs, Numb_Glob_Iters))
     algs_lbl = algorithms_list.copy()
     for i in range(Numb_Algs):
-        if(lamb[i] > 0):
-            algorithms_list[i] = algorithms_list[i] + "_prox_" + str(lamb[i])
-            algs_lbl[i] = algs_lbl[i] + "_prox"
-
-        string_learning_rate = str(learning_rate[i])
-        
-        if(algorithms_list[i] == "fedfedl"):
-            string_learning_rate = string_learning_rate + "_" +str(hyper_learning_rate[i])
-        algorithms_list[i] = algorithms_list[i] + \
-            "_" + string_learning_rate + "_" + str(num_users) + \
-            "u" + "_" + str(batch_size[i]) + "b"
+        string_learning_rate = str(learning_rate[i])  
+        string_learning_rate = string_learning_rate + "_" +str(meta_learning_rate[i]) + "_" +str(lamb[i])
+        algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size[i]) + "b"
        
         train_acc[i, :], train_loss[i, :], glob_acc[i, :] = np.array(
-            simple_read_data(loc_ep1[i], dataset + algorithms_list[i]))[:, :Numb_Glob_Iters]
+            simple_read_data(loc_ep1[i], dataset +"_"+ algorithms_list[i]))[:, :Numb_Glob_Iters]
         algs_lbl[i] = algs_lbl[i]
     return glob_acc, train_acc, train_loss
 
@@ -156,7 +148,7 @@ def plot_data_with_inset_two_figures(plt, title="", data=[], linestyles=[], labe
     if output_path is not None:
         plt.savefig(output_path)
 
-def plot_summary_one_figure(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[], algorithms_list=[], batch_size=0, dataset=""):
+def plot_summary_one_figure2(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[],meta_learning_rate = [], algorithms_list=[], batch_size=0, dataset=""):
     
     
     Numb_Algs = len(algorithms_list)
@@ -635,10 +627,10 @@ def plot_summary(num_users=100, loc_ep1=[], Numb_Glob_Iters=10, lamb=[], learnin
     plt.savefig('glob_acc.pdf')
     plt.savefig(dataset.upper() + str(loc_ep1[1]) + 'glob_acc.png')
     
-def plot_summary_one_figure2(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[],hyper_learning_rate=[], algorithms_list=[], batch_size=0, dataset = ""):
+def plot_summary_one_figure(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[], meta_learning_rate=[], algorithms_list=[], batch_size=0, dataset = ""):
     Numb_Algs = len(algorithms_list)
     glob_acc, train_acc, train_loss = get_training_data_value(
-        num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate,hyper_learning_rate, algorithms_list, batch_size, dataset)
+        num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, meta_learning_rate, algorithms_list, batch_size, dataset)
     plt.figure(1)
     MIN = train_loss.min() - 0.001
     start = 0
@@ -650,7 +642,7 @@ def plot_summary_one_figure2(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=
     plt.xlabel('Global rounds ' + '$K_g$')
     plt.title(dataset.upper())
     #plt.ylim([0.8, glob_acc.max()])
-    plt.savefig(dataset.upper() + str(loc_ep1[1]) + 'train_acc.png')
+    plt.savefig(dataset.upper() + str(loc_ep1[0]) + 'train_acc.png')
     #plt.savefig(dataset + str(loc_ep1[1]) + 'train_acc.pdf')
     plt.figure(2)
     for i in range(Numb_Algs):
@@ -662,8 +654,8 @@ def plot_summary_one_figure2(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=
     plt.ylabel('Training Loss')
     plt.xlabel('Global rounds')
     plt.title(dataset.upper())
-    plt.ylim([train_loss.min(), 0.5])
-    plt.savefig(dataset.upper() + str(loc_ep1[1]) + 'train_loss.png')
+    #plt.ylim([train_loss.min(), 0.5])
+    plt.savefig(dataset.upper() + str(loc_ep1[0]) + 'train_loss.png')
     #plt.savefig(dataset + str(loc_ep1[1]) + 'train_loss.pdf')
     plt.figure(3)
     for i in range(Numb_Algs):
@@ -675,7 +667,7 @@ def plot_summary_one_figure2(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=
     plt.ylabel('Test Accuracy')
     plt.xlabel('Global rounds ')
     plt.title(dataset.upper())
-    plt.savefig(dataset.upper() + str(loc_ep1[1]) + 'glob_acc.png')
+    plt.savefig(dataset.upper() + str(loc_ep1[0]) + 'glob_acc.png')
     #plt.savefig(dataset + str(loc_ep1[1]) + 'glob_acc.pdf')
 
 def get_max_value_index(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[], algorithms_list=[], batch_size=0, dataset=""):

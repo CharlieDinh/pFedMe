@@ -10,24 +10,30 @@ from fedl.servers.serveravg import FedAvg
 from fedl.servers.serverfedl import FEDL
 from fedl.servers.serverpsnl import Persionalized
 from fedl.trainmodel.models import Mclr_Synthetic,Net,Mclr_Mnist
+from utils.plot_utils import plot_summary_one_figure
 
 def main(dataset, algorithm, model, batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters,
          local_epochs, optimizer,numusers):
+    if(1):
+        if(model == "cnn"):
+            model = Net(), model
 
-    if(model == "cnn"):
-        model = Net(), model
+        if(model == "Mclr_Mnist"):
+            model = Mclr_Mnist(), model
 
-    if(model == "Mclr_Mnist"):
-        model = Mclr_Mnist(), model
-
-    if(algorithm == "FedAvg"):
-        server = FedAvg(dataset,algorithm, model, batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters, local_epochs, optimizer, numusers)
+        if(algorithm == "FedAvg"):
+            server = FedAvg(dataset,algorithm, model, batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters, local_epochs, optimizer, numusers)
     
-    if(algorithm == "Persionalized"):
-        server = Persionalized(dataset,algorithm, model, batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters, local_epochs, optimizer, numusers)
+        if(algorithm == "Persionalized"):
+            server = Persionalized(dataset,algorithm, model, batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters, local_epochs, optimizer, numusers)
 
-    server.train()
-    server.test()
+        server.train()
+        server.test()
+
+    # plot the result:
+    plot_summary_one_figure(num_users=numusers, loc_ep1=[local_epochs], Numb_Glob_Iters=num_glob_iters, lamb=[lamda],
+                               learning_rate=[learning_rate], meta_learning_rate = [meta_learning_rate], algorithms_list=[algorithm], batch_size=[batch_size], dataset=dataset)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -47,6 +53,7 @@ if __name__ == "__main__":
 
     print("=" * 80)
     print("Summary of training process:")
+    print("Algorithm: {}".format(args.algorithm))
     print("Batch size: {}".format(args.batch_size))
     print("local learing rate       : {}".format(args.learning_rate))
     print("meta learing rate       : {}".format(args.meta_learning_rate))
