@@ -60,21 +60,16 @@ class PersionalizedOptimizer(Optimizer):
         for group in self.param_groups:
             for p, localweight in zip( group['params'], weight_update):
                 temp = p.data
-                #print(localweight)
-                #print(p.data)
                 p.data = p.data - group['lr'] * (p.grad.data + group['lamda'] * (p.data - localweight.data))
-                #print(p.data)
-                #print("-----------------------------------")
-                #print(p.data.shape, localweight.shape)
-        #return  p.data
         return  group['params']
     
     def update_param(self, local_weight_updated, closure=None):
         loss = None
         if closure is not None:
             loss = closure
+        weight_update = local_weight_updated.copy()
         for group in self.param_groups:
-            for p, localweight in zip( group['params'], local_weight_updated):
+            for p, localweight in zip( group['params'], weight_update):
                 p.data = localweight.data
         #return  p.data
         return  group['params']

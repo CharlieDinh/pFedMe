@@ -55,19 +55,16 @@ class UserPersionalized(User):
                 loss = self.loss(output, y)
                 loss.backward()
                 new_params = self.optimizer.step(self.local_weight_updated)
-                #self.optimizer.step()
                 loss_per_epoch += loss.item() * X.shape[0]
             loss_per_epoch /= self.train_samples
             LOSS += loss_per_epoch
+
             # update local weight after finding aproximate theta
             for new_param, localweight in zip(new_params, self.local_weight_updated):
                 localweight.data = localweight.data - self.lamda* self.learning_rate * (localweight.data - new_param.data)
-                #new_param.data = localweight.data.clone()
         
-        # then update the new weight to the local weight
-        #self.model.fc1.weight = self.local_weight_updated[0]#.clone()
-        self.optimizer.update_param(self.local_weight_updated)
-        #self.optimizer.param_groups["params"]
+        self.update_parameters(self.local_weight_updated)
+
         result = LOSS / self.local_epochs
         #print(result)
         return result
