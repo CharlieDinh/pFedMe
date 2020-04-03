@@ -95,11 +95,11 @@ class Server:
     # define function for persionalized agegatation.
     def persionalized_update_parameters(self, sum_model):
         for server_param,sum_params in zip(self.model.parameters(), sum_model):
-            server_param.data = server_param.data - self.meta_learning_rate * (server_param.data- 1/self.num_users * sum_params.data)
+            server_param.data = server_param.data - self.meta_learning_rate * (server_param.data- 1/self.select_users * sum_params.data)
 
     def sumall_parameters(self, sum_model, user):
         for sum_params, user_param in zip(sum_model, user.get_parameters()):
-            sum_params.data = sum_params.data + user_param.data#.clone()
+            sum_params.data = sum_params.data + user_param.data
         return sum_model
 
     def persionalized_aggregate_parameters(self):
