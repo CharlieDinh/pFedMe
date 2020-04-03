@@ -4,9 +4,9 @@ import torch.nn.functional as F
 
 
 class Mclr_Synthetic(nn.Module):
-    def __init__(self):
+    def __init__(self,input_dim = 40, output_dim = 1):
         super(Mclr_Synthetic, self).__init__()
-        self.fc1 = nn.Linear(40, 1)
+        self.fc1 = nn.Linear(input_dim, output_dim)
 
     def forward(self, x):
         # Assume that x is of shape (40, )
@@ -43,12 +43,22 @@ class Net(nn.Module):
         return output
 
 class Mclr_Mnist(nn.Module):
-    def __init__(self):
+    def __init__(self,input_dim = 784, output_dim = 10):
         super(Mclr_Mnist, self).__init__()
-        self.fc1 = nn.Linear(784, 10)
+        self.fc1 = nn.Linear(input_dim, output_dim)
 
     def forward(self, x):
         x = torch.flatten(x, 1)
         x = self.fc1(x)
         output = F.log_softmax(x, dim=1)
         return output
+
+class Mclr_CrossEntropy(nn.Module):
+    def __init__(self, input_dim = 784, output_dim = 10):
+        super(Mclr_CrossEntropy, self).__init__()
+        self.linear = torch.nn.Linear(input_dim, output_dim)
+
+    def forward(self, x):
+        x = torch.flatten(x, 1)
+        outputs = self.linear(x)
+        return outputs
