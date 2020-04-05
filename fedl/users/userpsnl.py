@@ -28,7 +28,7 @@ class UserPersionalized(User):
         self.optimizer = PersionalizedOptimizer(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
 
     def set_parameters(self, model):
-        x = self.model.parameters()
+        #x = self.model.parameters()
         for old_param, new_param in zip(self.model.parameters(), model.parameters()):
             old_param = new_param.clone().requires_grad_(True)
         self.optimizer = PersionalizedOptimizer(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
@@ -50,12 +50,12 @@ class UserPersionalized(User):
         for epoch in range(1, self.local_epochs + 1):  # local update 
             self.model.train()
             loss_per_epoch = 0
-            for batch_idx, (X, y) in enumerate(self.trainloader): # ~ t time update 
+            for _, (X, y) in enumerate(self.trainloader): # ~ t time update 
                 self.optimizer.zero_grad()
                 output = self.model(X)
                 loss = self.loss(output, y)
                 loss.backward()
-                new_params = self.optimizer.step(self.local_weight_updated)
+                new_params,_ = self.optimizer.step(self.local_weight_updated)
                 loss_per_epoch += loss.item() * X.shape[0]
             loss_per_epoch /= self.train_samples
             LOSS += loss_per_epoch
