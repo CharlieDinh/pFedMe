@@ -20,7 +20,7 @@ class UserPersionalized(User):
         if(model[1] == "cnn" or model[1] == "Mclr_Mnist"):
             self.loss = nn.NLLLoss()
         else:
-            self.loss = nn.BCEWithLogitsLoss(reduction="mean")
+            self.loss = nn.CrossEntropyLoss()
         #if optimizer == "SGD":
         #    self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
         #if optimizer == "PersionalizedOptimizer":
