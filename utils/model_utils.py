@@ -125,9 +125,9 @@ def read_user_data(index,data,dataset):
         y_test = torch.Tensor(y_test).type(torch.int64)
     else:
         X_train = torch.Tensor(X_train).type(torch.float32)
-        y_train = torch.Tensor(y_train).type(torch.float32)
+        y_train = torch.Tensor(y_train).type(torch.int64)
         X_test = torch.Tensor(X_test).type(torch.float32)
-        y_test = torch.Tensor(y_test).type(torch.float32)
+        y_test = torch.Tensor(y_test).type(torch.int64)
     
     train_data = [(x, y) for x, y in zip(X_train, y_train)]
     test_data = [(x, y) for x, y in zip(X_test, y_test)]
