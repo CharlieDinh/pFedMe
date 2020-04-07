@@ -20,7 +20,9 @@ class FedAvg(Server):
             user = UserAVG(id, train, test, model, batch_size, learning_rate,meta_learning_rate,lamda, local_epochs, optimizer)
             self.users.append(user)
             self.total_train_samples += user.train_samples
-        print("Finished creating server.")
+            
+        print("Number of users / total users:",num_users, " / " ,total_users)
+        print("Finished creating FedAvg server.")
 
     def send_grads(self):
         assert (self.users is not None and len(self.users) > 0)
