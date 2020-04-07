@@ -2,20 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-
-class Mclr_Synthetic(nn.Module):
-    def __init__(self,input_dim = 40, output_dim = 1):
-        super(Mclr_Synthetic, self).__init__()
-        self.fc1 = nn.Linear(input_dim, output_dim)
-
-    def forward(self, x):
-        # Assume that x is of shape (40, )
-        X = self.fc1(x)
-        # Squeeze the last dimension of x, which is 1 (to make it
-        # compatible with y)
-        output = X.squeeze(1)
-        return output
-
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
@@ -42,9 +28,9 @@ class Net(nn.Module):
         output = F.log_softmax(x, dim=1)
         return output
 
-class Mclr_Mnist(nn.Module):
-    def __init__(self,input_dim = 784, output_dim = 10):
-        super(Mclr_Mnist, self).__init__()
+class Mclr_Logistic(nn.Module):
+    def __init__(self, input_dim = 784, output_dim = 10):
+        super(Mclr_Logistic, self).__init__()
         self.fc1 = nn.Linear(input_dim, output_dim)
 
     def forward(self, x):

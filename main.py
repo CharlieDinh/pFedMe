@@ -9,7 +9,7 @@ import os
 from fedl.servers.serveravg import FedAvg
 from fedl.servers.serverfedl import FEDL
 from fedl.servers.serverpsnl import Persionalized
-from fedl.trainmodel.models import Mclr_Synthetic,Net,Mclr_Mnist
+from fedl.trainmodel.models import Mclr_Logistic,Net
 from utils.plot_utils import plot_summary_one_figure
 
 def main(dataset, algorithm, model, batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters,
