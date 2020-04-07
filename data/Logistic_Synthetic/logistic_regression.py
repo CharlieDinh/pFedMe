@@ -20,7 +20,7 @@ def generate_logistic_regression_data(num_users=100, kappa=10, dim=40, noise_rat
     y_split = [[] for _ in range(num_users)]  # y for each user
 
     # Find users' sample sizes based on the power law (heterogeneity)
-    samples_per_user = np.random.lognormal(4, 2, num_users).astype(int) + 50
+    samples_per_user = np.random.lognormal(4, 2, num_users).astype(int) + 50 + 1000
     indices_per_user = np.insert(samples_per_user.cumsum(), 0, 0, 0)
     num_total_samples = indices_per_user[-1]
 
@@ -105,7 +105,7 @@ def save_total_data():
         num_samples = len(X[i])
         train_len = int(0.75 * num_samples)
         test_len = num_samples - train_len
-
+        print("User: ",uname, " Num Sample: ", num_samples )
         train_data['users'].append(uname)
         train_data['user_data'][uname] = {'x': X[i][:train_len], 'y': y[i][:train_len]}
         train_data['num_samples'].append(train_len)
@@ -167,7 +167,7 @@ def save_data_by_user():
 
 def main():
     save_total_data()
-    save_data_by_user()
+    #save_data_by_user()
 
 
 if __name__ == '__main__':
