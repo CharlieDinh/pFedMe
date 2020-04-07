@@ -15,11 +15,13 @@ from utils.plot_utils import plot_summary_one_figure
 def main(dataset, algorithm, model, batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters,
          local_epochs, optimizer,numusers):
     if(1):
+        if(model == "Mclr_Synthetic"):
+            model = Mclr_Logistic(40,2), model
+        else:
+            model = Mclr_Logistic(), model
+            
         if(model == "cnn"):
             model = Net(), model
-
-        if(model == "Mclr_Mnist"):
-            model = Mclr_Mnist(), model
 
         if(algorithm == "FedAvg"):
             server = FedAvg(dataset,algorithm, model, batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters, local_epochs, optimizer, numusers)
