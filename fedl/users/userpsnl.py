@@ -50,7 +50,10 @@ class UserPersionalized(User):
         for epoch in range(1, self.local_epochs + 1):  # local update 
             self.model.train()
             loss_per_epoch = 0
-            for _, (X, y) in enumerate(self.trainloader): # ~ t time update 
+            dataloader_iterator = iter(self.trainloader)
+            #for _, (X, y) in enumerate(self.trainloader): # ~ t time update
+            for i in range(4):
+                (X, y) = next(dataloader_iterator)
                 self.optimizer.zero_grad()
                 output = self.model(X)
                 loss = self.loss(output, y)
