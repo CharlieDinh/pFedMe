@@ -167,3 +167,16 @@ class Server:
         print("Average Global Accurancy: ", glob_acc)
         print("Average Trainning Accurancy: ", train_acc)
         print("Average Trainning Loss: ",train_loss)
+
+    def train_evaluate(self):
+        print("......... Evaluating .........")
+        evaluate_users = copy.deepcopy(self.users)
+        total_accurancy = 0 
+        total_sample  = 0
+        for user in evaluate_users:
+            user.train_evaluate(self.local_epochs)  # * user.train_samples
+            test_acc, sample_size = user.test()
+            total_accurancy += test_acc
+            total_sample += sample_size
+        print("Average testing accurancy after several fineturing ",
+              total_accurancy/total_sample)

@@ -43,7 +43,8 @@ class Persionalized(Server):
 
             # Evaluate model each interation
             self.evaluate()
-            
+            self.train_evaluate()
+
             self.selected_users = self.select_users(glob_iter,self.num_users)
             for user in self.selected_users:
                 user.train(self.local_epochs) * user.train_samples
@@ -56,4 +57,5 @@ class Persionalized(Server):
         #print(loss)
         self.save_results()
         self.save_model()
+    
   
