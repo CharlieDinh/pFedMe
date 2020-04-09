@@ -31,6 +31,9 @@ class User:
             param.detach()
         return self.model.parameters()
     
+    def get_updated_parameters(self):
+        return self.local_weight_updated
+    
     def update_parameters(self, new_params):
         for param , new_param in zip(self.model.parameters(),new_params):
             param[0].data = new_param.data.clone()

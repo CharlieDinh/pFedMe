@@ -26,10 +26,10 @@ class Server:
         self.rs_train_acc, self.rs_train_loss, self.rs_glob_acc = [], [], []
         
         # Initialize the server's grads to zeros
-        #for param in self.model.parameters():
-        #    param.data = torch.zeros_like(param.data)
-        #    param.grad = torch.zeros_like(param.data)
-        # self.send_parameters()
+        for param in self.model.parameters():
+            param.data = torch.zeros_like(param.data)
+            param.grad = torch.zeros_like(param.data)
+        #self.send_parameters()
         
     def aggregate_grads(self):
         assert (self.users is not None and len(self.users) > 0)
@@ -98,7 +98,7 @@ class Server:
             server_param.data = server_param.data - self.meta_learning_rate * (server_param.data- 1/self.select_users * sum_params.data)
 
     def sumall_parameters(self, sum_model, user):
-        for sum_params, user_param in zip(sum_model, user.get_parameters()):
+        for sum_params, user_param in zip(sum_model, user.get_updated_parameters()):
             sum_params.data = sum_params.data + user_param.data
         return sum_model
 
@@ -165,8 +165,23 @@ class Server:
         self.rs_train_loss.append(train_loss)
         #print("stats_train[1]",stats_train[3][0])
         print("Average Global Accurancy: ", glob_acc)
-        print("Average Trainning Accurancy: ", train_acc)
-        print("Average Trainning Loss: ",train_loss)
+        print("Average Global Trainning Accurancy: ", train_acc)
+        print("Average Global Trainning Loss: ",train_loss)
+
+    def evaluate_personalized_model(self):
+        stats = self.test()  
+        stats_train = self.train_error_and_loss()
+        glob_acc = np.sum(stats[2])*1.0/np.sum(stats[1])
+        train_acc = np.sum(stats_train[2])*1.0/np.sum(stats_train[1])
+        # train_loss = np.dot(stats_train[3], stats_train[1])*1.0/np.sum(stats_train[1])
+        train_loss = sum([x * y for (x, y) in zip(stats_train[1], stats_train[3])]).item() / np.sum(stats_train[1])
+        self.rs_glob_acc.append(glob_acc)
+        self.rs_train_acc.append(train_acc)
+        self.rs_train_loss.append(train_loss)
+        #print("stats_train[1]",stats_train[3][0])
+        print("Average Personal Accurancy: ", glob_acc)
+        print("Average Personal Trainning Accurancy: ", train_acc)
+        print("Average Personal Trainning Loss: ",train_loss)
 
     def train_evaluate(self):
         print("......... Evaluating .........")
@@ -178,5 +193,4 @@ class Server:
             test_acc, sample_size = user.test()
             total_accurancy += test_acc
             total_sample += sample_size
-        print("Average testing accurancy after several fineturing ",
-              total_accurancy/total_sample)
+        print("Average testing accurancy after several fineturing ",total_accurancy/total_sample)

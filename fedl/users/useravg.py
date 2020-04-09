@@ -20,12 +20,12 @@ class UserAVG(User):
         else:
             self.loss = nn.CrossEntropyLoss()
         #if optimizer == "SGD":
-        self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
+        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=self.learning_rate)
 
     def set_parameters(self, model):
         for old_param, new_param in zip(self.model.parameters(), model.parameters()):
             old_param = new_param.clone().requires_grad_(True)
-        self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
+        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=self.learning_rate)
 
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):

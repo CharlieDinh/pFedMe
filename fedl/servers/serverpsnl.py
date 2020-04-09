@@ -41,13 +41,26 @@ class Persionalized(Server):
             # send all parameter for users 
             self.send_parameters()
 
-            # Evaluate model each interation
+            # Evaluate gloal model on user for each interation
+            print("Evaluate global model")
+            print("")
             self.evaluate()
-            self.train_evaluate()
+            #self.train_evaluate()
+
+            # do update for all users not only selected users
+            for user in self.users:
+                user.train(self.local_epochs) #* user.train_samples
+            
+            # choose several users to send back upated model to server
+            # self.personalized_evaluate()
 
             self.selected_users = self.select_users(glob_iter,self.num_users)
-            for user in self.selected_users:
-                user.train(self.local_epochs) * user.train_samples
+
+            # Evaluate gloal model on user for each interation
+            print("Evaluate persionalized model")
+            print("")
+            self.evaluate_personalized_model()
+
             self.persionalized_aggregate_parameters()
 
             #loss_ /= self.total_train_samples
