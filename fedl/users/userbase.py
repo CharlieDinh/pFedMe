@@ -25,6 +25,11 @@ class User:
         self.trainloader = DataLoader(train_data, self.batch_size)
         self.testloader = DataLoader(test_data, self.test_samples)
         self.trainloaderfull = DataLoader(train_data, self.train_samples)
+    
+    def set_parameters(self, model):
+        for old_param, new_param in zip(self.model.parameters(), model.parameters()):
+            old_param.data = new_param.data.clone()
+        self.local_weight_updated = copy.deepcopy(self.optimizer.param_groups[0]['params'])
 
     def get_parameters(self):
         for param in self.model.parameters():

@@ -27,15 +27,6 @@ class UserPersionalized(User):
         
         self.optimizer = PersionalizedOptimizer(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
 
-    def set_parameters(self, model):
-        #x = self.model.parameters()
-        for old_param, new_param in zip(self.model.parameters(), model.parameters()):
-            old_param = new_param.clone().requires_grad_(True)
-        self.optimizer = PersionalizedOptimizer(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
-        #self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
-        # get all parameter from server.
-        self.local_weight_updated = copy.deepcopy(self.optimizer.param_groups[0]['params'])
-
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):
             for model_grad, new_grad in zip(self.model.parameters(), new_grads):
