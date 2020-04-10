@@ -41,7 +41,7 @@ class User:
     
     def update_parameters(self, new_params):
         for param , new_param in zip(self.model.parameters(),new_params):
-            param[0].data = new_param.data.clone()
+            param.data = new_param.data.clone()
 
     def get_grads(self):
         grads = []

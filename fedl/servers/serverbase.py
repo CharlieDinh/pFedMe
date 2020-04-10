@@ -94,23 +94,24 @@ class Server:
 
     # define function for persionalized agegatation.
     def persionalized_update_parameters(self, sum_model):
+        #print(len(self.selected_users))
         for server_param,sum_params in zip(self.model.parameters(), sum_model):
-            server_param.data = server_param.data - self.meta_learning_rate * (server_param.data- 1/self.select_users * sum_params.data)
+            server_param.data = server_param.data - self.meta_learning_rate * (server_param.data- 1.0/len(self.selected_users) * sum_params.data)
 
     def sumall_parameters(self, sum_model, user):
-        for sum_params, user_param in zip(sum_model, user.get_updated_parameters()):
-            sum_params.data = sum_params.data + user_param.data
+        for sum_params, user_param in zip(sum_model, user.model.parameters()):
+            sum_params.data = sum_params.data + user_param[0].data
         return sum_model
 
     def persionalized_aggregate_parameters(self):
         assert (self.users is not None and len(self.users) > 0)
-        sum_model = self.model.parameters()
+        sum_model = list(self.model.parameters())#.clone()
         # Clear sum_model
         for param in sum_model:
             param.data = torch.zeros_like(param.data)
 
-        for user in self.selected_users:
-            self.sumall_parameters(sum_model,user)
+        for user in self.selected_users: 
+            sum_model = self.sumall_parameters(sum_model, user)
         
         self.persionalized_update_parameters(sum_model)
 
