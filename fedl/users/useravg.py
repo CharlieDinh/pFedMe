@@ -24,8 +24,8 @@ class UserAVG(User):
 
     def set_parameters(self, model):
         for old_param, new_param in zip(self.model.parameters(), model.parameters()):
-            old_param = new_param.clone().requires_grad_(True)
-        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=self.learning_rate)
+            old_param.data = new_param.data.clone() #clone()#.requires_grad_(True)
+        #self.optimizer = torch.optim.SGD(self.model.parameters(), lr=self.learning_rate)
 
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):
