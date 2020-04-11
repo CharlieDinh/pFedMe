@@ -57,8 +57,12 @@ class Server:
         assert (self.users is not None and len(self.users) > 0)
         for param in self.model.parameters():
             param.data = torch.zeros_like(param.data)
+        total_train = 0
+        #if(self.num_users = self.to)
         for user in self.selected_users:
-            self.add_parameters(user, user.train_samples / self.total_train_samples)
+            total_train += user.train_samples
+        for user in self.selected_users:
+            self.add_parameters(user, user.train_samples / total_train)
 
     def save_model(self):
         model_path = os.path.join("models", self.dataset)
