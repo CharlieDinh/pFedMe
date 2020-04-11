@@ -74,26 +74,26 @@ class UserPersionalized(User):
         #print(result)
         return result
     
-    def train_evaluate(self, epochs):
-        LOSS = 0
-        self.model.train()
-        for epoch in range(1, self.local_epochs + 1):  # local update
-            self.model.train()
-            loss_per_epoch = 0
-            #dataloader_iterator = iter(self.testloader)
-            for _, (X, y) in enumerate(self.testloader):  # ~ t time update
-            #for i in range(4):
-            #    (X, y) = next(dataloader_iterator)
-                self.optimizer.zero_grad()
-                output = self.model(X)
-                loss = self.loss(output, y)
-                loss.backward()
-                new_params, _ = self.optimizer.step(self.local_weight_updated)
-                loss_per_epoch += loss.item() * X.shape[0]
+    # def train_evaluate(self, epochs):
+    #     LOSS = 0
+    #     self.model.train()
+    #     for epoch in range(1, self.local_epochs + 1):  # local update
+    #         self.model.train()
+    #         loss_per_epoch = 0
+    #         #dataloader_iterator = iter(self.testloader)
+    #         for _, (X, y) in enumerate(self.testloader):  # ~ t time update
+    #         #for i in range(4):
+    #         #    (X, y) = next(dataloader_iterator)
+    #             self.optimizer.zero_grad()
+    #             output = self.model(X)
+    #             loss = self.loss(output, y)
+    #             loss.backward()
+    #             new_params, _ = self.optimizer.step(self.local_weight_updated)
+    #             loss_per_epoch += loss.item() * X.shape[0]
 
-            # update local weight after finding aproximate theta
-            for new_param, localweight in zip(new_params, self.local_weight_updated):
-                localweight.data = localweight.data - self.lamda * \
-                    self.learning_rate * (localweight.data - new_param.data)
+    #         # update local weight after finding aproximate theta
+    #         for new_param, localweight in zip(new_params, self.local_weight_updated):
+    #             localweight.data = localweight.data - self.lamda * \
+    #                 self.learning_rate * (localweight.data - new_param.data)
 
-        self.update_parameters(self.local_weight_updated)
+    #     self.update_parameters(self.local_weight_updated)

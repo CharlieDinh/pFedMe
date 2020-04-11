@@ -4,7 +4,6 @@ import torch.nn.functional as F
 import os
 import json
 from torch.utils.data import DataLoader
-from fedl.optimizers.fedoptimizer import MySGD, FEDLOptimizer
 from fedl.users.userbase import User
 
 class UserAVG(User):
