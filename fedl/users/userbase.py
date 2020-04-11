@@ -25,6 +25,7 @@ class User:
         self.trainloader = DataLoader(train_data, self.batch_size)
         self.testloader = DataLoader(test_data, self.test_samples)
         self.trainloaderfull = DataLoader(train_data, self.train_samples)
+        self.iter_trainloader = iter(self.trainloader)
     
     def set_parameters(self, model):
         for old_param, new_param in zip(self.model.parameters(), model.parameters()):

@@ -41,10 +41,17 @@ class UserPersionalized(User):
         for epoch in range(1, self.local_epochs + 1):  # local update 
             self.model.train()
             loss_per_epoch = 0
-            #dataloader_iterator = iter(self.trainloader)
-            for _ , (X, y) in enumerate(self.trainloader): # ~ t time update
-            #for i in range(4):
-                #(X, y) = next(dataloader_iterator)
+            #for _ , (X, y) in enumerate(self.trainloader): # ~ t time update
+            try:
+                # Samples a new batch for persionalizing
+                (X, y) = next(self.iter_trainloader)
+            except StopIteration:
+                # restart the generator if the previous generator is exhausted.
+                self.iter_trainloader = iter(self.trainloader)
+                (X, y) = next(self.iter_trainloader)
+
+            K = 3 # K is number of personalized steps
+            for i in range(K):
                 self.optimizer.zero_grad()
                 output = self.model(X)
                 loss = self.loss(output, y)
