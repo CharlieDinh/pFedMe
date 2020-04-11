@@ -97,27 +97,21 @@ class Server:
         return np.random.choice(self.users, num_users, replace=False) #, p=pk)
 
     # define function for persionalized agegatation.
-    def persionalized_update_parameters(self, sum_model):
-        #print(len(self.selected_users))
-        for server_param,sum_params in zip(self.model.parameters(), sum_model):
-            server_param.data = server_param.data - self.meta_learning_rate * (server_param.data- 1.0/len(self.selected_users) * sum_params.data)
+    def persionalized_update_parameters(self,user, ratio):
+        for server_param, user_param in zip(self.model.parameters(), user.local_weight_updated):
+            server_param.data = server_param.data + user_param.data.clone() * ratio
 
-    def sumall_parameters(self, sum_model, user):
-        for sum_params, user_param in zip(sum_model, user.model.parameters()):
-            sum_params.data = sum_params.data + user_param[0].data
-        return sum_model
 
     def persionalized_aggregate_parameters(self):
         assert (self.users is not None and len(self.users) > 0)
-        sum_model = list(self.model.parameters())#.clone()
-        # Clear sum_model
-        for param in sum_model:
+        for param in self.model.parameters():
             param.data = torch.zeros_like(param.data)
-
-        for user in self.selected_users: 
-            sum_model = self.sumall_parameters(sum_model, user)
-        
-        self.persionalized_update_parameters(sum_model)
+        total_train = 0
+        #if(self.num_users = self.to)
+        for user in self.selected_users:
+            total_train += user.train_samples
+        for user in self.selected_users:
+            self.persionalized_update_parameters(user, user.train_samples / total_train)
 
     # Save loss, accurancy to h5 fiel
     def save_results(self):

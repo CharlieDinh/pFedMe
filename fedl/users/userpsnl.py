@@ -61,7 +61,7 @@ class UserPersionalized(User):
         # evaluate personal model before making argeation at the server size 
         #test_acc, _ = self.test()
         #print("check accurancy of peronal model ", test_acc)
-        self.update_parameters(self.local_weight_updated)
+        #self.update_parameters(self.local_weight_updated)
 
         result = LOSS / self.local_epochs
         #print(result)
