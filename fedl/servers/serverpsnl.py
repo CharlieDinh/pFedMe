@@ -61,7 +61,7 @@ class Persionalized(Server):
             print("")
             self.evaluate_personalized_model()
 
-            self.persionalized_aggregate_parameters()
+            self.aggregate_parameters()
 
             #loss_ /= self.total_train_samples
             #loss.append(loss_)
