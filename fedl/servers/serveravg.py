@@ -7,9 +7,9 @@ from utils.model_utils import read_data, read_user_data
 import numpy as np
 
 class FedAvg(Server):
-    def __init__(self, dataset,algorithm, model, batch_size, learning_rate,meta_learning_rate, lamda, num_glob_iters,
+    def __init__(self, dataset,algorithm, model, batch_size, learning_rate,alpha, lamda, num_glob_iters,
                  local_epochs, optimizer, num_users):
-        super().__init__(dataset,algorithm, model[0], batch_size, learning_rate, meta_learning_rate, lamda, num_glob_iters,
+        super().__init__(dataset,algorithm, model[0], batch_size, learning_rate, alpha, lamda, num_glob_iters,
                          local_epochs, optimizer, num_users)
 
         # Initialize data for all  users
@@ -17,7 +17,7 @@ class FedAvg(Server):
         total_users = len(data[0])
         for i in range(total_users):
             id, train , test = read_user_data(i, data, dataset)
-            user = UserAVG(id, train, test, model, batch_size, learning_rate,meta_learning_rate,lamda, local_epochs, optimizer)
+            user = UserAVG(id, train, test, model, batch_size, learning_rate,alpha,lamda, local_epochs, optimizer)
             self.users.append(user)
             self.total_train_samples += user.train_samples
             

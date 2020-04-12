@@ -11,7 +11,7 @@ def simple_read_data(loc_ep, alg):
     rs_train_loss = np.array(hf.get('rs_train_loss')[:])
     return rs_train_acc, rs_train_loss, rs_glob_acc
 
-def get_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[],meta_learning_rate=[],algorithms_list=[], batch_size=[], dataset=""):
+def get_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[],alpha=[],algorithms_list=[], batch_size=[], dataset=""):
     Numb_Algs = len(algorithms_list)
     train_acc = np.zeros((Numb_Algs, Numb_Glob_Iters))
     train_loss = np.zeros((Numb_Algs, Numb_Glob_Iters))
@@ -19,7 +19,7 @@ def get_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[
     algs_lbl = algorithms_list.copy()
     for i in range(Numb_Algs):
         string_learning_rate = str(learning_rate[i])  
-        string_learning_rate = string_learning_rate + "_" +str(meta_learning_rate[i]) + "_" +str(lamb[i])
+        string_learning_rate = string_learning_rate + "_" +str(alpha[i]) + "_" +str(lamb[i])
         algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size[i]) + "b"
        
         train_acc[i, :], train_loss[i, :], glob_acc[i, :] = np.array(
@@ -148,7 +148,7 @@ def plot_data_with_inset_two_figures(plt, title="", data=[], linestyles=[], labe
     if output_path is not None:
         plt.savefig(output_path)
 
-def plot_summary_one_figure2(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[],meta_learning_rate = [], algorithms_list=[], batch_size=0, dataset=""):
+def plot_summary_one_figure2(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[],alpha = [], algorithms_list=[], batch_size=0, dataset=""):
     
     
     Numb_Algs = len(algorithms_list)
@@ -627,10 +627,10 @@ def plot_summary(num_users=100, loc_ep1=[], Numb_Glob_Iters=10, lamb=[], learnin
     plt.savefig('glob_acc.pdf')
     plt.savefig(dataset.upper() + str(loc_ep1[1]) + 'glob_acc.png')
     
-def plot_summary_one_figure(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[], meta_learning_rate=[], algorithms_list=[], batch_size=0, dataset = ""):
+def plot_summary_one_figure(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[], alpha=[], algorithms_list=[], batch_size=0, dataset = ""):
     Numb_Algs = len(algorithms_list)
     glob_acc, train_acc, train_loss = get_training_data_value(
-        num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, meta_learning_rate, algorithms_list, batch_size, dataset)
+        num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset)
     plt.figure(1)
     MIN = train_loss.min() - 0.001
     start = 0
