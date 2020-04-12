@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import os
 import json
 from torch.utils.data import DataLoader
-from fedl.optimizers.fedoptimizer import MySGD, FEDLOptimizer,PersionalizedOptimizer
+from fedl.optimizers.fedoptimizer import PersionalizedOptimizer
 from fedl.users.userbase import User
 import copy
 
@@ -17,14 +17,11 @@ class UserPersionalized(User):
         super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, alpha, lamda,
                          local_epochs)
 
-        if(model[1] == "cnn" or model[1] == "Mclr_Mnist"):
-            self.loss = nn.NLLLoss()
-        else:
+        if(model[1] == "Mclr_CrossEntropy"):
             self.loss = nn.CrossEntropyLoss()
-        #if optimizer == "SGD":
-        #    self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
-        #if optimizer == "PersionalizedOptimizer":
-        
+        else:
+            self.loss = nn.NLLLoss()
+            
         self.optimizer = PersionalizedOptimizer(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
 
     def set_grads(self, new_grads):

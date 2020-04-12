@@ -26,6 +26,11 @@ class User:
         self.testloader = DataLoader(test_data, self.test_samples)
         self.trainloaderfull = DataLoader(train_data, self.train_samples)
         self.iter_trainloader = iter(self.trainloader)
+
+        # those parameters are for persionalized federated learing.
+        self.local_model = list(self.model.parameters()).copy()
+        self.persionalized_model = list(self.model.parameters()).copy()
+        self.persionalized_model_bar = list(self.model.parameters()).copy()
     
     def set_parameters(self, model):
         for old_param, new_param in zip(self.model.parameters(), model.parameters()):
@@ -41,7 +46,7 @@ class User:
         return self.local_weight_updated
     
     def update_parameters(self, new_params):
-        for param , new_param in zip(self.model.parameters(),new_params):
+        for param , new_param in zip(self.model.parameters(), new_params):
             param.data = new_param.data.clone()
 
     def get_grads(self):

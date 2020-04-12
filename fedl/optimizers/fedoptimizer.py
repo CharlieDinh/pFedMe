@@ -18,7 +18,6 @@ class MySGD(Optimizer):
                     continue
                 d_p = p.grad.data
                 p.data.add_(-group['lr'], d_p)
-
         return loss
 
 
@@ -72,3 +71,23 @@ class PersionalizedOptimizer(Optimizer):
                 p.data = localweight.data
         #return  p.data
         return  group['params']
+
+
+class APFLOptimizer(Optimizer):
+    def __init__(self, params, lr):
+        defaults = dict(lr=lr)
+        super(APFLOptimizer, self).__init__(params, defaults)
+
+    def step(self, closure=None, alpha = 1, n_k = 1):
+        loss = None
+        if closure is not None:
+            loss = closure
+
+        for group in self.param_groups:
+            # print(group)
+            for p in group['params']:
+                if p.grad is None:
+                    continue
+                d_p = alpha  * n_k * p.grad.data
+                p.data.add_(-group['lr'], d_p)
+        return loss

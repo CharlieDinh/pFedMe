@@ -5,6 +5,7 @@ import os
 import json
 from torch.utils.data import DataLoader
 from fedl.users.userbase import User
+from fedl.optimizers.fedoptimizer import APFLOptimizer
 import copy
 
 class UserAPFL(User):
@@ -12,19 +13,18 @@ class UserAPFL(User):
     User in FedAvg.dataset
     """
     def __init__(self, numeric_id, train_data, test_data, model, batch_size, learning_rate,alpha,lamda,
-                 local_epochs, optimizer):
+                 local_epochs, optimizer, total_users , num_users):
         super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, alpha, lamda,
                          local_epochs)
-
-        if(model[1] == "cnn" or model[1] == "Mclr_Mnist"):
-            self.loss = nn.NLLLoss()
-        else:
-            self.loss = nn.CrossEntropyLoss()
-        #if optimizer == "SGD":
-        #    self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
-        #if optimizer == "PersionalizedOptimizer":
+        self.total_users = total_users
+        self.num_users = num_users
         
-        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
+        if(model[1] == "Mclr_CrossEntropy"):
+            self.loss = nn.CrossEntropyLoss()
+        else:
+            self.loss = nn.NLLLoss()
+
+        self.optimizer = APFLOptimizer(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
 
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):
@@ -39,8 +39,7 @@ class UserAPFL(User):
         self.model.train()
         for epoch in range(1, self.local_epochs + 1):  # local update 
             self.model.train()
-            loss_per_epoch = 0
-            #for _ , (X, y) in enumerate(self.trainloader): # ~ t time update
+
             try:
                 # Samples a new batch for persionalizing
                 (X, y) = next(self.iter_trainloader)
@@ -48,27 +47,26 @@ class UserAPFL(User):
                 # restart the generator if the previous generator is exhausted.
                 self.iter_trainloader = iter(self.trainloader)
                 (X, y) = next(self.iter_trainloader)
-
-            K = 3 # K is number of personalized steps
-            for i in range(K):
-                self.optimizer.zero_grad()
-                output = self.model(X)
-                loss = self.loss(output, y)
-                loss.backward()
-                self.persionalized_model, _ = self.optimizer.step(self.local_weight_updated)
-                loss_per_epoch += loss.item() * X.shape[0]
-            loss_per_epoch /= self.train_samples
-            LOSS += loss_per_epoch
             
-            # update local weight after finding aproximate theta
-            for new_param, localweight in zip(self.persionalized_model, self.local_weight_updated):
-                localweight.data = localweight.data - self.lamda* self.learning_rate * (localweight.data - new_param.data)
+            # caculate local model 
+            self.optimizer.zero_grad()
+            output = self.model(X)
+            loss = self.loss(output, y)
+            loss.backward()
+            self.optimizer.step()
+            self.local_model = list(self.model.parameters()).copy()
+
+            # caculate persionalized model
+            self.update_parameters(self.persionalized_model)
+            loss = self.loss(output, y)
+            loss.backward()
+            self.optimizer.step(self.alpha,self.total_users/self.num_users)
+            self.persionalized_model = list(self.model.parameters()).copy() 
+
+            # caculate persionalized bar model
+            for persionalized_bar, persionalized, local in zip(self.persionalized_model_bar, self.persionalized_model, self.local_model):
+                persionalized_bar = self.alpha * persionalized + (1 - self.alpha )* local
         
-        # evaluate personal model before making argeation at the server size 
-        #test_acc, _ = self.test()
-        #print("check accurancy of peronal model ", test_acc)
         #self.update_parameters(self.local_weight_updated)
 
-        result = LOSS / self.local_epochs
-        #print(result)
-        return result
+        return LOSS
