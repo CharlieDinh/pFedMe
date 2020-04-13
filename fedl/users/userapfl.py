@@ -24,7 +24,7 @@ class UserAPFL(User):
         else:
             self.loss = nn.NLLLoss()
 
-        self.optimizer = APFLOptimizer(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
+        self.optimizer = APFLOptimizer(self.model.parameters(), lr=self.learning_rate)
 
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):
@@ -58,6 +58,8 @@ class UserAPFL(User):
 
             # caculate persionalized model
             self.update_parameters(self.persionalized_model)
+            self.optimizer.zero_grad()
+            output = self.model(X)
             loss = self.loss(output, y)
             loss.backward()
             self.optimizer.step(self.alpha,self.total_users/self.num_users)
@@ -66,7 +68,10 @@ class UserAPFL(User):
             # caculate persionalized bar model
             for persionalized_bar, persionalized, local in zip(self.persionalized_model_bar, self.persionalized_model, self.local_model):
                 persionalized_bar = self.alpha * persionalized + (1 - self.alpha )* local
-        
+
+            # update local model back to model for the argegation.
+            self.update_parameters(self.local_model)
+
         #self.update_parameters(self.local_weight_updated)
 
         return LOSS

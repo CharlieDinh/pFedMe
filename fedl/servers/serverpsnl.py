@@ -45,7 +45,6 @@ class Persionalized(Server):
             print("Evaluate global model")
             print("")
             self.evaluate()
-            #self.train_evaluate()
 
             # do update for all users not only selected users
             for user in self.users:
@@ -53,7 +52,6 @@ class Persionalized(Server):
             
             # choose several users to send back upated model to server
             # self.personalized_evaluate()
-
             self.selected_users = self.select_users(glob_iter,self.num_users)
 
             # Evaluate gloal model on user for each interation
