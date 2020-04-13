@@ -47,7 +47,7 @@ class FedAvg(Server):
 
             self.selected_users = self.select_users(glob_iter,self.num_users)
             for user in self.selected_users:
-                user.train(self.local_epochs) * user.train_samples
+                user.train(self.local_epochs) #* user.train_samples
             self.aggregate_parameters()
             #loss_ /= self.total_train_samples
             #loss.append(loss_)

@@ -72,6 +72,4 @@ class UserAPFL(User):
             # update local model back to model for the argegation.
             self.update_parameters(self.local_model)
 
-        #self.update_parameters(self.local_weight_updated)
-
         return LOSS

@@ -14,7 +14,7 @@ class UserAVG(User):
                  local_epochs, optimizer):
         super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, alpha, lamda,
                          local_epochs)
-                         
+
         if(model[1] == "Mclr_CrossEntropy"):
             self.loss = nn.CrossEntropyLoss()
         else:
@@ -35,17 +35,18 @@ class UserAVG(User):
         self.model.train()
         for epoch in range(1, self.local_epochs + 1):
             self.model.train()
-            loss_per_epoch = 0
-            for batch_idx, (X, y) in enumerate(self.trainloader):
-                self.optimizer.zero_grad()
-                output = self.model(X)
-                loss = self.loss(output, y)
-                loss.backward()
-                self.optimizer.step()
-                loss_per_epoch += loss.item() * X.shape[0]
-            loss_per_epoch /= self.train_samples
-            LOSS += loss_per_epoch
-        result = LOSS / self.local_epochs
-        #print(result)
-        return result
+            try:
+                # Samples a new batch for persionalizing
+                (X, y) = next(self.iter_trainloader)
+            except StopIteration:
+                # restart the generator if the previous generator is exhausted.
+                self.iter_trainloader = iter(self.trainloader)
+                (X, y) = next(self.iter_trainloader)
+                
+            self.optimizer.zero_grad()
+            output = self.model(X)
+            loss = self.loss(output, y)
+            loss.backward()
+            self.optimizer.step()
+        return LOSS
 
