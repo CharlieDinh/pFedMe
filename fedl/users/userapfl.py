@@ -65,7 +65,7 @@ class UserAPFL(User):
             self.optimizer.step(self.alpha,self.total_users/self.num_users)
             self.persionalized_model = list(self.model.parameters()).copy() 
 
-            # caculate persionalized bar model
+            # caculate persionalized bar model => this model is use to evaluate as in the paper. 
             for persionalized_bar, persionalized, local in zip(self.persionalized_model_bar, self.persionalized_model, self.local_model):
                 persionalized_bar = self.alpha * persionalized + (1 - self.alpha )* local
 

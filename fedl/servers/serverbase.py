@@ -98,6 +98,7 @@ class Server:
 
     # define function for persionalized agegatation.
     def persionalized_update_parameters(self,user, ratio):
+        # only argegate the local_weight_update
         for server_param, user_param in zip(self.model.parameters(), user.local_weight_updated):
             server_param.data = server_param.data + user_param.data.clone() * ratio
 

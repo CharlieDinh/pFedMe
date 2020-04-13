@@ -56,8 +56,8 @@ class APFL(Server):
             #print("")
             #self.evaluate_personalized_model()
 
-            self.persionalized_aggregate_parameters()
-            
+            self.aggregate_parameters()
+
         self.save_results()
         self.save_model()
     
