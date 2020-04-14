@@ -54,7 +54,7 @@ class UserAPFL(User):
             loss = self.loss(output, y)
             loss.backward()
             self.optimizer.step()
-            self.local_model = list(self.model.parameters()).copy()
+            self.clone_model_paramenter(self.model.parameters(), self.local_model)
 
             # caculate persionalized model
             self.update_parameters(self.persionalized_model)
@@ -63,11 +63,11 @@ class UserAPFL(User):
             loss = self.loss(output, y)
             loss.backward()
             self.optimizer.step(self.alpha,self.total_users/self.num_users)
-            self.persionalized_model = list(self.model.parameters()).copy() 
+            self.clone_model_paramenter(self.model.parameters(),self.persionalized_model)
 
-            # caculate persionalized bar model => this model is use to evaluate as in the paper. 
+            # # caculate persionalized bar model => this model is use to evaluate as in the paper. 
             for persionalized_bar, persionalized, local in zip(self.persionalized_model_bar, self.persionalized_model, self.local_model):
-                persionalized_bar = self.alpha * persionalized + (1 - self.alpha )* local
+                persionalized_bar.data = self.alpha * persionalized.data + (1 - self.alpha )* local.data
 
             # update local model back to model for the argegation.
             self.update_parameters(self.local_model)

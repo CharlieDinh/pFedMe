@@ -21,7 +21,7 @@ class UserPersionalized(User):
             self.loss = nn.CrossEntropyLoss()
         else:
             self.loss = nn.NLLLoss()
-            
+
         self.optimizer = PersionalizedOptimizer(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
 
     def set_grads(self, new_grads):
@@ -37,7 +37,6 @@ class UserPersionalized(User):
         self.model.train()
         for epoch in range(1, self.local_epochs + 1):  # local update 
             self.model.train()
-            loss_per_epoch = 0
             #for _ , (X, y) in enumerate(self.trainloader): # ~ t time update
             try:
                 # Samples a new batch for persionalizing
@@ -47,50 +46,20 @@ class UserPersionalized(User):
                 self.iter_trainloader = iter(self.trainloader)
                 (X, y) = next(self.iter_trainloader)
 
-            K = 3 # K is number of personalized steps
+            K = 5 # K is number of personalized steps
             for i in range(K):
                 self.optimizer.zero_grad()
                 output = self.model(X)
                 loss = self.loss(output, y)
                 loss.backward()
-                self.persionalized_model, _ = self.optimizer.step(self.local_weight_updated)
-                loss_per_epoch += loss.item() * X.shape[0]
-            loss_per_epoch /= self.train_samples
-            LOSS += loss_per_epoch
-            
+                self.persionalized_model_bar, _ = self.optimizer.step(self.local_weight_updated)
+
             # update local weight after finding aproximate theta
-            for new_param, localweight in zip(self.persionalized_model, self.local_weight_updated):
+            for new_param, localweight in zip(self.persionalized_model_bar, self.local_weight_updated):
                 localweight.data = localweight.data - self.lamda* self.learning_rate * (localweight.data - new_param.data)
-        
-        # evaluate personal model before making argeation at the server size 
-        #test_acc, _ = self.test()
-        #print("check accurancy of peronal model ", test_acc)
-        #self.update_parameters(self.local_weight_updated)
 
-        result = LOSS / self.local_epochs
-        #print(result)
-        return result
-    
-    # def train_evaluate(self, epochs):
-    #     LOSS = 0
-    #     self.model.train()
-    #     for epoch in range(1, self.local_epochs + 1):  # local update
-    #         self.model.train()
-    #         loss_per_epoch = 0
-    #         #dataloader_iterator = iter(self.testloader)
-    #         for _, (X, y) in enumerate(self.testloader):  # ~ t time update
-    #         #for i in range(4):
-    #         #    (X, y) = next(dataloader_iterator)
-    #             self.optimizer.zero_grad()
-    #             output = self.model(X)
-    #             loss = self.loss(output, y)
-    #             loss.backward()
-    #             new_params, _ = self.optimizer.step(self.local_weight_updated)
-    #             loss_per_epoch += loss.item() * X.shape[0]
+        #update local model as local_weight_upated
+        self.clone_model_paramenter(self.local_weight_updated, self.local_model)
+        self.update_parameters(self.local_weight_updated)
 
-    #         # update local weight after finding aproximate theta
-    #         for new_param, localweight in zip(new_params, self.local_weight_updated):
-    #             localweight.data = localweight.data - self.lamda * \
-    #                 self.learning_rate * (localweight.data - new_param.data)
-
-    #     self.update_parameters(self.local_weight_updated)
+        return LOSS

@@ -7,7 +7,7 @@ from utils.model_utils import read_data, read_user_data
 import numpy as np
 
 class Persionalized(Server):
-    def __init__(self, dataset,algorithm, model, batch_size, learning_rate, alpha, lamda, num_glob_iters,
+    def __init__(self, dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num_glob_iters,
                  local_epochs, optimizer, num_users):
         super().__init__(dataset,algorithm, model[0], batch_size, learning_rate, alpha, lamda, num_glob_iters,
                          local_epochs, optimizer, num_users)
@@ -55,15 +55,11 @@ class Persionalized(Server):
             self.selected_users = self.select_users(glob_iter,self.num_users)
 
             # Evaluate gloal model on user for each interation
-            print("Evaluate persionalized model")
-            print("")
+            #print("Evaluate persionalized model")
+            #print("")
             self.evaluate_personalized_model()
+            self.aggregate_parameters()
 
-            self.persionalized_aggregate_parameters()
-
-            #loss_ /= self.total_train_samples
-            #loss.append(loss_)
-            #print(loss_)
 
         #print(loss)
         self.save_results()

@@ -28,9 +28,9 @@ class User:
         self.iter_trainloader = iter(self.trainloader)
 
         # those parameters are for persionalized federated learing.
-        self.local_model = list(self.model.parameters()).copy()
-        self.persionalized_model = list(self.model.parameters()).copy()
-        self.persionalized_model_bar = list(self.model.parameters()).copy()
+        self.local_model = copy.deepcopy(list(self.model.parameters()))
+        self.persionalized_model = copy.deepcopy(list(self.model.parameters()))
+        self.persionalized_model_bar = copy.deepcopy(list(self.model.parameters()))
     
     def set_parameters(self, model):
         for old_param, new_param in zip(self.model.parameters(), model.parameters()):
@@ -41,6 +41,11 @@ class User:
         for param in self.model.parameters():
             param.detach()
         return self.model.parameters()
+    
+    def clone_model_paramenter(self, param, clone_param):
+        for param, clone_param in zip(param, clone_param):
+            clone_param.data = param.data.clone()
+        return clone_param
     
     def get_updated_parameters(self):
         return self.local_weight_updated
@@ -81,6 +86,33 @@ class User:
             #print(self.id + ", Train Loss:", loss)
         return train_acc, loss , self.train_samples
     
+    def test_persionalized_model(self):
+        self.model.eval()
+        test_acc = 0
+        self.update_parameters(self.persionalized_model_bar)
+        for x, y in self.testloader:
+            output = self.model(x)
+            test_acc += (torch.sum(torch.argmax(output, dim=1) == y)).item()
+            #@loss += self.loss(output, y)
+            #print(self.id + ", Test Accuracy:", test_acc / y.shape[0] )
+            #print(self.id + ", Test Loss:", loss)
+        self.update_parameters(self.local_model)
+        return test_acc, y.shape[0]
+
+    def train_error_and_loss_persionalized_model(self):
+        self.model.eval()
+        train_acc = 0
+        loss = 0
+        self.update_parameters(self.persionalized_model_bar)
+        for x, y in self.trainloaderfull:
+            output = self.model(x)
+            train_acc += (torch.sum(torch.argmax(output, dim=1) == y)).item()
+            loss += self.loss(output, y)
+            #print(self.id + ", Train Accuracy:", train_acc)
+            #print(self.id + ", Train Loss:", loss)
+        self.update_parameters(self.local_model)
+        return train_acc, loss , self.train_samples
+
     def save_model(self):
         model_path = os.path.join("models", self.dataset)
         if not os.path.exists(model_path):

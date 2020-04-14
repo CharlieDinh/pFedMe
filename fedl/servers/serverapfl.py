@@ -52,10 +52,9 @@ class APFL(Server):
                 user.train(self.local_epochs) #* user.train_samples
             
             # Evaluate gloal model on user for each interation
-            #print("Evaluate persionalized model")
-            #print("")
-            #self.evaluate_personalized_model()
-
+            print("Evaluate persionalized model")
+            print("")
+            self.evaluate_personalized_model()
             self.aggregate_parameters()
 
         self.save_results()

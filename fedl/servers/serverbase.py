@@ -6,7 +6,7 @@ from utils.model_utils import Metrics
 import copy
 
 class Server:
-    def __init__(self, dataset,algorithm, model, batch_size, learning_rate,alpha, lamda,
+    def __init__(self, dataset,algorithm, model, batch_size, learning_rate ,alpha, lamda,
                  num_glob_iters, local_epochs, optimizer,num_users):
 
         # Set up the main attributes
@@ -23,7 +23,7 @@ class Server:
         self.alpha = alpha
         self.lamda = lamda
         self.algorithm = algorithm
-        self.rs_train_acc, self.rs_train_loss, self.rs_glob_acc = [], [], []
+        self.rs_train_acc, self.rs_train_loss, self.rs_glob_acc,self.rs_train_acc_per, self.rs_train_loss_per, self.rs_glob_acc_per = [], [], [], [], [], []
         
         # Initialize the server's grads to zeros
         for param in self.model.parameters():
@@ -118,11 +118,22 @@ class Server:
     def save_results(self):
         alg = self.dataset + "_" + self.algorithm
         alg = alg + "_" + str(self.learning_rate) + "_" + str(self.alpha) + "_" + str(self.lamda) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b"
-        with h5py.File("./results/"+'{}_{}.h5'.format(alg, self.local_epochs), 'w') as hf:
-            hf.create_dataset('rs_glob_acc', data=self.rs_glob_acc)
-            hf.create_dataset('rs_train_acc', data=self.rs_train_acc)
-            hf.create_dataset('rs_train_loss', data=self.rs_train_loss)
-            hf.close()
+        if (len(self.rs_glob_acc) != 0 &  len(self.rs_train_acc) & len(self.rs_train_loss)) :
+            with h5py.File("./results/"+'{}_{}.h5'.format(alg, self.local_epochs), 'w') as hf:
+                hf.create_dataset('rs_glob_acc', data=self.rs_glob_acc)
+                hf.create_dataset('rs_train_acc', data=self.rs_train_acc)
+                hf.create_dataset('rs_train_loss', data=self.rs_train_loss)
+                hf.close()
+        
+        # store persionalized value
+        alg = self.dataset + "_" + self.algorithm + "_p"
+        alg = alg  + "_" + str(self.learning_rate) + "_" + str(self.alpha) + "_" + str(self.lamda) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b"
+        if (len(self.rs_glob_acc_per) != 0 &  len(self.rs_train_acc_per) & len(self.rs_train_loss_per)) :
+            with h5py.File("./results/"+'{}_{}.h5'.format(alg, self.local_epochs), 'w') as hf:
+                hf.create_dataset('rs_glob_acc', data=self.rs_glob_acc_per)
+                hf.create_dataset('rs_train_acc', data=self.rs_train_acc_per)
+                hf.create_dataset('rs_train_loss', data=self.rs_train_loss_per)
+                hf.close()
 
     def test(self):
         '''tests self.latest_model on given clients
@@ -152,7 +163,35 @@ class Server:
         #groups = [c.group for c in self.clients]
 
         return ids, num_samples, tot_correct, losses
-    
+
+    def test_persionalized_model(self):
+        '''tests self.latest_model on given clients
+        '''
+        num_samples = []
+        tot_correct = []
+        for c in self.users:
+            ct, ns = c.test_persionalized_model()
+            tot_correct.append(ct*1.0)
+            num_samples.append(ns)
+        ids = [c.id for c in self.users]
+
+        return ids, num_samples, tot_correct
+
+    def train_error_and_loss_persionalized_model(self):
+        num_samples = []
+        tot_correct = []
+        losses = []
+        for c in self.users:
+            ct, cl, ns = c.train_error_and_loss_persionalized_model() 
+            tot_correct.append(ct*1.0)
+            num_samples.append(ns)
+            losses.append(cl*1.0)
+        
+        ids = [c.id for c in self.users]
+        #groups = [c.group for c in self.clients]
+
+        return ids, num_samples, tot_correct, losses
+
     def evaluate(self):
         stats = self.test()  
         stats_train = self.train_error_and_loss()
@@ -169,15 +208,15 @@ class Server:
         print("Average Global Trainning Loss: ",train_loss)
 
     def evaluate_personalized_model(self):
-        stats = self.test()  
-        stats_train = self.train_error_and_loss()
+        stats = self.test_persionalized_model()  
+        stats_train = self.train_error_and_loss_persionalized_model()
         glob_acc = np.sum(stats[2])*1.0/np.sum(stats[1])
         train_acc = np.sum(stats_train[2])*1.0/np.sum(stats_train[1])
         # train_loss = np.dot(stats_train[3], stats_train[1])*1.0/np.sum(stats_train[1])
         train_loss = sum([x * y for (x, y) in zip(stats_train[1], stats_train[3])]).item() / np.sum(stats_train[1])
-        self.rs_glob_acc.append(glob_acc)
-        self.rs_train_acc.append(train_acc)
-        self.rs_train_loss.append(train_loss)
+        self.rs_glob_acc_per.append(glob_acc)
+        self.rs_train_acc_per.append(train_acc)
+        self.rs_train_loss_per.append(train_loss)
         #print("stats_train[1]",stats_train[3][0])
         print("Average Personal Accurancy: ", glob_acc)
         print("Average Personal Trainning Accurancy: ", train_acc)
