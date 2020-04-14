@@ -46,20 +46,20 @@ class UserPersionalized(User):
                 self.iter_trainloader = iter(self.trainloader)
                 (X, y) = next(self.iter_trainloader)
 
-            K = 5 # K is number of personalized steps
+            K = 10 # K is number of personalized steps
             for i in range(K):
                 self.optimizer.zero_grad()
                 output = self.model(X)
                 loss = self.loss(output, y)
                 loss.backward()
-                self.persionalized_model_bar, _ = self.optimizer.step(self.local_weight_updated)
+                self.persionalized_model_bar, _ = self.optimizer.step(self.local_model)
 
             # update local weight after finding aproximate theta
-            for new_param, localweight in zip(self.persionalized_model_bar, self.local_weight_updated):
+            for new_param, localweight in zip(self.persionalized_model_bar, self.local_model):
                 localweight.data = localweight.data - self.lamda* self.learning_rate * (localweight.data - new_param.data)
 
         #update local model as local_weight_upated
-        self.clone_model_paramenter(self.local_weight_updated, self.local_model)
-        self.update_parameters(self.local_weight_updated)
+        #self.clone_model_paramenter(self.local_weight_updated, self.local_model)
+        self.update_parameters(self.local_model)
 
         return LOSS
