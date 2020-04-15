@@ -11,6 +11,8 @@ from fedl.servers.serverapfl import APFL
 from fedl.servers.serverpsnl import Persionalized
 from fedl.trainmodel.models import Mclr_Logistic, Net, Mclr_CrossEntropy
 from utils.plot_utils import plot_summary_one_figure
+import torch
+
 torch.manual_seed(0)
 
 def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num_glob_iters,
