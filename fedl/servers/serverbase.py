@@ -26,9 +26,9 @@ class Server:
         self.rs_train_acc, self.rs_train_loss, self.rs_glob_acc,self.rs_train_acc_per, self.rs_train_loss_per, self.rs_glob_acc_per = [], [], [], [], [], []
         
         # Initialize the server's grads to zeros
-        for param in self.model.parameters():
-            param.data = torch.zeros_like(param.data)
-            param.grad = torch.zeros_like(param.data)
+        #for param in self.model.parameters():
+        #    param.data = torch.zeros_like(param.data)
+        #    param.grad = torch.zeros_like(param.data)
         #self.send_parameters()
         
     def aggregate_grads(self):
