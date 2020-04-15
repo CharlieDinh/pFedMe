@@ -222,16 +222,25 @@ class Server:
         print("Average Personal Trainning Accurancy: ", train_acc)
         print("Average Personal Trainning Loss: ",train_loss)
 
-    def evaluate_with_one_step(self):
-        print(" Evaluate persionalized model with one step update ")
-        #evaluate_users = copy.deepcopy(self.users)
-        total_accurancy = 0 
-        total_sample  = 0
-        for user in self.users:
-            user.train_one_step()  # * user.train_samples
-            test_acc, sample_size = user.test()
-            total_accurancy += test_acc
-            total_sample += sample_size
-            # set local model back to users to continue training after evaluation
-            user.update_parameters(user.local_model)
-        print("Average testing accurancy after several fineturing ",total_accurancy/total_sample)
+    def evaluate_one_step(self):
+        for c in self.users:
+            c.train_one_step()
+
+        stats = self.test()  
+        stats_train = self.train_error_and_loss()
+
+        # set local model back to client for training process.
+        for c in self.users:
+            c.update_parameters(c.local_model)
+
+        glob_acc = np.sum(stats[2])*1.0/np.sum(stats[1])
+        train_acc = np.sum(stats_train[2])*1.0/np.sum(stats_train[1])
+        # train_loss = np.dot(stats_train[3], stats_train[1])*1.0/np.sum(stats_train[1])
+        train_loss = sum([x * y for (x, y) in zip(stats_train[1], stats_train[3])]).item() / np.sum(stats_train[1])
+        self.rs_glob_acc_per.append(glob_acc)
+        self.rs_train_acc_per.append(train_acc)
+        self.rs_train_loss_per.append(train_loss)
+        #print("stats_train[1]",stats_train[3][0])
+        print("Average Personal Accurancy: ", glob_acc)
+        print("Average Personal Trainning Accurancy: ", train_acc)
+        print("Average Personal Trainning Loss: ",train_loss)
