@@ -224,12 +224,14 @@ class Server:
 
     def evaluate_with_one_step(self):
         print(" Evaluate persionalized model with one step update ")
-        evaluate_users = copy.deepcopy(self.users)
+        #evaluate_users = copy.deepcopy(self.users)
         total_accurancy = 0 
         total_sample  = 0
-        for user in evaluate_users:
+        for user in self.users:
             user.train_one_step()  # * user.train_samples
             test_acc, sample_size = user.test()
             total_accurancy += test_acc
             total_sample += sample_size
+            # set local model back to users to continue training after evaluation
+            user.update_parameters(user.local_model)
         print("Average testing accurancy after several fineturing ",total_accurancy/total_sample)
