@@ -56,9 +56,12 @@ class UserPerAvg(User):
             loss.backward()
             self.optimizer.step(beta = self.alpha)
 
+            # clone model to user model 
+            self.clone_model_paramenter(self.model.parameters(), self.local_model)
+
         return LOSS    
 
-    def train_one_step(self, epochs):
+    def train_one_step(self):
         self.model.train()
         #step 1
         X, y = self.get_next_test_batch()

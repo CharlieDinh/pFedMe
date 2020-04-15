@@ -132,7 +132,7 @@ class User:
             (X, y) = next(self.iter_testloader)
         except StopIteration:
             # restart the generator if the previous generator is exhausted.
-            self.iter_trainloader = iter(self.testloader)
+            self.iter_testloader = iter(self.testloader)
             (X, y) = next(self.iter_testloader)
         return (X, y)
 
