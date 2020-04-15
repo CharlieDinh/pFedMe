@@ -16,15 +16,15 @@ import torch
 torch.manual_seed(0)
 
 def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num_glob_iters,
-         local_epochs, optimizer, numusers):
+         local_epochs, optimizer, numusers, K, personal_learning_rate):
     
-    algorithms = ["Persionalized","FedAvg","APFL"]
+    algorithms = ["Persionalized"]
     local_ep = [20, 20, 20,20, 20]
     lamda = [3, 3, 3, 3, 3]
-    learning_rate = [0.01,0.01,0.01,0.01,0.01]
+    learning_rate = [0.01, 0.01, 0.01, 0.01, 0.01]
     alpha =  [0.5, 0.5, 0.5, 0.5, 0.5]
     batch_size = [20, 20, 20, 20, 20]
-    if(0):
+    if(1):
         if(model == "Mclr_Synthetic"):
             model = Mclr_Logistic(40,2), model
         else:
@@ -39,7 +39,8 @@ def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num
                 server.train()
                 server.test()
             if(algorithms[i] == "Persionalized"):
-                server = Persionalized(dataset,algorithms[i], model, batch_size[i], learning_rate[i], alpha[i], lamda[i], num_glob_iters, local_ep[i], optimizer, numusers)
+                server = Persionalized(dataset,algorithms[i], model, batch_size[i], learning_rate[i], alpha[i], lamda[i], num_glob_iters, local_ep[i], optimizer, numusers, K, personal_learning_rate)
+
                 server.train()
                 server.test()
             if(algorithms[i] == "APFL"):
@@ -51,7 +52,7 @@ def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num
                 server.train()
                 server.test()
     # plot the result:
-    algorithms = ["Persionalized_p","Persionalized_p"]
+    algorithms = ["APFL", "APFL_p", "Persionalized", "Persionalized_p"]
     plot_summary_one_figure(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
                                learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset)
 
@@ -59,18 +60,20 @@ def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", type=str, default="Mnist", choices=["Mnist", "Logistic_Synthetic"])
-    parser.add_argument("--model", type=str, default="Mclr_Logistic", choices=["cnn", "Mclr_Logistic", "Mclr_CrossEntropy"])
+    parser.add_argument("--model", type=str, default="Mclr_Logistic",
+                        choices=["cnn", "Mclr_Logistic", "Mclr_CrossEntropy"])
     parser.add_argument("--batch_size", type=int, default=20)
-    parser.add_argument("--learning_rate", type=float, default=0.01, help="Local learning rate")
-    #parser.add_argument("--persional_learning_rate", type=float, default=0.01, help="Local learning rate for Persionalized")
-    #parser.add_argument("--local_step_update", type=float, default=5, help="Local learning rate for Persionalized")
-    parser.add_argument("--alpha", type=float, default=0.25, help="Mixture Weight for APFL")
-    parser.add_argument("--lamda", type=float, default = 3, help="Regularization term")
-    parser.add_argument("--num_global_iters", type=int, default=200)
+    parser.add_argument("--learning_rate", type=float, default=0.001, help="Local learning rate")
+    parser.add_argument("--alpha", type=float, default=1, help="Mixture Weight for APFL")
+    parser.add_argument("--lamda", type=float, default=3, help="Regularization term")
+    parser.add_argument("--num_global_iters", type=int, default=100)
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
-    parser.add_argument("--algorithm", type=str, default="Persionalized", choices=["Persionalized","PerAvg", "FedAvg","APFL"])
-    parser.add_argument("--numusers", type=float, default=5, help="Number of Users per round") 
+    parser.add_argument("--algorithm", type=str, default="Persionalized",
+                        choices=["Persionalized", "PerAvg", "FedAvg", "APFL"])
+    parser.add_argument("--numusers", type=float, default=5, help="Number of Users per round")
+    parser.add_argument("--K", type=int, default=5, help="Optimization steps")
+    parser.add_argument("--personal_learning_rate", type=float, default=0.01, help="Personal learning rate")
     args = parser.parse_args()
 
     print("=" * 80)
@@ -95,5 +98,7 @@ if __name__ == "__main__":
         num_glob_iters=args.num_global_iters,
         local_epochs=args.local_epochs,
         optimizer= args.optimizer,
-        numusers = args.numusers
+        numusers = args.numusers,
+        K=args.K,
+        personal_learning_rate=args.personal_learning_rate
     )

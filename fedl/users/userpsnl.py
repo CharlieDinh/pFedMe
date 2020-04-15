@@ -13,7 +13,7 @@ class UserPersionalized(User):
     User in FedAvg.dataset
     """
     def __init__(self, numeric_id, train_data, test_data, model, batch_size, learning_rate,alpha,lamda,
-                 local_epochs, optimizer):
+                 local_epochs, optimizer, K, personal_learning_rate):
         super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, alpha, lamda,
                          local_epochs)
 
@@ -22,7 +22,9 @@ class UserPersionalized(User):
         else:
             self.loss = nn.NLLLoss()
 
-        self.optimizer = PersionalizedOptimizer(self.model.parameters(), lr=self.learning_rate, lamda=self.lamda)
+        self.K = K
+        self.personal_learning_rate = personal_learning_rate
+        self.optimizer = PersionalizedOptimizer(self.model.parameters(), lr=self.personal_learning_rate, lamda=self.lamda)
 
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):
@@ -40,8 +42,8 @@ class UserPersionalized(User):
             self.model.train()
             X, y = self.get_next_train_batch()
 
-            K = 10 # K is number of personalized steps
-            for i in range(K):
+            # K = 30 # K is number of personalized steps
+            for i in range(self.K):
                 self.optimizer.zero_grad()
                 output = self.model(X)
                 loss = self.loss(output, y)
