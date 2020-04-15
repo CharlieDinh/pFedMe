@@ -38,7 +38,7 @@ class UserPersionalized(User):
         for epoch in range(1, self.local_epochs + 1):  # local update
             
             self.model.train()
-            X, y = self.get_next_batch()
+            X, y = self.get_next_train_batch()
 
             K = 10 # K is number of personalized steps
             for i in range(K):

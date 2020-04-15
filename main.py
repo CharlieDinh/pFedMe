@@ -36,8 +36,8 @@ def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num
         if(algorithm == "APFL"):
             server = APFL(dataset,algorithm, model, batch_size, learning_rate, alpha, lamda, num_glob_iters, local_epochs, optimizer, numusers)
 
-        if(algorithms[i] == "PerAvg"):
-            server = PerAvg(dataset,algorithms[i], model, batch_size[i], learning_rate[i], alpha[i], lamda[i], num_glob_iters, local_ep[i], optimizer, numusers)
+        if(algorithm == "PerAvg"):
+            server = PerAvg(dataset,algorithm, model, batch_size, learning_rate, alpha, lamda, num_glob_iters, local_epochs, optimizer, numusers)
 
         server.train()
         server.test()

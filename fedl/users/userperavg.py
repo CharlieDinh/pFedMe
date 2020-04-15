@@ -23,7 +23,7 @@ class UserPerAvg(User):
         else:
             self.loss = nn.NLLLoss()
 
-        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=self.learning_rate)
+        self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
 
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):
@@ -41,7 +41,7 @@ class UserPerAvg(User):
             self.model.train()
 
             #step 1
-            X, y = self.get_next_batch()
+            X, y = self.get_next_train_batch()
             self.optimizer.zero_grad()
             output = self.model(X)
             loss = self.loss(output, y)
@@ -49,11 +49,28 @@ class UserPerAvg(User):
             self.optimizer.step()
 
             #step 2
-            X, y = self.get_next_batch()
+            X, y = self.get_next_train_batch()
             self.optimizer.zero_grad()
             output = self.model(X)
             loss = self.loss(output, y)
             loss.backward()
-            self.optimizer.step()
+            self.optimizer.step(beta = self.alpha)
 
         return LOSS    
+
+    def train_one_step(self, epochs):
+        self.model.train()
+        #step 1
+        X, y = self.get_next_test_batch()
+        self.optimizer.zero_grad()
+        output = self.model(X)
+        loss = self.loss(output, y)
+        loss.backward()
+        self.optimizer.step()
+            #step 2
+        X, y = self.get_next_train_batch()
+        self.optimizer.zero_grad()
+        output = self.model(X)
+        loss = self.loss(output, y)
+        loss.backward()
+        self.optimizer.step(beta=self.alpha)

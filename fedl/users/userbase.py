@@ -23,9 +23,11 @@ class User:
         self.lamda = lamda
         self.local_epochs = local_epochs
         self.trainloader = DataLoader(train_data, self.batch_size)
-        self.testloader = DataLoader(test_data, self.test_samples)
+        self.testloader =  DataLoader(test_data, self.batch_size)
+        self.testloaderfull = DataLoader(test_data, self.test_samples)
         self.trainloaderfull = DataLoader(train_data, self.train_samples)
         self.iter_trainloader = iter(self.trainloader)
+        self.iter_testloader = iter(self.testloader)
 
         # those parameters are for persionalized federated learing.
         self.local_model = copy.deepcopy(list(self.model.parameters()))
@@ -67,7 +69,7 @@ class User:
     def test(self):
         self.model.eval()
         test_acc = 0
-        for x, y in self.testloader:
+        for x, y in self.testloaderfull:
             output = self.model(x)
             test_acc += (torch.sum(torch.argmax(output, dim=1) == y)).item()
             #@loss += self.loss(output, y)
@@ -91,7 +93,7 @@ class User:
         self.model.eval()
         test_acc = 0
         self.update_parameters(self.persionalized_model_bar)
-        for x, y in self.testloader:
+        for x, y in self.testloaderfull:
             output = self.model(x)
             test_acc += (torch.sum(torch.argmax(output, dim=1) == y)).item()
             #@loss += self.loss(output, y)
@@ -114,7 +116,7 @@ class User:
         self.update_parameters(self.local_model)
         return train_acc, loss , self.train_samples
     
-    def get_next_batch(self):
+    def get_next_train_batch(self):
         try:
             # Samples a new batch for persionalizing
             (X, y) = next(self.iter_trainloader)
@@ -122,6 +124,16 @@ class User:
             # restart the generator if the previous generator is exhausted.
             self.iter_trainloader = iter(self.trainloader)
             (X, y) = next(self.iter_trainloader)
+        return (X, y)
+    
+    def get_next_test_batch(self):
+        try:
+            # Samples a new batch for persionalizing
+            (X, y) = next(self.iter_testloader)
+        except StopIteration:
+            # restart the generator if the previous generator is exhausted.
+            self.iter_trainloader = iter(self.testloader)
+            (X, y) = next(self.iter_testloader)
         return (X, y)
 
     def save_model(self):
@@ -133,7 +145,7 @@ class User:
     def load_model(self):
         model_path = os.path.join("models", self.dataset)
         self.model = torch.load(os.path.join(model_path, "server" + ".pt"))
-
+    
     @staticmethod
     def model_exists():
         return os.path.exists(os.path.join("models", "server" + ".pt"))

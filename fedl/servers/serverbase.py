@@ -222,13 +222,13 @@ class Server:
         print("Average Personal Trainning Accurancy: ", train_acc)
         print("Average Personal Trainning Loss: ",train_loss)
 
-    def train_evaluate(self):
-        print("......... Evaluating .........")
+    def evaluate_with_one_step(self):
+        print(" Evaluate persionalized model with one step update ")
         evaluate_users = copy.deepcopy(self.users)
         total_accurancy = 0 
         total_sample  = 0
         for user in evaluate_users:
-            user.train_evaluate(self.local_epochs)  # * user.train_samples
+            user.train_one_step()  # * user.train_samples
             test_acc, sample_size = user.test()
             total_accurancy += test_acc
             total_sample += sample_size

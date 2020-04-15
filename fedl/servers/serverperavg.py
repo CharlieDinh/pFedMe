@@ -53,7 +53,7 @@ class PerAvg(Server):
             # Evaluate gloal model on user for each interation
             print("Evaluate persionalized model")
             print("")
-            self.evaluate_personalized_model()
+            self.evaluate_with_one_step()
             self.aggregate_parameters()
 
         self.save_results()

@@ -38,9 +38,9 @@ class UserAPFL(User):
         LOSS = 0
         self.model.train()
         for epoch in range(1, self.local_epochs + 1):  # local update 
-            
+
             self.model.train()
-            X, y = self.get_next_batch()
+            X, y = self.get_next_train_batch()
             
             # caculate local model 
             self.optimizer.zero_grad()

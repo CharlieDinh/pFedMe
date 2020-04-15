@@ -6,7 +6,7 @@ class MySGD(Optimizer):
         defaults = dict(lr=lr)
         super(MySGD, self).__init__(params, defaults)
 
-    def step(self, closure=None):
+    def step(self, closure=None, beta = 0):
         loss = None
         if closure is not None:
             loss = closure
@@ -17,7 +17,10 @@ class MySGD(Optimizer):
                 if p.grad is None:
                     continue
                 d_p = p.grad.data
-                p.data.add_(-group['lr'], d_p)
+                if(beta != 0):
+                    p.data.add_(-beta, d_p)
+                else:     
+                    p.data.add_(-group['lr'], d_p)
         return loss
 
 
