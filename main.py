@@ -9,6 +9,7 @@ import os
 from fedl.servers.serveravg import FedAvg
 from fedl.servers.serverapfl import APFL
 from fedl.servers.serverpsnl import Persionalized
+from fedl.servers.serverperavg import PerAvg
 from fedl.trainmodel.models import Mclr_Logistic, Net, Mclr_CrossEntropy
 from utils.plot_utils import plot_summary_one_figure
 import torch
@@ -35,6 +36,9 @@ def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num
         if(algorithm == "APFL"):
             server = APFL(dataset,algorithm, model, batch_size, learning_rate, alpha, lamda, num_glob_iters, local_epochs, optimizer, numusers)
 
+        if(algorithms[i] == "PerAvg"):
+            server = PerAvg(dataset,algorithms[i], model, batch_size[i], learning_rate[i], alpha[i], lamda[i], num_glob_iters, local_ep[i], optimizer, numusers)
+
         server.train()
         server.test()
 
@@ -54,7 +58,7 @@ if __name__ == "__main__":
     parser.add_argument("--num_global_iters", type=int, default=20)
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
-    parser.add_argument("--algorithm", type=str, default="Persionalized", choices=["Persionalized", "FedAvg","APFL"])
+    parser.add_argument("--algorithm", type=str, default="Persionalized", choices=["Persionalized","PerAvg", "FedAvg","APFL"])
     parser.add_argument("--numusers", type=float, default=5, help="Number of Users per round") 
     args = parser.parse_args()
 

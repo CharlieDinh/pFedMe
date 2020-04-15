@@ -113,6 +113,16 @@ class User:
             #print(self.id + ", Train Loss:", loss)
         self.update_parameters(self.local_model)
         return train_acc, loss , self.train_samples
+    
+    def get_next_batch(self):
+        try:
+            # Samples a new batch for persionalizing
+            (X, y) = next(self.iter_trainloader)
+        except StopIteration:
+            # restart the generator if the previous generator is exhausted.
+            self.iter_trainloader = iter(self.trainloader)
+            (X, y) = next(self.iter_trainloader)
+        return (X, y)
 
     def save_model(self):
         model_path = os.path.join("models", self.dataset)

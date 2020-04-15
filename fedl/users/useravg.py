@@ -35,14 +35,7 @@ class UserAVG(User):
         self.model.train()
         for epoch in range(1, self.local_epochs + 1):
             self.model.train()
-            try:
-                # Samples a new batch for persionalizing
-                (X, y) = next(self.iter_trainloader)
-            except StopIteration:
-                # restart the generator if the previous generator is exhausted.
-                self.iter_trainloader = iter(self.trainloader)
-                (X, y) = next(self.iter_trainloader)
-                
+            X, y = self.get_next_batch()
             self.optimizer.zero_grad()
             output = self.model(X)
             loss = self.loss(output, y)
