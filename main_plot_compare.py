@@ -19,12 +19,14 @@ def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num
          local_epochs, optimizer, numusers, K, personal_learning_rate):
     
     algorithms = ["Persionalized"]
-    local_ep = [20, 20, 20,20, 20]
-    lamda = [3, 3, 3, 3, 3]
-    learning_rate = [0.01, 0.01, 0.01, 0.01, 0.01]
-    alpha =  [0.5, 0.5, 0.5, 0.5, 0.5]
-    batch_size = [20, 20, 20, 20, 20]
-    if(1):
+    local_ep = [20,20]
+    lamda = [12,12]
+    learning_rate = [0.01,0.01]
+    alpha =  [0.5,0.5]
+    batch_size = [20,20]
+    K = [5,5]
+    personal_learning_rate = [0.01,0.01]
+    if(0):
         if(model == "Mclr_Synthetic"):
             model = Mclr_Logistic(40,2), model
         else:
@@ -39,8 +41,7 @@ def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num
                 server.train()
                 server.test()
             if(algorithms[i] == "Persionalized"):
-                server = Persionalized(dataset,algorithms[i], model, batch_size[i], learning_rate[i], alpha[i], lamda[i], num_glob_iters, local_ep[i], optimizer, numusers, K, personal_learning_rate)
-
+                server = Persionalized(dataset,algorithms[i], model, batch_size[i], learning_rate[i], alpha[i], lamda[i], num_glob_iters, local_ep[i], optimizer, numusers, K[i], personal_learning_rate[i])
                 server.train()
                 server.test()
             if(algorithms[i] == "APFL"):
@@ -52,9 +53,9 @@ def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num
                 server.train()
                 server.test()
     # plot the result:
-    algorithms = ["APFL", "APFL_p", "Persionalized", "Persionalized_p"]
+    algorithms = ["Persionalized", "Persionalized_p"]
     plot_summary_one_figure(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
-                               learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset)
+                               learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
 
 
 if __name__ == "__main__":

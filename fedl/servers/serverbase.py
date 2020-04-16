@@ -117,9 +117,11 @@ class Server:
     # Save loss, accurancy to h5 fiel
     def save_results(self):
         alg = self.dataset + "_" + self.algorithm
-        alg = alg + "_" + str(self.learning_rate) + "_" + str(self.alpha) + "_" + str(self.lamda) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b"
+        alg = alg + "_" + str(self.learning_rate) + "_" + str(self.alpha) + "_" + str(self.lamda) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b" + "_" + str(self.local_epochs)
+        if(self.algorithm == "Persionalized" or self.algorithm == "Persionalized_p"):
+            alg = alg + "_" + str(self.K) + "_" + str(self.personal_learning_rate)
         if (len(self.rs_glob_acc) != 0 &  len(self.rs_train_acc) & len(self.rs_train_loss)) :
-            with h5py.File("./results/"+'{}_{}.h5'.format(alg, self.local_epochs), 'w') as hf:
+            with h5py.File("./results/"+'{}.h5'.format(alg, self.local_epochs), 'w') as hf:
                 hf.create_dataset('rs_glob_acc', data=self.rs_glob_acc)
                 hf.create_dataset('rs_train_acc', data=self.rs_train_acc)
                 hf.create_dataset('rs_train_loss', data=self.rs_train_loss)
@@ -127,9 +129,11 @@ class Server:
         
         # store persionalized value
         alg = self.dataset + "_" + self.algorithm + "_p"
-        alg = alg  + "_" + str(self.learning_rate) + "_" + str(self.alpha) + "_" + str(self.lamda) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b"
+        alg = alg  + "_" + str(self.learning_rate) + "_" + str(self.alpha) + "_" + str(self.lamda) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b"+ "_" + str(self.local_epochs)
+        if(self.algorithm == "Persionalized" or self.algorithm == "Persionalized_p"):
+            alg = alg + "_" + str(self.K) + "_" + str(self.personal_learning_rate)
         if (len(self.rs_glob_acc_per) != 0 &  len(self.rs_train_acc_per) & len(self.rs_train_loss_per)) :
-            with h5py.File("./results/"+'{}_{}.h5'.format(alg, self.local_epochs), 'w') as hf:
+            with h5py.File("./results/"+'{}.h5'.format(alg, self.local_epochs), 'w') as hf:
                 hf.create_dataset('rs_glob_acc', data=self.rs_glob_acc_per)
                 hf.create_dataset('rs_train_acc', data=self.rs_train_acc_per)
                 hf.create_dataset('rs_train_loss', data=self.rs_train_loss_per)

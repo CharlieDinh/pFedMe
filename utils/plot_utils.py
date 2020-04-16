@@ -4,14 +4,14 @@ import numpy as np
 from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes, mark_inset
 
 
-def simple_read_data(loc_ep, alg):
-    hf = h5py.File("./results/"+'{}_{}.h5'.format(alg, loc_ep), 'r')
+def simple_read_data(alg):
+    hf = h5py.File("./results/"+'{}.h5'.format(alg), 'r')
     rs_glob_acc = np.array(hf.get('rs_glob_acc')[:])
     rs_train_acc = np.array(hf.get('rs_train_acc')[:])
     rs_train_loss = np.array(hf.get('rs_train_loss')[:])
     return rs_train_acc, rs_train_loss, rs_glob_acc
 
-def get_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[],alpha=[],algorithms_list=[], batch_size=[], dataset=""):
+def get_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[],alpha=[],algorithms_list=[], batch_size=[], dataset="", k= [] , personal_learning_rate = []):
     Numb_Algs = len(algorithms_list)
     train_acc = np.zeros((Numb_Algs, Numb_Glob_Iters))
     train_loss = np.zeros((Numb_Algs, Numb_Glob_Iters))
@@ -20,10 +20,13 @@ def get_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[
     for i in range(Numb_Algs):
         string_learning_rate = str(learning_rate[i])  
         string_learning_rate = string_learning_rate + "_" +str(alpha[i]) + "_" +str(lamb[i])
-        algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size[i]) + "b"
-       
+        if(algorithms_list[i] == "Persionalized" or algorithms_list[i] == "Persionalized_p"):
+            algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size[i]) + "b" + "_" +str(loc_ep1[i]) + "_"+ str(k[i])  + "_"+ str(personal_learning_rate[i])
+        else:
+            algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size[i]) + "b"  "_" +str(loc_ep1[i])
+
         train_acc[i, :], train_loss[i, :], glob_acc[i, :] = np.array(
-            simple_read_data(loc_ep1[i], dataset +"_"+ algorithms_list[i]))[:, :Numb_Glob_Iters]
+            simple_read_data(dataset +"_"+ algorithms_list[i]))[:, :Numb_Glob_Iters]
         algs_lbl[i] = algs_lbl[i]
     return glob_acc, train_acc, train_loss
 
@@ -627,10 +630,10 @@ def plot_summary(num_users=100, loc_ep1=[], Numb_Glob_Iters=10, lamb=[], learnin
     plt.savefig('glob_acc.pdf')
     plt.savefig(dataset.upper() + str(loc_ep1[1]) + 'glob_acc.png')
     
-def plot_summary_one_figure(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[], alpha=[], algorithms_list=[], batch_size=0, dataset = ""):
+def plot_summary_one_figure(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[], alpha=[], algorithms_list=[], batch_size=0, dataset = "", k = [], personal_learning_rate = []):
     Numb_Algs = len(algorithms_list)
-    glob_acc, train_acc, train_loss = get_training_data_value(
-        num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset)
+    dataset = dataset
+    glob_acc, train_acc, train_loss = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
     plt.figure(1)
     MIN = train_loss.min() - 0.001
     start = 0
