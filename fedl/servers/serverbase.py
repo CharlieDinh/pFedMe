@@ -16,7 +16,7 @@ class Server:
         self.batch_size = batch_size
         self.learning_rate = learning_rate
         self.total_train_samples = 0
-        self.model = model
+        self.model = copy.deepcopy(model)
         self.users = []
         self.selected_users = []
         self.num_users = num_users
