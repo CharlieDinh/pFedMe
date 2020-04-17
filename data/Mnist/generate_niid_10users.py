@@ -7,7 +7,7 @@ import os
 
 random.seed(1)
 np.random.seed(1)
-NUM_USERS = 10
+NUM_USERS = 20 # should be muitiple of 10
 NUM_LABELS = 2
 # Setup directory for train/test data
 train_path = './data/train/mnist_train.json'
@@ -53,20 +53,21 @@ def ram_dom_gen(total, size):
     temp.append(total)
     print(temp)
     return temp
-number_sampe = []
+number_sample = []
 for total_value, count in zip(mnist_data, counts):
     temp = ram_dom_gen(len(total_value), count)
-    number_sampe.append(temp)
+    number_sample.append(temp)
 print("--------------")
-print(number_sampe)
+print(number_sample)
 
 i = 0
 number_samples = []
-for i in range(2):
-    for sample in number_sampe:
+for i in range(len(number_sample[0])):
+    for sample in number_sample:
         print(sample)
         number_samples.append(sample[i])
 
+print("--------------")
 print(number_samples)
 
 ###### CREATE USER DATA SPLIT #######
@@ -78,6 +79,7 @@ for user in trange(NUM_USERS):
     for j in range(NUM_LABELS):  # 4 labels for each users
         l = (user + j) % 10
         print("value of L",l)
+        print("value of count",count)
         num_samples =  number_samples[count] # num sample
         count = count + 1
         if idx[l] + num_samples < len(mnist_data[l]):
