@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-# Code adapted from 
-# https://github.com/litian96/FedProx/blob/master/data/synthetic_0.5_0.5/generate_synthetic.py
-
 import json
 import math
 import numpy as np
@@ -12,8 +8,8 @@ from tqdm import trange
 import math
 
 
-NUM_USER = 20
-
+NUM_USER = 100
+np.random.seed(0)
 def softmax(x):
     ex = np.exp(x)
     sum_ex = np.sum( np.exp(x))
@@ -25,7 +21,7 @@ def generate_synthetic(alpha, beta, iid):
     dimension = 60
     NUM_CLASS = 10
     
-    samples_per_user = np.random.lognormal(4, 2, (NUM_USER)).astype(int) + 2000
+    samples_per_user = (np.random.lognormal(4, 2, (NUM_USER)).astype(int) + 50) * 5
     print(samples_per_user)
     num_samples = np.sum(samples_per_user)
 
@@ -83,12 +79,6 @@ def generate_synthetic(alpha, beta, iid):
 
 def main():
 
-    if (not os.path.exists("data/train")):
-        os.makedirs("data/train")
-    if (not os.path.exists("data/test")):
-        os.makedirs("data/test")
-
-
 
     train_data = {'users': [], 'user_data':{}, 'num_samples':[]}
     test_data = {'users': [], 'user_data':{}, 'num_samples':[]}
@@ -132,3 +122,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
