@@ -15,18 +15,22 @@ from utils.plot_utils import plot_summary_one_figure
 import torch
 torch.manual_seed(0)
 
+use_cuda = torch.cuda.is_available()
+device = torch.device("cuda" if use_cuda else "cpu")
+
 def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num_glob_iters,
          local_epochs, optimizer, numusers, K, personal_learning_rate):
     
-    algorithms = ["Persionalized"]
-    local_ep = [20,20]
-    lamda = [12,12]
-    learning_rate = [0.01,0.01]
-    alpha =  [0.5,0.5]
-    batch_size = [20,20]
-    K = [5,5]
-    personal_learning_rate = [0.01,0.01]
-    if(0):
+    algorithms = ["PerAvg", "Persionalized","FedAvg"]
+    local_ep = [20,20,20,20]
+    lamda = [15,15,15,15]
+    learning_rate = [0.003, 0.003, 0.003, 0.003]
+    alpha =  [0.001, 0.001, 0.001, 0.001]
+    batch_size = [20,20,20,20,20,20,20]
+    K = [5,5,5,5]
+    personal_learning_rate = [0.1,0.1,0.1,0.1]
+
+    if(1):
         if(model == "Mclr_Synthetic"):
             model = Mclr_Logistic(40,2), model
         else:
@@ -53,7 +57,7 @@ def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num
                 server.train()
                 server.test()
     # plot the result:
-    algorithms = ["Persionalized", "Persionalized_p"]
+    algorithms = [ "Persionalized_p", "Persionalized","PerAvg_p","FedAvg"]
     plot_summary_one_figure(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
                                learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
 
@@ -67,7 +71,7 @@ if __name__ == "__main__":
     parser.add_argument("--learning_rate", type=float, default=0.001, help="Local learning rate")
     parser.add_argument("--alpha", type=float, default=1, help="Mixture Weight for APFL")
     parser.add_argument("--lamda", type=float, default=3, help="Regularization term")
-    parser.add_argument("--num_global_iters", type=int, default=100)
+    parser.add_argument("--num_global_iters", type=int, default=1000)
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
     parser.add_argument("--algorithm", type=str, default="Persionalized",
