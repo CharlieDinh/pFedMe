@@ -10,7 +10,7 @@ from fedl.servers.serveravg import FedAvg
 from fedl.servers.serverapfl import APFL
 from fedl.servers.serverpsnl import Persionalized
 from fedl.servers.serverperavg import PerAvg
-from fedl.trainmodel.models import Mclr_Logistic, Net, Mclr_CrossEntropy
+from fedl.trainmodel.models import Mclr_Logistic, Net, Mclr_CrossEntropy, DNN
 from utils.plot_utils import plot_summary_one_figure
 import torch
 torch.manual_seed(0)
@@ -35,8 +35,12 @@ def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num
             model = Mclr_Logistic(40,2), model
         else:
             model = Mclr_Logistic(), model
+
         if(model == "cnn"):
             model = Net(), model
+
+        if(model == "dnn"):
+            model = DNN(), model
         
         for i in range(len(algorithms)):
             print(algorithms[i])
@@ -66,7 +70,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", type=str, default="Mnist", choices=["Mnist", "Logistic_Synthetic"])
     parser.add_argument("--model", type=str, default="Mclr_Logistic",
-                        choices=["cnn", "Mclr_Logistic", "Mclr_CrossEntropy"])
+                        choices=["dnn", "Mclr_Logistic", "Mclr_CrossEntropy"])
     parser.add_argument("--batch_size", type=int, default=20)
     parser.add_argument("--learning_rate", type=float, default=0.001, help="Local learning rate")
     parser.add_argument("--alpha", type=float, default=1, help="Mixture Weight for APFL")
