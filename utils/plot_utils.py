@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import h5py
 import numpy as np
 from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes, mark_inset
-
+import os
 
 def simple_read_data(alg):
     hf = h5py.File("./results/"+'{}.h5'.format(alg), 'r')
@@ -1008,3 +1008,285 @@ def plot_summary_nist(num_users=100, loc_ep1=[], Numb_Glob_Iters=10, lamb=[], le
                 'test_accu.pdf', bbox_inches='tight')
     plt.savefig(dataset + str(loc_ep1[1]) +
                 'test_accu.png', bbox_inches='tight')
+
+# plot_summary_one_figure(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
+#                         learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms,
+#                         batch_size=batch_size, dataset=dataset, k = K,
+#                         personal_learning_rate = personal_learning_rate)
+
+def plot_summary_two_figures_new(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list,
+                                 batch_size, dataset, k, personal_learning_rate):
+
+    Numb_Algs = len(algorithms_list)
+    dataset = dataset
+    glob_acc, train_acc, train_loss = get_training_data_value(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate,
+                                                              alpha, algorithms_list, batch_size, dataset, k,
+                                                              personal_learning_rate)
+    one_alg = all([alg == algorithms_list[0] for alg in algorithms_list])
+
+    fig = plt.figure(figsize=(10, 4.5))
+    ax = fig.add_subplot(111)  # The big subplot
+    ax1 = fig.add_subplot(121)
+    ax2 = fig.add_subplot(122)
+
+    linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':']
+
+    for i in range(Numb_Algs):
+        if one_alg:
+            label = str(lamb[i]) + "_" + str(loc_ep1[i]) + "e" + "_" + str(batch_size[i]) + "b"
+        else:
+            label = algorithms_list[i] + str(lamb[i]) + "_" + str(loc_ep1[i]) + "e" + "_" + str(batch_size[i]) + "b"
+        ax1.plot(train_loss[i, 1:], linestyle=linestyles[i],
+                 label=label)
+    #ax1.legend(loc='lower right')
+    ax1.set_ylabel('Training Loss')
+    ax1.set_xlabel('Global rounds')
+
+    for i in range(Numb_Algs):
+        if one_alg:
+            label = str(lamb[i]) + "_" + str(loc_ep1[i]) + "e" + "_" + str(batch_size[i]) + "b"
+        else:
+            label = algorithms_list[i] + str(lamb[i]) + "_" + str(loc_ep1[i]) + "e" + "_" + str(batch_size[i]) + "b"
+        ax2.plot(glob_acc[i, 1:], linestyle=linestyles[i],
+                 label=label)
+    #ax2.legend(loc='lower right')
+    ax2.set_ylabel('Test Accuracy')
+    ax2.set_xlabel('Global rounds')
+
+    ax.spines['top'].set_color('none')
+    ax.spines['bottom'].set_color('none')
+    ax.spines['left'].set_color('none')
+    ax.spines['right'].set_color('none')
+    ax.tick_params(labelcolor='w', top='off',
+                   bottom='off', left='off', right='off')
+
+    plt.savefig(dataset.upper())
+
+
+def plot_different_k(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list,
+                                 batch_size, dataset, k, personal_learning_rate):
+    Numb_Algs = len(algorithms_list)
+    glob_acc, train_acc, train_loss = get_training_data_value(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate,
+                                                              alpha, algorithms_list, batch_size, dataset, k,
+                                                              personal_learning_rate)
+
+    normal_glob_acc = glob_acc[:len(glob_acc) // 2]
+    personal_glob_acc = glob_acc[len(glob_acc) // 2:]
+    normal_train_acc = train_acc[:len(train_acc) // 2]
+    personal_train_acc = train_acc[len(train_acc) // 2:]
+    normal_train_loss = train_loss[:len(train_loss) // 2]
+    personal_train_loss = train_loss[len(train_loss) // 2:]
+
+    one_alg = all([alg == algorithms_list[0] for alg in algorithms_list])
+
+    fig = plt.figure(figsize=(22.5, 3.5))
+    ax = fig.add_subplot(111)  # The big subplot
+    ax1 = fig.add_subplot(141)
+    ax2 = fig.add_subplot(142)
+    ax3 = fig.add_subplot(143)
+    ax4 = fig.add_subplot(144)
+
+    linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':']
+
+    min_train_loss = min([min(x) for x in train_loss])
+    max_glob_acc = max([max(x) for x in glob_acc])
+
+    for i in range(len(normal_train_loss)):
+        ax1.plot(normal_train_loss[i, 1:], linestyle=linestyles[i],
+                 label="K = {}".format(k[i]))
+    min_val = min([min(x) for x in normal_train_loss])
+    ax1.set_ylim([min_train_loss - 0.01, 2.2 * min_train_loss])
+    ax1.legend(loc='upper right')
+    ax1.set_ylabel('Server Training Loss')
+    ax1.set_xlabel('Global rounds')
+
+    for i in range(len(personal_train_loss)):
+        ax2.plot(personal_train_loss[i, 1:], linestyle=linestyles[i],
+                 label="K = {}".format(k[i]))
+    min_val = min([min(x) for x in personal_train_loss])
+    ax2.set_ylim([min_train_loss - 0.01, 2.2 * min_train_loss])
+    ax2.set_ylabel('Personal Training Loss')
+    ax2.set_xlabel('Global rounds')
+
+    for i in range(len(normal_glob_acc)):
+        ax3.plot(normal_glob_acc[i, 1:], linestyle=linestyles[i],
+                 label="K = {}".format(k[i]))
+    #ax3.set_ylim([0.8 * max_glob_acc, max_glob_acc + 0.01])
+    ax3.set_ylabel('Server Test Accuracy')
+    ax3.set_xlabel('Global rounds')
+
+    for i in range(len(personal_glob_acc)):
+        ax4.plot(personal_glob_acc[i, 1:], linestyle=linestyles[i],
+                 label="K = {}".format(k[i]))
+    #ax4.set_ylim([0.5, max_glob_acc + 0.01])
+    ax4.set_ylabel('Personal Test Accuracy')
+    ax4.set_xlabel('Global rounds')
+
+    ax.spines['top'].set_color('none')
+    ax.spines['bottom'].set_color('none')
+    ax.spines['left'].set_color('none')
+    ax.spines['right'].set_color('none')
+    ax.tick_params(labelcolor='w', top='off',
+                   bottom='off', left='off', right='off')
+
+    print(lamb, Numb_Glob_Iters, num_users, batch_size, learning_rate)
+
+    plt.suptitle(dataset.upper() + ": " "$\\lambda$ = " + str(lamb[0]) + ", $T$ = " + str(Numb_Glob_Iters) +
+                 ", $S$ = " + str(num_users) + ", $|\\mathcal{D}_i|$ = " + str(batch_size[0]) +
+                 ", $\\eta$ = " + str(learning_rate[0]), y=-0.02, x=0.5)
+    plt.savefig(dataset.upper(), bbox_inches="tight")
+    # algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" +
+    # str(num_users) + "u" + "_" + str(batch_size[i]) + "b" + "_" +str(loc_ep1[i]) + "_" + str(k[i]) + "_" + str(personal_learning_rate[i])
+
+
+
+
+
+def plot_different_k_one_plot(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list,
+                              batch_size, dataset, k, personal_learning_rate):
+    num_stats = len(k)  # number of lines
+    algorithms_list = ["Persionalized"] * num_stats
+    glob_acc, train_acc, train_loss = get_training_data_value(num_users, [loc_ep1] * num_stats, Numb_Glob_Iters,
+                                                              [lamb] * num_stats, [learning_rate] * num_stats,
+                                                              [alpha] * num_stats, algorithms_list,
+                                                              [batch_size] * num_stats, dataset, k,
+                                                              [personal_learning_rate] * num_stats)
+
+    linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':']
+
+    title = "$\\lambda$ = " + str(lamb) + ", $T$ = " + str(Numb_Glob_Iters) + \
+            ", $S$ = " + str(num_users) + ", $|\\mathcal{D}_i|$ = " + str(batch_size) + \
+            ", $\\eta$ = " + str(learning_rate)
+
+    # Train Loss on global model
+    plt.figure(figsize=(5, 4))
+    for i in range(num_stats):
+        plt.plot(range(1, len(train_loss[1]) + 1), train_loss[i, :], linestyle=linestyles[i],
+                 label="$K$ = " + str(k[i]))
+    plt.ylim((train_loss.min() * 0.9, train_loss.min() * 1.3))
+    plt.xlabel("Global Rounds $T$")
+    plt.ylabel("Server Train Loss")
+    plt.legend()
+    plt.title("Personalized (Global Model)")
+    plt.savefig("Personalized_GlobalModel_Loss_{}.png".format(dataset), bbox_inches="tight")
+
+    # Glob accuracy on global model
+    plt.figure(figsize=(5, 4))
+    for i in range(num_stats):
+        plt.plot(range(1, len(glob_acc[1]) + 1), glob_acc[i, :], linestyle=linestyles[i],
+                 label="$K$ = " + str(k[i]))
+    #plt.ylim((glob_acc.max() * 0.85, glob_acc.max() * 1.05))
+    plt.xlabel("Global Rounds $T$")
+    plt.ylabel("Server Accuracy")
+    plt.legend()
+    plt.title("Personalized (Global Model)")
+    plt.savefig("Personalized_GlobalModel_GlobAcc_{}.png".format(dataset), bbox_inches="tight")
+
+
+
+
+    algorithms_list = ["Persionalized_p"] * num_stats
+    glob_acc, train_acc, train_loss = get_training_data_value(num_users, [loc_ep1] * num_stats, Numb_Glob_Iters,
+                                                              [lamb] * num_stats, [learning_rate] * num_stats,
+                                                              [alpha] * num_stats, algorithms_list,
+                                                              [batch_size] * num_stats, dataset, k,
+                                                              [personal_learning_rate] * num_stats)
+
+    # Train Loss on global model
+    plt.figure(figsize=(5, 4))
+    for i in range(num_stats):
+        plt.plot(range(1, len(train_loss[1]) + 1), train_loss[i, :], linestyle=linestyles[i],
+                 label="$K$ = " + str(k[i]))
+    plt.ylim((train_loss.min() * 0.9, train_loss.min() * 1.3))
+    plt.xlabel("Global Rounds $T$")
+    plt.ylabel("Server Train Loss")
+    plt.legend()
+    plt.title("Personalized (Personalized Model)")
+    plt.savefig("Personalized_PersonalizedModel_Loss_{}.png".format(dataset), bbox_inches="tight")
+
+    # Glob accuracy on global model
+    plt.figure(figsize=(5, 4))
+    for i in range(num_stats):
+        plt.plot(range(1, len(glob_acc[1]) + 1), glob_acc[i, :], linestyle=linestyles[i],
+                 label="$K$ = " + str(k[i]))
+    #plt.ylim((glob_acc.max() * 0.85, glob_acc.max() * 1.05))
+    plt.xlabel("Global Rounds $T$")
+    plt.ylabel("Server Accuracy")
+    plt.legend()
+    plt.title("Personalized (Personalized Model)")
+    plt.savefig("Personalized_PersonalizedModel_GlobAcc_{}.png".format(dataset), bbox_inches="tight")
+
+
+def plot_summary_two_figures2(num_users=100, loc_ep1=[], Numb_Glob_Iters=10, lamb=[], learning_rate=[], algorithms_list=[], batch_size=0, dataset=""):
+    Numb_Algs: int = len(algorithms_list)
+
+    glob_acc, train_acc, train_loss = get_training_data_value(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, algorithms_list, batch_size, dataset)
+
+    plt.figure(1)
+    linestyles = ['-', '--']
+    algs_lbl = ["FEDL",  "FedAvg",
+                "FEDL",  "FedAvg"]
+    fig = plt.figure(figsize=(10, 4.5))
+    ax = fig.add_subplot(111)    # The big subplot
+    ax1 = fig.add_subplot(121)
+    ax2 = fig.add_subplot(122)
+    #min = train_loss.min()
+    min = train_loss.min() - 0.01
+    max = 3.5  # train_loss.max() + 0.01
+    num_al = 2
+# Turn off axis lines and ticks of the big subplot
+    ax.spines['top'].set_color('none')
+    ax.spines['bottom'].set_color('none')
+    ax.spines['left'].set_color('none')
+    ax.spines['right'].set_color('none')
+    ax.tick_params(labelcolor='w', top='off',
+                   bottom='off', left='off', right='off')
+    for i in range(num_al):
+        ax1.plot(train_loss[i, 1:], linestyle=linestyles[i],
+                 label=algs_lbl[i] + " : " + '$K_l = $' + str(loc_ep1[i]))
+        ax1.set_ylim([min, max])
+        ax1.legend(loc='upper right')
+
+    for i in range(num_al):
+        ax2.plot(train_loss[i+num_al, 1:], linestyle=linestyles[i],
+                 label=algs_lbl[i + num_al] + " : " + '$K_l = $' + str(loc_ep1[i+num_al]))
+        ax2.set_ylim([min, max])
+        ax2.legend(loc='upper right')
+    ax.set_title('FENIST', y=1.02)
+    ax.set_xlabel('Global rounds ' + '$K_g$')
+    ax.set_ylabel('Training Loss', labelpad=15)
+    plt.savefig(dataset + str(loc_ep1[1]) + 'train_loss.pdf')
+    plt.savefig(dataset + str(loc_ep1[1]) + 'train_loss.png')
+
+    plt.figure(2)
+    fig = plt.figure(figsize=(10, 4.5))
+    #fig = plt.figure(figsize=(10, 4))
+    ax = fig.add_subplot(111)    # The big subplot
+    ax1 = fig.add_subplot(121)
+    ax2 = fig.add_subplot(122)
+    max = glob_acc.max() + 0.01
+    min = 0.1
+    # Turn off axis lines and ticks of the big subplot
+    ax.spines['top'].set_color('none')
+    ax.spines['bottom'].set_color('none')
+    ax.spines['left'].set_color('none')
+    ax.spines['right'].set_color('none')
+    ax.tick_params(labelcolor='w', top='off',
+                   bottom='off', left='off', right='off')
+
+    for i in range(num_al):
+        ax1.plot(glob_acc[i, 1:], linestyle=linestyles[i],
+                 label=algs_lbl[i] + " : " + '$K_l = $' + str(loc_ep1[i]))
+        ax1.set_ylim([min, max])
+        ax1.legend(loc='lower right')
+
+    for i in range(num_al):
+        ax2.plot(glob_acc[i+num_al, 1:], linestyle=linestyles[i],
+                 label=algs_lbl[i + num_al] + " : " + '$K_l = $' + str(loc_ep1[i+num_al]))
+        ax2.set_ylim([min, max])
+        ax2.legend(loc='lower right')
+    ax.set_title('FENIST', y=1.02)
+    ax.set_xlabel('Global rounds ' + '$K_g$')
+    ax.set_ylabel('Test Accuracy', labelpad=15)
+    plt.savefig(dataset + str(loc_ep1[1]) + 'glob_acc.pdf')
+    plt.savefig(dataset + str(loc_ep1[1]) + 'glob_acc.png')
