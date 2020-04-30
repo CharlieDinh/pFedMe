@@ -5,6 +5,7 @@ from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes, mark_inset
 import os
 
 def simple_read_data(alg):
+    print(alg)
     hf = h5py.File("./results/"+'{}.h5'.format(alg), 'r')
     rs_glob_acc = np.array(hf.get('rs_glob_acc')[:])
     rs_train_acc = np.array(hf.get('rs_train_acc')[:])
@@ -1014,6 +1015,19 @@ def plot_summary_nist(num_users=100, loc_ep1=[], Numb_Glob_Iters=10, lamb=[], le
 #                         batch_size=batch_size, dataset=dataset, k = K,
 #                         personal_learning_rate = personal_learning_rate)
 
+def get_label_name(name):
+    if name.startswith("Persionalized"):
+        if name.startswith("Persionalized_p"):
+            return "Personalized (Personalized Model)"
+        else:
+            return "Personalized (Global Model)"
+    if name.startswith("PerAvg"):
+        return "Per-FedAvg"
+    if name.startswith("FedAvg"):
+        return "FedAvg"
+    if name.startswith("APFL"):
+        return "APFL"
+
 def plot_summary_two_figures_new(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list,
                                  batch_size, dataset, k, personal_learning_rate):
 
@@ -1024,34 +1038,10 @@ def plot_summary_two_figures_new(num_users, loc_ep1, Numb_Glob_Iters, lamb, lear
                                                               personal_learning_rate)
     one_alg = all([alg == algorithms_list[0] for alg in algorithms_list])
 
-    fig = plt.figure(figsize=(10, 4.5))
+    fig = plt.figure(figsize=(12, 4.3))
     ax = fig.add_subplot(111)  # The big subplot
     ax1 = fig.add_subplot(121)
     ax2 = fig.add_subplot(122)
-
-    linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':']
-
-    for i in range(Numb_Algs):
-        if one_alg:
-            label = str(lamb[i]) + "_" + str(loc_ep1[i]) + "e" + "_" + str(batch_size[i]) + "b"
-        else:
-            label = algorithms_list[i] + str(lamb[i]) + "_" + str(loc_ep1[i]) + "e" + "_" + str(batch_size[i]) + "b"
-        ax1.plot(train_loss[i, 1:], linestyle=linestyles[i],
-                 label=label)
-    #ax1.legend(loc='lower right')
-    ax1.set_ylabel('Training Loss')
-    ax1.set_xlabel('Global rounds')
-
-    for i in range(Numb_Algs):
-        if one_alg:
-            label = str(lamb[i]) + "_" + str(loc_ep1[i]) + "e" + "_" + str(batch_size[i]) + "b"
-        else:
-            label = algorithms_list[i] + str(lamb[i]) + "_" + str(loc_ep1[i]) + "e" + "_" + str(batch_size[i]) + "b"
-        ax2.plot(glob_acc[i, 1:], linestyle=linestyles[i],
-                 label=label)
-    #ax2.legend(loc='lower right')
-    ax2.set_ylabel('Test Accuracy')
-    ax2.set_xlabel('Global rounds')
 
     ax.spines['top'].set_color('none')
     ax.spines['bottom'].set_color('none')
@@ -1059,8 +1049,39 @@ def plot_summary_two_figures_new(num_users, loc_ep1, Numb_Glob_Iters, lamb, lear
     ax.spines['right'].set_color('none')
     ax.tick_params(labelcolor='w', top='off',
                    bottom='off', left='off', right='off')
+    ax.set_xticks([])
+    ax.set_yticks([])
 
-    plt.savefig(dataset.upper())
+    linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':']
+    print(lamb)
+
+    for i in range(Numb_Algs):
+        label = get_label_name(algorithms_list[i])
+        # if label.startswith("Personalized (Personalized Model"):
+        #     label = label.format(lamb[i])
+        ax1.plot(train_loss[i, 1:], linestyle=linestyles[i],
+                 label=label)
+    # ax1.set_ylim(train_loss.min() * 0.98, train_loss.min() * 1.8)
+    ax1.legend(loc='upper right')
+    ax1.set_ylabel('Training Loss', size=14)
+    ax1.set_xlabel('Global rounds', size=14)
+
+    for i in range(Numb_Algs):
+        label = get_label_name(algorithms_list[i])
+        # if label.startswith("Personalized (Personalized Model"):
+        #     label = label.format(lamb[i])
+        ax2.plot(glob_acc[i, 1:], linestyle=linestyles[i],
+                 label=label)
+    # ax2.set_ylim(glob_acc.max() * 0.93, glob_acc.max() * 1.003)
+    # ax2.legend(loc='lower right')
+    ax2.set_ylabel('Test Accuracy', size=14)
+    ax2.set_xlabel('Global rounds', size=14)
+
+
+
+    # plt.suptitle()
+
+    plt.savefig(dataset.upper() + "-algorithm-comparison-nonconvex.pdf", bbox_inches="tight")
 
 
 def plot_different_k(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list,

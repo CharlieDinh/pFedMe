@@ -11,7 +11,7 @@ from fedl.servers.serverapfl import APFL
 from fedl.servers.serverpsnl import Persionalized
 from fedl.servers.serverperavg import PerAvg
 from fedl.trainmodel.models import Mclr_Logistic, Net, Mclr_CrossEntropy, DNN
-from utils.plot_utils import plot_summary_one_figure
+from utils.plot_utils import *
 import torch
 torch.manual_seed(0)
 
@@ -21,7 +21,7 @@ device = torch.device("cuda" if use_cuda else "cpu")
 def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num_glob_iters,
          local_epochs, optimizer, numusers, K, personal_learning_rate):
     
-    algorithms = ["PerAvg", "Persionalized","FedAvg"]
+    algorithms = ["Persionalized"]
     local_ep = [20,20,20,20]
     lamda = [15,15,15,15]
     learning_rate = [0.003, 0.003, 0.003, 0.003]
@@ -33,7 +33,7 @@ def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num
     if(1):
         if(model == "Mclr_Synthetic"):
             model = Mclr_Logistic(40,2), model
-        else:
+        elif model == "Mclr_Logistic":
             model = Mclr_Logistic(), model
 
         if(model == "cnn"):
@@ -61,21 +61,23 @@ def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num
                 server.train()
                 server.test()
     # plot the result:
-    algorithms = [ "Persionalized_p", "Persionalized","PerAvg_p","FedAvg"]
-    plot_summary_one_figure(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
+    algorithms = ["Persionalized_p", "Persionalized", "PerAvg_p", "FedAvg"]
+    plot_summary_two_figures_new(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
                                learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
+    #plot_summary_one_figure(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
+                               #learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", type=str, default="Mnist", choices=["Mnist", "Logistic_Synthetic"])
-    parser.add_argument("--model", type=str, default="Mclr_Logistic",
-                        choices=["dnn", "Mclr_Logistic", "Mclr_CrossEntropy"])
+    parser.add_argument("--model", type=str, default="dnn",
+                        choices=["dnn", "Mclr_Logistic", "Mclr_CrossEntropy", "cnn"])
     parser.add_argument("--batch_size", type=int, default=20)
     parser.add_argument("--learning_rate", type=float, default=0.001, help="Local learning rate")
     parser.add_argument("--alpha", type=float, default=1, help="Mixture Weight for APFL")
     parser.add_argument("--lamda", type=float, default=3, help="Regularization term")
-    parser.add_argument("--num_global_iters", type=int, default=1000)
+    parser.add_argument("--num_global_iters", type=int, default=600)
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
     parser.add_argument("--algorithm", type=str, default="Persionalized",
