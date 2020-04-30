@@ -60,6 +60,6 @@ class DNN(nn.Module):
         # define forward pass
         x = torch.flatten(x, 1)
         x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
+        x = self.fc2(x)
         x = F.log_softmax(x, dim=1)
         return x
