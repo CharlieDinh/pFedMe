@@ -1076,9 +1076,6 @@ def plot_summary_two_figures_new(num_users, loc_ep1, Numb_Glob_Iters, lamb, lear
     # ax2.legend(loc='lower right')
     ax2.set_ylabel('Test Accuracy', size=14)
     ax2.set_xlabel('Global rounds', size=14)
-
-
-
     # plt.suptitle()
 
     plt.savefig(dataset.upper() + "-algorithm-comparison-nonconvex.pdf", bbox_inches="tight")
@@ -1311,3 +1308,101 @@ def plot_summary_two_figures2(num_users=100, loc_ep1=[], Numb_Glob_Iters=10, lam
     ax.set_ylabel('Test Accuracy', labelpad=15)
     plt.savefig(dataset + str(loc_ep1[1]) + 'glob_acc.pdf')
     plt.savefig(dataset + str(loc_ep1[1]) + 'glob_acc.png')
+
+
+def plot_summary_one_figure_synthetic_R(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate):
+    Numb_Algs = len(algorithms_list)   
+    dataset = dataset
+    glob_acc, train_acc, train_loss = get_training_data_value(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate,alpha, algorithms_list, batch_size, dataset, k,personal_learning_rate)
+    one_alg = all([alg == algorithms_list[0] for alg in algorithms_list])
+    linestyles = ['-', '--', '-.','-', '--', '-.']
+    print(lamb)
+    colors = ['tab:blue', 'tab:green', 'r', 'c', 'darkorange', 'tab:brown', 'w']
+    for i in range(Numb_Algs):
+        label = get_label_name(algorithms_list[i])
+        #plt.plot(train_loss[i, 1:], linestyle=linestyles[i],label=label)
+        #plt.plot(train_loss[i, 1:], linestyle=linestyles[i], label=label + ":" +r'$\lambda = $'+ str(lamb[i]) + ","
+        #         r'$R = $' +str(loc_ep1[i]), linewidth = 1)
+        plt.plot(train_loss[i, 1:], linestyle=linestyles[i], label=label + ": "
+                 r'$R = $' +str(loc_ep1[i]), linewidth = 1, color=colors[i])
+    plt.legend(loc='upper right')
+    plt.ylabel('Training Loss', size=14)
+    plt.xlabel('Global rounds', size=14)
+    #plt.ylim([train_loss.min() - 0.01,  2])
+    plt.ylim([0.37,  1.8])
+    #plt.savefig(dataset.upper() + "Non_Convex_Syn_fixR.pdf", bbox_inches="tight")
+    plt.savefig(dataset.upper() + "Convex_Syn_fixR.pdf", bbox_inches="tight")
+    plt.close()
+
+def plot_summary_one_figure_synthetic_K(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate):
+    Numb_Algs = len(algorithms_list)   
+    dataset = dataset
+    glob_acc, train_acc, train_loss = get_training_data_value(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate,alpha, algorithms_list, batch_size, dataset, k,personal_learning_rate)
+    one_alg = all([alg == algorithms_list[0] for alg in algorithms_list])
+    linestyles = ['-', '--', '-.','-', '--', '-.']
+    print(lamb)
+    colors = ['tab:blue', 'tab:green','darkorange', 'r', 'c', 'tab:brown', 'w']
+    for i in range(Numb_Algs):
+        label = get_label_name(algorithms_list[i])
+        plt.plot(train_loss[i, 1:], linestyle=linestyles[i], label=label + ": "
+                 r'$K = $' +str(k[i]), linewidth = 1, color=colors[i])
+    plt.legend(loc='upper right')
+    plt.ylabel('Training Loss', size=14)
+    plt.xlabel('Global rounds', size=14)
+    plt.ylim([0.37,  1.8])
+    #plt.savefig(dataset.upper() + "Non_Convex_Syn_fixK.pdf", bbox_inches="tight")
+    plt.savefig(dataset.upper() + "Convex_Syn_fixR.pdf", bbox_inches="tight")
+    plt.close()
+
+def plot_summary_one_figure_synthetic_L(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate):
+    Numb_Algs = len(algorithms_list)   
+    dataset = dataset
+    glob_acc, train_acc, train_loss = get_training_data_value(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate,alpha, algorithms_list, batch_size, dataset, k,personal_learning_rate)
+    one_alg = all([alg == algorithms_list[0] for alg in algorithms_list])
+    linestyles = ['-', '--', '-.','-', '--', '-.']
+    print(lamb)
+    colors = ['tab:blue', 'tab:green', 'r', 'c', 'darkorange', 'tab:brown', 'w']
+    for i in range(Numb_Algs):
+        label = get_label_name(algorithms_list[i])
+        plt.plot(train_loss[i, 1:], linestyle=linestyles[i], label=label + ": "
+                 + r'$\lambda = $'+ str(lamb[i]), linewidth = 1, color=colors[i])
+    plt.legend(loc='upper right')
+    plt.ylabel('Training Loss', size=14)
+    plt.xlabel('Global rounds', size=14)
+    plt.ylim([0.37,  1.8])
+    #plt.savefig(dataset.upper() + "Non_Convex_Syn_fixL.pdf", bbox_inches="tight")
+    plt.savefig(dataset.upper() + "Convex_Syn_fixR.pdf", bbox_inches="tight")
+    plt.close()
+
+
+def plot_summary_one_figure_mnist(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate):
+    Numb_Algs = len(algorithms_list)   
+    dataset = dataset
+    glob_acc, train_acc, train_loss = get_training_data_value(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate,alpha, algorithms_list, batch_size, dataset, k,personal_learning_rate)
+    one_alg = all([alg == algorithms_list[0] for alg in algorithms_list])
+    linestyles = ['-', '--', '-.','-', '--', '-.']
+    print(lamb)
+    colors = ['tab:blue', 'tab:green', 'r', 'darkorange']
+    plt.figure(1)
+    # training loss
+    for i in range(Numb_Algs):
+        label = get_label_name(algorithms_list[i])
+        plt.plot(train_loss[i, 1:], linestyle=linestyles[i], label=label, linewidth = 1, color=colors[i])
+    plt.legend(loc='upper right')
+    plt.ylabel('Training Loss', size=14)
+    plt.xlabel('Global rounds', size=14)
+    plt.ylim([0.06,  0.7])
+    #plt.savefig(dataset.upper() + "Non_Convex_Syn_fixL.pdf", bbox_inches="tight")
+    plt.savefig(dataset.upper() + "Non_Convex_Mnist_train.pdf", bbox_inches="tight")
+    plt.figure(2)
+    # Global accurancy
+    for i in range(Numb_Algs):
+        label = get_label_name(algorithms_list[i])
+        plt.plot(glob_acc[i, 1:], linestyle=linestyles[i], label=label, linewidth = 1, color=colors[i])
+    plt.legend(loc='lower right')
+    plt.ylabel('Test Accuracy', size=14)
+    plt.xlabel('Global rounds', size=14)
+    plt.ylim([0.9,  0.98])
+    #plt.savefig(dataset.upper() + "Non_Convex_Syn_fixL.pdf", bbox_inches="tight")
+    plt.savefig(dataset.upper() + "Non_Convex_Mnist_test.pdf", bbox_inches="tight")
+    plt.close()
