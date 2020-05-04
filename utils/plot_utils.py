@@ -658,7 +658,7 @@ def plot_summary_one_figure(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[
     plt.ylabel('Training Loss')
     plt.xlabel('Global rounds')
     plt.title(dataset.upper())
-    plt.ylim([train_loss.min(), 0.5])
+    plt.ylim([train_loss.min(), 1.4])
     plt.savefig(dataset.upper() + str(loc_ep1[0]) + 'train_loss.png')
     #plt.savefig(dataset + str(loc_ep1[1]) + 'train_loss.pdf')
     plt.figure(3)
@@ -1328,10 +1328,10 @@ def plot_summary_one_figure_synthetic_R(num_users, loc_ep1, Numb_Glob_Iters, lam
     plt.legend(loc='upper right')
     plt.ylabel('Training Loss', size=14)
     plt.xlabel('Global rounds', size=14)
-    #plt.ylim([train_loss.min() - 0.01,  2])
-    plt.ylim([0.37,  1.8])
-    #plt.savefig(dataset.upper() + "Non_Convex_Syn_fixR.pdf", bbox_inches="tight")
-    plt.savefig(dataset.upper() + "Convex_Syn_fixR.pdf", bbox_inches="tight")
+    plt.ylim([train_loss.min() - 0.01,  2])
+    #plt.ylim([0.5,  1.8])
+    plt.savefig(dataset.upper() + "Non_Convex_Syn_fixR.pdf", bbox_inches="tight")
+    #plt.savefig(dataset.upper() + "Convex_Syn_fixR.pdf", bbox_inches="tight")
     plt.close()
 
 def plot_summary_one_figure_synthetic_K(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate):
@@ -1349,9 +1349,10 @@ def plot_summary_one_figure_synthetic_K(num_users, loc_ep1, Numb_Glob_Iters, lam
     plt.legend(loc='upper right')
     plt.ylabel('Training Loss', size=14)
     plt.xlabel('Global rounds', size=14)
-    plt.ylim([0.37,  1.8])
+    #plt.ylim([0.5,  1.8])
+    plt.ylim([train_loss.min() - 0.01,  2])
     #plt.savefig(dataset.upper() + "Non_Convex_Syn_fixK.pdf", bbox_inches="tight")
-    plt.savefig(dataset.upper() + "Convex_Syn_fixR.pdf", bbox_inches="tight")
+    plt.savefig(dataset.upper() + "Convex_Syn_fixK.pdf", bbox_inches="tight")
     plt.close()
 
 def plot_summary_one_figure_synthetic_L(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate):
@@ -1359,9 +1360,9 @@ def plot_summary_one_figure_synthetic_L(num_users, loc_ep1, Numb_Glob_Iters, lam
     dataset = dataset
     glob_acc, train_acc, train_loss = get_training_data_value(num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate,alpha, algorithms_list, batch_size, dataset, k,personal_learning_rate)
     one_alg = all([alg == algorithms_list[0] for alg in algorithms_list])
-    linestyles = ['-', '--', '-.','-', '--', '-.']
+    linestyles = ['-', '--', '-.',':','-', '--', '-.']
     print(lamb)
-    colors = ['tab:blue', 'tab:green', 'r', 'c', 'darkorange', 'tab:brown', 'w']
+    colors = ['tab:blue', 'tab:green', 'r', 'c', 'darkorange', 'tab:brown', 'm']
     for i in range(Numb_Algs):
         label = get_label_name(algorithms_list[i])
         plt.plot(train_loss[i, 1:], linestyle=linestyles[i], label=label + ": "
@@ -1369,9 +1370,10 @@ def plot_summary_one_figure_synthetic_L(num_users, loc_ep1, Numb_Glob_Iters, lam
     plt.legend(loc='upper right')
     plt.ylabel('Training Loss', size=14)
     plt.xlabel('Global rounds', size=14)
-    plt.ylim([0.37,  1.8])
-    #plt.savefig(dataset.upper() + "Non_Convex_Syn_fixL.pdf", bbox_inches="tight")
-    plt.savefig(dataset.upper() + "Convex_Syn_fixR.pdf", bbox_inches="tight")
+    #plt.ylim([0.5,  1.8])
+    plt.ylim([train_loss.min() - 0.01,  2])
+    plt.savefig(dataset.upper() + "Non_Convex_Syn_fixL.pdf", bbox_inches="tight")
+    #plt.savefig(dataset.upper() + "Convex_Syn_fixL.pdf", bbox_inches="tight")
     plt.close()
 
 
@@ -1391,9 +1393,9 @@ def plot_summary_one_figure_mnist(num_users, loc_ep1, Numb_Glob_Iters, lamb, lea
     plt.legend(loc='upper right')
     plt.ylabel('Training Loss', size=14)
     plt.xlabel('Global rounds', size=14)
-    plt.ylim([0.06,  0.7])
-    #plt.savefig(dataset.upper() + "Non_Convex_Syn_fixL.pdf", bbox_inches="tight")
-    plt.savefig(dataset.upper() + "Non_Convex_Mnist_train.pdf", bbox_inches="tight")
+    plt.ylim([0.195,  0.5])
+    plt.savefig(dataset.upper() + "Convex_Mnist_train.pdf", bbox_inches="tight")
+    #plt.savefig(dataset.upper() + "Non_Convex_Mnist_train.pdf", bbox_inches="tight")
     plt.figure(2)
     # Global accurancy
     for i in range(Numb_Algs):
@@ -1402,7 +1404,8 @@ def plot_summary_one_figure_mnist(num_users, loc_ep1, Numb_Glob_Iters, lamb, lea
     plt.legend(loc='lower right')
     plt.ylabel('Test Accuracy', size=14)
     plt.xlabel('Global rounds', size=14)
-    plt.ylim([0.9,  0.98])
-    #plt.savefig(dataset.upper() + "Non_Convex_Syn_fixL.pdf", bbox_inches="tight")
-    plt.savefig(dataset.upper() + "Non_Convex_Mnist_test.pdf", bbox_inches="tight")
+    #plt.ylim([0.9,  0.98])
+    plt.ylim([0.89,  0.945])
+    plt.savefig(dataset.upper() + "Convex_Mnist_test.pdf", bbox_inches="tight")
+    #plt.savefig(dataset.upper() + "Non_Convex_Mnist_test.pdf", bbox_inches="tight")
     plt.close()
