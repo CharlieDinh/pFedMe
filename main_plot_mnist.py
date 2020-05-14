@@ -45,15 +45,15 @@ if(0):  # R values
     plot_summary_one_figure_mnist_R(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
                                learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
 
-if(1): # D values
+if(0): # D values
     local_ep = [20,20,20,20,20,20,20]
     lamda = [15,15,15,15,15,15,15]
-    learning_rate = [0.005, 0.005, 0.005, 0.005, 0.005, 0.005]
+    learning_rate = [0.004, 0.005, 0.005, 0.004, 0.005, 0.005]
     alpha =  [0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
-    batch_size = [10,20,10,20]
+    batch_size = [10,20,50,10,20,50]
     K = [5,5,5,5,5,5]
-    personal_learning_rate = [0.09,0.09,0.09,0.09,0.09,0.09] 
-    algorithms = [ "Persionalized_p","Persionalized_p","Persionalized","Persionalized"]
+    personal_learning_rate = [0.08,0.09,0.09,0.08,0.09,0.09] 
+    algorithms = [ "Persionalized_p","Persionalized_p","Persionalized_p","Persionalized","Persionalized","Persionalized"]
     plot_summary_one_figure_mnist_D(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
                                learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
 
@@ -69,14 +69,77 @@ if(0): # K value
     plot_summary_one_figure_mnist_K(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
                                learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
 
-if(0): # comparision 
+if(1): # comparision 
+    local_ep = [20,20,20,20,20,20,20]
+    lamda = [30,30,15,15,15]
+    learning_rate = [0.005, 0.005, 0.005, 0.005, 0.005]
+    alpha =  [0.001, 0.001, 0.001, 0.001, 0.001]
+    batch_size = [20,20,20,20,20]
+    K = [5,5,5,5,5,5]
+    personal_learning_rate = [0.05,0.05,0.09,0.09,0.09] 
+    algorithms = [ "Persionalized_p","Persionalized","PerAvg_p","FedAvg"]
+    plot_summary_one_figure_mnist_Compare(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
+                               learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
+
+
+# -------------------------------------------- Convex Case----------------------------------------#
+if(0): # L values
+    local_ep = [20,20,20,20,20,20,20]
+    lamda = [7,10,15,7,10,15]
+    learning_rate = [0.005, 0.005, 0.005, 0.005, 0.005, 0.005]
+    alpha =  [0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
+    batch_size = [20,20,20,20,20,20]
+    K = [5,5,5,5,5,5]
+    personal_learning_rate = [0.09,0.09,0.09,0.09,0.09,0.09] 
+    algorithms = [ "Persionalized_p","Persionalized_p","Persionalized_p","Persionalized","Persionalized","Persionalized"]
+    plot_summary_one_figure_mnist_L(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
+                               learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
+if(0):  # R values
+    local_ep = [10,20,30,10,20,30]
+    lamda = [15,15,15,15,15,15,15]
+    learning_rate = [0.005, 0.005, 0.005, 0.005, 0.005, 0.005]
+    alpha =  [0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
+    batch_size = [20,20,20,20,20,20]
+    K = [5,5,5,5,5,5]
+    personal_learning_rate = [0.09,0.09,0.09,0.09,0.09,0.09] 
+    algorithms = [ "Persionalized_p","Persionalized_p","Persionalized_p","Persionalized","Persionalized","Persionalized"]
+    plot_summary_one_figure_mnist_R(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
+                               learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
+if(0): # D values
+    local_ep = [20,20,20,20,20,20,20]
+    lamda = [15,15,15,15,15,15,15]
+    learning_rate = [0.004, 0.005, 0.005, 0.004, 0.005, 0.005]
+    alpha =  [0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
+    batch_size = [10,20,50,10,20,50]
+    K = [5,5,5,5,5,5]
+    personal_learning_rate = [0.08,0.09,0.08,0.08,0.09,0.09] 
+    algorithms = [ "Persionalized_p","Persionalized_p","Persionalized_p","Persionalized","Persionalized","Persionalized"]
+    plot_summary_one_figure_mnist_D(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
+                               learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
+if(0): # K value
     local_ep = [20,20,20,20,20,20,20]
     lamda = [15,15,15,15,15,15,15]
     learning_rate = [0.005, 0.005, 0.005, 0.005, 0.005, 0.005]
     alpha =  [0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
-    batch_size = [10,20,50,10,20,50]
-    K = [5,5,5,5,5,5]
+    batch_size = [20,20,20,20,20,20]
+    K = [1,5,7,1,5,7]
     personal_learning_rate = [0.09,0.09,0.09,0.09,0.09,0.09] 
     algorithms = [ "Persionalized_p","Persionalized_p","Persionalized_p","Persionalized","Persionalized","Persionalized"]
-    plot_summary_one_figure_mnist_D(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
+    plot_summary_one_figure_mnist_K(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
                                learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
+if(0): # comparision
+    local_ep = [20,20,20,20,20,20,20]
+    lamda = [15,15,15,15]
+    learning_rate = [0.005, 0.005, 0.005, 0.005]
+    alpha =  [0.001, 0.001, 0.001, 0.001]
+    batch_size = [20,20,20,20]
+    K = [5,5,5,5,5,5]
+    personal_learning_rate = [0.1,0.1,0.09,0.09,0.09,0.09]
+    algorithms = [ "Persionalized_p","Persionalized","PerAvg_p","FedAvg"]
+    plot_summary_one_figure_mnist_Compare(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
+                               learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
+
+
+
+
+

@@ -18,17 +18,17 @@ torch.manual_seed(0)
 def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num_glob_iters,
          local_epochs, optimizer, numusers, K, personal_learning_rate):
     
-    algorithms = ["Persionalized","Persionalized","Persionalized","Persionalized"]
+    algorithms = ["Persionalized"]
     local_ep = [20,20,20,20,20]
-    lamda = [10,10,10,10,10]
+    lamda = [12,12,15,15,15]
     learning_rate = [0.005, 0.005, 0.005, 0.005, 0.005]
     alpha =  [0.001, 0.001, 0.001, 0.001, 0.001]
     batch_size = [20,20,20,20,20,20,20]
-    K = [1,3,10,20]
-    personal_learning_rate = [0.01,0.01,0.01,0.01]
+    K = [5,5,5,5]
+    personal_learning_rate = [0.1,0.1,0.01,0.01]
     
     model = Mclr_Logistic(60,10), model
-    if(0):    
+    if(1):    
         for i in range(len(algorithms)):
             print(algorithms[i])
             if(algorithms[i] == "FedAvg"):
@@ -48,7 +48,7 @@ def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num
                 server.train()
                 server.test()   
 
-    algorithms = [ "Persionalized_p","Persionalized_p","Persionalized_p","Persionalized_p"]
+    algorithms = [ "Persionalized_p","Persionalized","PerAvg_p","FedAvg"]
     plot_summary_one_figure(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
                                learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
 
