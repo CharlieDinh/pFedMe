@@ -121,7 +121,7 @@ class Server:
 
         # aaggregate avergage model with previous model using parameter beta 
         for pre_param, param in zip(previous_param, self.model.parameters()):
-            param = (1 - self.alpha)*pre_param + self.alpha*param
+            param.data = (1 - self.alpha)*pre_param.data + self.alpha*param.data
             
     # Save loss, accurancy to h5 fiel
     def save_results(self):

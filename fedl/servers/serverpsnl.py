@@ -60,7 +60,8 @@ class Persionalized(Server):
             #print("Evaluate persionalized model")
             #print("")
             self.evaluate_personalized_model()
-            self.aggregate_parameters()
+            #self.aggregate_parameters()
+            self.persionalized_aggregate_parameters()
 
 
         #print(loss)
