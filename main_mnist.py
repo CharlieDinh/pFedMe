@@ -74,7 +74,7 @@ if __name__ == "__main__":
     parser.add_argument("--learning_rate", type=float, default=0.001, help="Local learning rate")
     parser.add_argument("--alpha", type=float, default=1, help="Mixture Weight for APFL")
     parser.add_argument("--lamda", type=float, default=3, help="Regularization term")
-    parser.add_argument("--num_global_iters", type=int, default=600)
+    parser.add_argument("--num_global_iters", type=int, default=800)
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
     parser.add_argument("--algorithm", type=str, default="Persionalized",
