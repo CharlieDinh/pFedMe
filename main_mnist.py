@@ -24,13 +24,13 @@ def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num
     algorithms = ["Persionalized"]
     local_ep = [20,20,20,20]
     lamda = [15,15,15,15]
-    learning_rate = [0.003, 0.003, 0.003, 0.003]
-    alpha =  [0.001, 0.001, 0.001, 0.001]
+    learning_rate = [0.005, 0.005, 0.005, 0.005]
+    alpha =  [1, 1, 1, 1]
     batch_size = [20,20,20,20,20,20,20]
     K = [5,5,5,5]
     personal_learning_rate = [0.1,0.1,0.1,0.1]
 
-    if(1):
+    if(0):
         if(model == "Mclr_Synthetic"):
             model = Mclr_Logistic(40,2), model
         elif model == "Mclr_Logistic":
@@ -61,7 +61,7 @@ def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num
                 server.train()
                 server.test()
     # plot the result:
-    algorithms = ["Persionalized_p", "Persionalized", "PerAvg_p", "FedAvg"]
+    algorithms = ["Persionalized_p", "Persionalized"]
     plot_summary_one_figure(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
 
 
