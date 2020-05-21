@@ -60,6 +60,18 @@ if(0):
     plot_summary_one_figure_synthetic_L(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
                                learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
 
+if(0):
+    local_ep = [20,20,20,20,20,20]
+    lamda = [20,20,15,15]
+    learning_rate = [0.005, 0.005, 0.005, 0.005, 0.005, 0.005]
+    alpha =  [0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
+    batch_size = [20,20,20,20,20,20]
+    K = [5,5,5,5,5,5]
+    personal_learning_rate = [0.01,0.01,0.01,0.01,0.01,0.01] 
+    algorithms = [ "Persionalized_p","Persionalized","FedAvg","PerAvg_p"]
+    plot_summary_one_figure_synthetic_Compare(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
+                               learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
+
 
 # --------------------------------------------Non Convex Case----------------------------------------#
 
