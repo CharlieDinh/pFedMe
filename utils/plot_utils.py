@@ -102,9 +102,9 @@ def get_max_value_index(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], l
 def get_label_name(name):
     if name.startswith("Persionalized"):
         if name.startswith("Persionalized_p"):
-            return "PFedMe"+ " (Personalized Model)"
+            return "pFedMe"+ " (Personalized Model)"
         else:
-            return "PFedMe"+ " (Global Model)"
+            return "pFedMe"+ " (Global Model)"
     if name.startswith("PerAvg"):
         return "Per-FedAvg"
     if name.startswith("FedAvg"):
