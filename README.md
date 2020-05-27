@@ -1,5 +1,7 @@
 # Personalized Federated Learning with Moreau Envelopes
-This repository implements all experiments in the paper the Personalized Federated Learning with Moreau Envelopes. This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL algorithms
+This repository implements all experiments in the paper the Personalized Federated Learning with Moreau Envelopes. 
+
+This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL algorithms.
 
 # Software requirement
 numpy
@@ -39,7 +41,7 @@ python3 main.py --dataset Mnist --model Mclr_Logistic --batch_size 20 --learning
 
 - All the train loss, testing accuracy, and training accuracy will be stored as h5py file in the folder "results". It is noted that we store the data for persionalized model of pFedMe in xxPersionalizedxx.h5 file while the global model is stored in xxPersionalizedxx.h5
 
-- In order to plot the figure, set runing parametes in file main_plot.py.
+- In order to plot the figure, set parameters in file main_plot.py similar to parameters run from previous experiments.
    For example. To plot the 3 experiments above, in the main_plot.py set:
    <pre><code>
     algorithms = ["Persionalized","Persionalized","PerAvg","FedAvg"]
