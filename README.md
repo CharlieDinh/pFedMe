@@ -5,16 +5,16 @@ Authors: Nguyen H.Tran, Canh T.Dinh, Tuan D.Nguyen
 
 This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL algorithms.
 
-# Software requirement
-numpy
+# Software requirement:
+- numpy
 
-scipy
+- scipy
 
-pytorch
+- pytorch
 
-Pillow
+- Pillow
 
-matplotlib
+- matplotlib
 
 # Dataset: We use 2 datasets: MNIST and Synthetic
 - To generate non-idd MNIST Data: 
