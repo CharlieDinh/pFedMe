@@ -23,7 +23,7 @@ matplotlib
 - To generate niid Synthetic:
   - Access data/Synthetic and run: "python3 generate_synthetic_05_05.py". Similar to MNIST data, the synthetic data is configurable with number of users and numbers of labels for each user.
 
-
+- The datasets also are available to download at: https://drive.google.com/drive/folders/1vTrQzE3Ww-Oc0c3apFt8tkRvw5eW07eL
 
 # Produce experiments and figures
 
