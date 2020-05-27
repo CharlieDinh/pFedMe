@@ -1,3 +1,2 @@
-# Personalized_Federated_Learning
-This repository implements the personalized federated learning which applies Meta learing on federated networks.
-Authors: Canh Dinh, Nguyen H. Tran, Tuan Dung Nguyen
+# Personalized Federated Learning with Moreau Envelopes
+This repository implements the Personalized Federated Learning with Moreau Envelopes.
