@@ -31,12 +31,21 @@ matplotlib
 
 - There is a main file "main.py" which allows to run the experiment.
 
-- To produce the comparision experiment for pFedMe using MNIST dataset in strongly convex case:
+- To produce the comparision experiment for pFedMe using MNIST dataset:
+![MNIST](https://user-images.githubusercontent.com/44039773/82981428-6795d080-a02f-11ea-9e0b-9da210354975.png)
 
+  -Strongly Convex Case:
 <pre><code>
 python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.1 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm Persionalized --numusers 5
 python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5
 python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5
+</code></pre>
+
+  - Non-Convex case: 
+<pre><code>
+python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.09 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm Persionalized --numusers 5
+python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5
+python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5
 </code></pre>
 
 - All the train loss, testing accuracy, and training accuracy will be stored as h5py file in the folder "results". It is noted that we store the data for persionalized model of pFedMe in xxPersionalized_pxx.h5 file while the global model is stored in xxPersionalizedxx.h5
@@ -54,4 +63,20 @@ python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.0
     personal_learning_rate = [0.1,0.1,0.1,0.1] 
     plot_summary_one_figure_mnist_Compare(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda, learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
     </code></pre>
+
+- To produce the comparision experiment for pFedMe using Synthetic dataset:
+![SYNTHETIC](https://user-images.githubusercontent.com/44039773/82981423-65cc0d00-a02f-11ea-92e4-b4fc09989d69.png)
     
+ -Strongly Convex Case:
+<pre><code>
+python3 main.py --dataset Synthetic --model mclr --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.1 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm Persionalized --numusers 5
+python3 main.py --dataset Synthetic --model mclr --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5
+python3 main.py --dataset Synthetic --model mclr --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5
+</code></pre>
+
+  - Non-Convex case: 
+<pre><code>
+python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.09 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm Persionalized --numusers 5
+python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5
+python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5
+</code></pre>
