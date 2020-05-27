@@ -34,9 +34,9 @@ matplotlib
 - To produce the comparision experiment for pFedMe using MNIST dataset in strongly convex case:
 
 <pre><code>
-python3 main.py --dataset Mnist --model Mclr_Logistic --batch_size 20 --learning_rate 0.005 --per_lr 0.1 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm Persionalized --numusers 5
-python3 main.py --dataset Mnist --model Mclr_Logistic --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5
-python3 main.py --dataset Mnist --model Mclr_Logistic --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5
+python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.1 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm Persionalized --numusers 5
+python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5
+python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5
 </code></pre>
 
 - All the train loss, testing accuracy, and training accuracy will be stored as h5py file in the folder "results". It is noted that we store the data for persionalized model of pFedMe in xxPersionalizedxx.h5 file while the global model is stored in xxPersionalizedxx.h5
