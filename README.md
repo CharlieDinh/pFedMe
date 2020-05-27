@@ -4,10 +4,15 @@ This repository is not only implement pFedMe but also FedAvg, Per-FedAvg, and AP
 
 # Software requirement
 numpy
+
 scipy
+
 pytorch
+
 Pillow
+
 matplotlib
+
 tqdm
 
 # Dataset: We using 2 dataset: MNIST and Synthetic
