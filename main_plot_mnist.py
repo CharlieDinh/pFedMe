@@ -17,7 +17,7 @@ torch.manual_seed(0)
 
 # plot for synthetic
 numusers = 5
-num_glob_iters = 600
+num_glob_iters = 800
 dataset = "Mnist"
 
 # --------------------------------------------Non Convex Case----------------------------------------#

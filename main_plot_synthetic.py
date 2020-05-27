@@ -17,7 +17,7 @@ torch.manual_seed(0)
 
 # plot for synthetic
 numusers = 10
-num_glob_iters = 500
+num_glob_iters = 600
 dataset = "Logistic_Synthetic"
 
 # --------------------------------------------Non Convex Case----------------------------------------#
