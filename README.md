@@ -1,7 +1,7 @@
 # Personalized Federated Learning with Moreau Envelopes
 This repository implements all experiments in the paper the <mark>Personalized Federated Learning with Moreau Envelopes<mark>.
   
-Authors: Nguyen H.Tran, Canh T.Dinh, Tuan Nguyen
+Authors: Nguyen H.Tran, Canh T.Dinh, Tuan D.Nguyen
 
 This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL algorithms.
 
