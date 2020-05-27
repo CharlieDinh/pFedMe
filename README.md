@@ -14,7 +14,7 @@ Pillow
 
 matplotlib
 
-# Dataset: We using 2 dataset: MNIST and Synthetic
+# Dataset: We use 2 datasets: MNIST and Synthetic
 - To generate non-idd MNIST Data: 
   - Access data/Mnist and run: "python3 generate_niid_20users.py"
   - We can change the number of user and number of labels for each user using 2 variable NUM_USERS = 20 and NUM_LABELS = 2
@@ -23,7 +23,7 @@ matplotlib
   - Access data/Mnist and run: "python3 generate_iid_20users.py"
 
 - To generate niid Synthetic:
-  - Access data/Synthetic and run: "python3 generate_synthetic_05_05.py". Similar to MNIST data, the synthetic data is configurable with number of users and numbers of labels for each user.
+  - Access data/Synthetic and run: "python3 generate_synthetic_05_05.py". Similar to MNIST data, the Synthetic data is configurable with number of users and numbers of labels for each user.
 
 - The datasets also are available to download at: https://drive.google.com/drive/folders/1vTrQzE3Ww-Oc0c3apFt8tkRvw5eW07eL
 
@@ -34,14 +34,14 @@ matplotlib
 - To produce the comparision experiment for pFedMe using MNIST dataset:
 ![MNIST](https://user-images.githubusercontent.com/44039773/82981428-6795d080-a02f-11ea-9e0b-9da210354975.png)
 
-  -Strongly Convex Case:
+- Strongly Convex Case:
 <pre><code>
 python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.1 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm Persionalized --numusers 5
 python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5
 python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5
 </code></pre>
-
-  - Non-Convex case: 
+  
+- Non-Convex case: 
 <pre><code>
 python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.09 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm Persionalized --numusers 5
 python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5
@@ -66,15 +66,15 @@ python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.00
 
 - To produce the comparision experiment for pFedMe using Synthetic dataset:
 ![SYNTHETIC](https://user-images.githubusercontent.com/44039773/82981423-65cc0d00-a02f-11ea-92e4-b4fc09989d69.png)
-    
- -Strongly Convex Case:
+
+- Strongly Convex Case:
 <pre><code>
 python3 main.py --dataset Synthetic --model mclr --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.1 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm Persionalized --numusers 5
 python3 main.py --dataset Synthetic --model mclr --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5
 python3 main.py --dataset Synthetic --model mclr --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5
 </code></pre>
 
-  - Non-Convex case: 
+- Non-Convex case: 
 <pre><code>
 python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.09 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm Persionalized --numusers 5
 python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5
