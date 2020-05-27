@@ -13,8 +13,6 @@ Pillow
 
 matplotlib
 
-tqdm
-
 # Dataset: We using 2 dataset: MNIST and Synthetic
 - To gennerate non-idd MNIST Data: 
   - Access data/Mnist and run: "python3 generate_niid_20users.py"
