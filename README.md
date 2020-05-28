@@ -3,7 +3,8 @@ This repository implements all experiments in the paper the <mark>Personalized F
   
 Authors: Nguyen H.Tran, Canh T.Dinh, Tuan D.Nguyen
 
-This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL algorithms.
+This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL algorithms. \
+(Federated Learning using )
 
 # Software requirement:
 - numpy
