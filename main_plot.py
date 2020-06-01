@@ -20,7 +20,7 @@ if(1): # plot for MNIST
     alpha =  [0.001, 0.001, 0.001, 0.001]
     batch_size = [20,20,20,20]
     K = [5,5,5,5,5,5]
-    personal_learning_rate = [0.1,0.1,0.09,0.09,0.09,0.09]
+    personal_learning_rate = [0.1,0.1,0.1,0.1,0.1,0.1]
     algorithms = [ "Persionalized_p","Persionalized","PerAvg_p","FedAvg"]
     plot_summary_one_figure_mnist_Compare(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
                                learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
