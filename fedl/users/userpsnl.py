@@ -26,7 +26,7 @@ class UserpFedMe(User):
 
         self.K = K
         self.personal_learning_rate = personal_learning_rate
-        self.optimizer = PersionalizedOptimizer(self.model.parameters(), lr=self.personal_learning_rate, lamda=self.lamda)
+        self.optimizer = pFedMeOptimizer(self.model.parameters(), lr=self.personal_learning_rate, lamda=self.lamda)
 
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):

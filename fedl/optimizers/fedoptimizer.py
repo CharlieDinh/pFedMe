@@ -52,7 +52,7 @@ class pFedMeOptimizer(Optimizer):
         if lr < 0.0:
             raise ValueError("Invalid learning rate: {}".format(lr))
         defaults = dict(lr=lr, lamda=lamda, mu = mu)
-        super(PersionalizedOptimizer, self).__init__(params, defaults)
+        super(pFedMeOptimizer, self).__init__(params, defaults)
     
     def step(self, local_weight_updated, closure=None):
         loss = None
