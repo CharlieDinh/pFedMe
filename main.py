@@ -51,8 +51,8 @@ def main(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_
         server.test()
 
     # plot the result:
-    plot_summary_one_figure(num_users=numusers, loc_ep1=[local_epochs], Numb_Glob_Iters=num_glob_iters, lamb=[lamda],
-                               learning_rate=[learning_rate], alpha = [beta], algorithms_list=[algorithm], batch_size=[batch_size], dataset=dataset)
+    #plot_summary_one_figure(num_users=numusers, loc_ep1=[local_epochs], Numb_Glob_Iters=num_glob_iters, lamb=[lamda],
+    #                           learning_rate=[learning_rate], alpha = [beta], algorithms_list=[algorithm], batch_size=[batch_size], dataset=dataset)
 
 
 if __name__ == "__main__":
