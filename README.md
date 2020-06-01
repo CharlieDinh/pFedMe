@@ -26,15 +26,15 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
   - Access data/Mnist and run: "python3 generate_iid_20users.py"
 
 - To generate niid Synthetic:
-  - Access data/Synthetic and run: "python3 generate_synthetic_05_05.py". Similar to MNIST data, the Synthetic data is configurable with number of users and numbers of labels for each user.
+  - Access data/Synthetic and run: "python3 generate_synthetic_05_05.py". Similar to MNIST data, the Synthetic data is configurable with number of users and the numbers of labels for each user.
 
 - The datasets also are available to download at: https://drive.google.com/drive/folders/1vTrQzE3Ww-Oc0c3apFt8tkRvw5eW07eL
 
 # Produce experiments and figures
 
-- There is a main file "main.py" which allows to run the experiment.
+- There is a main file "main.py" which allows running the experiment.
 
-- To produce the comparision experiment for pFedMe using MNIST dataset:
+- To produce the comparison experiments for pFedMe using MNIST dataset:
 ![MNIST](https://user-images.githubusercontent.com/44039773/82981428-6795d080-a02f-11ea-9e0b-9da210354975.png)
 
 - Strongly Convex Case:
@@ -51,7 +51,7 @@ python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.00
 python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5
 </code></pre>
 
-- All the train loss, testing accuracy, and training accuracy will be stored as h5py file in the folder "results". It is noted that we store the data for persionalized model of pFedMe in xxpFedMe_pxx.h5 file while the global model is stored in xxpFedMexx.h5
+- All the train loss, testing accuracy, and training accuracy will be stored as h5py file in the folder "results". It is noted that we store the data for persionalized model and global in 2 separate files following format: DATASET_pFedMe_p_x_x_xu_xb_x.h5 and DATASET_pFedMe_x_x_xu_xb_x.h5 respectively. 
 
 - In order to plot the figure, set parameters in file main_plot.py similar to parameters run from previous experiments.
    For example. To plot the 3 experiments above, in the main_plot.py set:
