@@ -11,9 +11,6 @@ import copy
 # Implementation for APFL clients
 
 class UserAPFL(User):
-    """
-    User in FedAvg.dataset
-    """
     def __init__(self, numeric_id, train_data, test_data, model, batch_size, learning_rate,alpha,lamda,
                  local_epochs, optimizer, total_users , num_users):
         super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, alpha, lamda,

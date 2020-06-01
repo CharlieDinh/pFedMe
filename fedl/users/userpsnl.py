@@ -11,9 +11,6 @@ import copy
 # Implementation for pFeMe clients
 
 class UserpFedMe(User):
-    """
-    User in FedAvg.dataset
-    """
     def __init__(self, numeric_id, train_data, test_data, model, batch_size, learning_rate,alpha,lamda,
                  local_epochs, optimizer, K, personal_learning_rate):
         super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, alpha, lamda,
