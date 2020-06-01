@@ -76,7 +76,7 @@ python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.00
 
 - Strongly Convex Case:
 <pre><code>
-python3 main.py --dataset Synthetic --model mclr --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.1 --beta 1 --lamda 15 --num_global_iters 600 --local_epochs 20 --algorithm pFedMe --numusers 5
+python3 main.py --dataset Synthetic --model mclr --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.01 --beta 1 --lamda 15 --num_global_iters 600 --local_epochs 20 --algorithm pFedMe --numusers 5
 python3 main.py --dataset Synthetic --model mclr --batch_size 20 --learning_rate 0.005 --num_global_iters 600 --local_epochs 20 --algorithm FedAvg --numusers 5
 python3 main.py --dataset Synthetic --model mclr --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 600 --local_epochs 20 --algorithm PerAvg --numusers 5
 </code></pre>
