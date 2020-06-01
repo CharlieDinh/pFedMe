@@ -4,7 +4,7 @@ This repository implements all experiments in the paper the <mark>Personalized F
 Authors: Anonymous
 
 This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL algorithms. \
-(Federated Learning using )
+(Federated Learning using Pytorch)
 
 # Software requirement:
 - numpy
