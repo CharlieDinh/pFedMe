@@ -8,6 +8,8 @@ from fedl.users.userbase import User
 from fedl.optimizers.fedoptimizer import APFLOptimizer
 import copy
 
+# Implementation for APFL clients
+
 class UserAPFL(User):
     """
     User in FedAvg.dataset

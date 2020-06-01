@@ -4,11 +4,13 @@ import torch.nn.functional as F
 import os
 import json
 from torch.utils.data import DataLoader
-from fedl.optimizers.fedoptimizer import PersionalizedOptimizer
+from fedl.optimizers.fedoptimizer import pFedMeOptimizer
 from fedl.users.userbase import User
 import copy
 
-class UserPersionalized(User):
+# Implementation for pFeMe clients
+
+class UserpFedMe(User):
     """
     User in FedAvg.dataset
     """

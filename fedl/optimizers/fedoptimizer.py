@@ -46,7 +46,7 @@ class FEDLOptimizer(Optimizer):
                 i += 1
         return loss
 
-class PersionalizedOptimizer(Optimizer):
+class pFedMeOptimizer(Optimizer):
     def __init__(self, params, lr=0.01, lamda=0.1 , mu = 0.001):
         #self.local_weight_updated = local_weight # w_i,K
         if lr < 0.0:

@@ -103,8 +103,8 @@ def get_max_value_index(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], l
         ), "Index: ", np.argmax(glob_acc[i]), "local update:", loc_ep1[i])
 
 def get_label_name(name):
-    if name.startswith("Persionalized"):
-        if name.startswith("Persionalized_p"):
+    if name.startswith("pFedMe"):
+        if name.startswith("pFedMe_p"):
             return "pFedMe"+ " (Personalized Model)"
         else:
             return "pFedMe"+ " (Global Model)"

@@ -1,14 +1,14 @@
 import torch
 import os
 
-from fedl.users.userpsnl import UserPersionalized
+from fedl.users.userpsnl import UserpFedMe
 from fedl.servers.serverbase import Server
 from utils.model_utils import read_data, read_user_data
 import numpy as np
  
 # Implementation for pFedMe Server
 
-class Persionalized(Server):
+class pFedMe(Server):
     def __init__(self, dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num_glob_iters,
                  local_epochs, optimizer, num_users, K, personal_learning_rate):
         super().__init__(dataset,algorithm, model[0], batch_size, learning_rate, alpha, lamda, num_glob_iters,
@@ -21,7 +21,7 @@ class Persionalized(Server):
         self.personal_learning_rate = personal_learning_rate
         for i in range(total_users):
             id, train , test = read_user_data(i, data, dataset)
-            user = UserPersionalized(id, train, test, model, batch_size, learning_rate, alpha, lamda, local_epochs, optimizer, K, personal_learning_rate)
+            user = UserpFedMe(id, train, test, model, batch_size, learning_rate, alpha, lamda, local_epochs, optimizer, K, personal_learning_rate)
             self.users.append(user)
             self.total_train_samples += user.train_samples
         print("Number of users / total users:",num_users, " / " ,total_users)

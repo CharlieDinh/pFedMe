@@ -7,10 +7,9 @@ from torch.utils.data import DataLoader
 from fedl.optimizers.fedoptimizer import MySGD, FEDLOptimizer
 from fedl.users.userbase import User
 
+# Implementation for Per-FedAvg clients
+
 class UserPerAvg(User):
-    """
-    User in FedAvg.dataset
-    """
     def __init__(self, numeric_id, train_data, test_data, model, batch_size, learning_rate,alpha,lamda,
                  local_epochs, optimizer, total_users , num_users):
         super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, alpha, lamda,

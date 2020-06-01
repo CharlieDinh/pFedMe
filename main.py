@@ -8,7 +8,7 @@ import random
 import os
 from fedl.servers.serveravg import FedAvg
 from fedl.servers.serverapfl import APFL
-from fedl.servers.serverpsnl import Persionalized
+from fedl.servers.serverpsnl import pFedMe
 from fedl.servers.serverperavg import PerAvg
 from fedl.trainmodel.models import Mclr_Logistic, Net, Mclr_CrossEntropy, DNN
 from utils.plot_utils import plot_summary_one_figure
@@ -38,8 +38,8 @@ def main(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_
         if(algorithm == "FedAvg"):
             server = FedAvg(dataset,algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers)
     
-        if(algorithm == "Persionalized"):
-            server = Persionalized(dataset,algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers,K,personal_learning_rate )
+        if(algorithm == "pFedMe"):
+            server = pFedMe(dataset,algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers,K,personal_learning_rate )
 
         if(algorithm == "APFL"):
             server = APFL(dataset,algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers)
@@ -66,22 +66,23 @@ if __name__ == "__main__":
     parser.add_argument("--num_global_iters", type=int, default=800)
     parser.add_argument("--local_epochs", type=int, default=20)
     parser.add_argument("--optimizer", type=str, default="SGD")
-    parser.add_argument("--algorithm", type=str, default="Persionalized",
-                        choices=["Persionalized", "PerAvg", "FedAvg", "APFL"])
+    parser.add_argument("--algorithm", type=str, default="pFedMe",choices=["pFedMe", "PerAvg", "FedAvg", "APFL"]) 
     parser.add_argument("--numusers", type=int, default=20, help="Number of Users per round")
-    parser.add_argument("--K", type=int, default=5, help="Optimization steps")
-    parser.add_argument("--personal_learning_rate", type=float, default=0.1, help="Personal learning rate")
+    parser.add_argument("--K", type=int, default=5, help="Computation steps")
+    parser.add_argument("--personal_learning_rate", type=float, default=0.1, help="Persionalized learning rate to caculate theta aproximately using K steps")
     args = parser.parse_args()
 
     print("=" * 80)
     print("Summary of training process:")
     print("Algorithm: {}".format(args.algorithm))
     print("Batch size: {}".format(args.batch_size))
-    print("local learing rate       : {}".format(args.learning_rate))
+    print("Learing rate       : {}".format(args.learning_rate))
     print("Average Moving       : {}".format(args.beta))
-    print("number user per round       : {}".format(args.numusers))
-    print("K_g       : {}".format(args.num_global_iters))
-    print("K_l       : {}".format(args.local_epochs))
+    print("Subset of users      : {}".format(args.numusers))
+    print("Number of global rounds       : {}".format(args.num_global_iters))
+    print("Number of local rounds       : {}".format(args.local_epochs))
+    print("Dataset       : {}".format(args.dataset))
+    print("Local Model       : {}".format(args.model))
     print("=" * 80)
 
     main(
