@@ -64,7 +64,7 @@ python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.00
     learning_rate = [0.005, 0.005, 0.005, 0.005]
     beta =  [1.0, 1.0, 0.001, 1.0]
     batch_size = [20,20,20,20]
-    K = [5,5,5,5,5,5]
+    K = [5,5,5,5]
     personal_learning_rate = [0.1,0.1,0.1,0.1]
     algorithms = [ "pFedMe_p","pFedMe","PerAvg_p","FedAvg"]
     plot_summary_one_figure_mnist_Compare(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
