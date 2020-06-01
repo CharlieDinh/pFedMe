@@ -46,13 +46,13 @@ def get_data_label_style(input_data = [], linestyles= [], algs_lbl = [], lamb = 
 def plot_summary_one_figure(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[], alpha=[], algorithms_list=[], batch_size=0, dataset = "", k = [], personal_learning_rate = []):
     Numb_Algs = len(algorithms_list)
     dataset = dataset
-    #glob_acc_, train_acc_, train_loss_ = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
+    glob_acc_, train_acc_, train_loss_ = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
     
-    # glob_acc =  average_smooth(glob_acc_, window='flat')
-    # train_loss = average_smooth(train_loss_, window='flat')
-    # train_acc = average_smooth(train_acc_, window='flat')
+    glob_acc =  average_smooth(glob_acc_, window='flat')
+    train_loss = average_smooth(train_loss_, window='flat')
+    train_acc = average_smooth(train_acc_, window='flat')
 
-    glob_acc, train_acc, train_loss = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
+    #glob_acc, train_acc, train_loss = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
     print("max value of test accurancy",glob_acc.max())
     plt.figure(1,figsize=(5, 5))
     MIN = train_loss.min() - 0.001
