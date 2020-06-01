@@ -30,7 +30,7 @@ if(1): # plot for Synthetic
     num_glob_iters = 600
     dataset = "Synthetic"
     local_ep = [20,20,20,20,20,20]
-    lamda = [20,20,15,15]
+    lamda = [20,20,20,20]
     learning_rate = [0.005, 0.005, 0.005, 0.005, 0.005, 0.005]
     alpha =  [0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
     batch_size = [20,20,20,20,20,20]

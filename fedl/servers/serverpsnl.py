@@ -5,6 +5,8 @@ from fedl.users.userpsnl import UserPersionalized
 from fedl.servers.serverbase import Server
 from utils.model_utils import read_data, read_user_data
 import numpy as np
+ 
+# Implementation for pFedMe Server
 
 class Persionalized(Server):
     def __init__(self, dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num_glob_iters,

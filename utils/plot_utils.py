@@ -48,9 +48,9 @@ def plot_summary_one_figure(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[
     dataset = dataset
     #glob_acc_, train_acc_, train_loss_ = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
     
-    # glob_acc =  smooth(glob_acc_, window='flat')
-    # train_loss = smooth(train_loss_, window='flat')
-    # train_acc = smooth(train_acc_, window='flat')
+    # glob_acc =  average_smooth(glob_acc_, window='flat')
+    # train_loss = average_smooth(train_loss_, window='flat')
+    # train_acc = average_smooth(train_acc_, window='flat')
 
     glob_acc, train_acc, train_loss = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
     print("max value of test accurancy",glob_acc.max())
@@ -115,37 +115,7 @@ def get_label_name(name):
     if name.startswith("APFL"):
         return "APFL"
 
-def smooth(data,window_len=20,window='hanning'):
-    """smooth the data using a window with requested size.
-    
-    This method is based on the convolution of a scaled window with the signal.
-    The signal is prepared by introducing reflected copies of the signal 
-    (with the window size) in both ends so that transient parts are minimized
-    in the begining and end part of the output signal.
-    
-    input:
-        x: the input signal 
-        window_len: the dimension of the smoothing window; should be an odd integer
-        window: the type of window from 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'
-            flat window will produce a moving average smoothing.
-
-    output:
-        the smoothed signal
-        
-    example:
-
-    t=linspace(-2,2,0.1)
-    x=sin(t)+randn(len(t))*0.1
-    y=smooth(x)
-    
-    see also: 
-    
-    numpy.hanning, numpy.hamming, numpy.bartlett, numpy.blackman, numpy.convolve
-    scipy.signal.lfilter
- 
-    TODO: the window parameter could be the window itself if an array instead of a string
-    NOTE: length(output) != length(input), to correct this: return y[(window_len/2-1):-(window_len/2)] instead of just y.
-    """
+def average_smooth(data, window_len=20, window='hanning'):
     results = []
     if window_len<3:
         return data
@@ -167,9 +137,9 @@ def plot_summary_one_figure_synthetic_R(num_users, loc_ep1, Numb_Glob_Iters, lam
     dataset = dataset
     glob_acc_, train_acc_, train_loss_ = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
     
-    glob_acc =  smooth(glob_acc_, window='flat')
-    train_loss = smooth(train_loss_, window='flat')
-    train_acc = smooth(train_acc_, window='flat')
+    glob_acc =  average_smooth(glob_acc_, window='flat')
+    train_loss = average_smooth(train_loss_, window='flat')
+    train_acc = average_smooth(train_acc_, window='flat')
     
     
     linestyles = ['-','-','-','-.','-.','-.']
@@ -209,9 +179,9 @@ def plot_summary_one_figure_synthetic_K(num_users, loc_ep1, Numb_Glob_Iters, lam
     
     glob_acc_, train_acc_, train_loss_ = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
     
-    glob_acc =  smooth(glob_acc_, window='flat')
-    train_loss = smooth(train_loss_, window='flat')
-    train_acc = smooth(train_acc_, window='flat')
+    glob_acc =  average_smooth(glob_acc_, window='flat')
+    train_loss = average_smooth(train_loss_, window='flat')
+    train_acc = average_smooth(train_acc_, window='flat')
     
     linestyles = ['-','-','-','-.','-.','-.']
     print(lamb)
@@ -248,9 +218,9 @@ def plot_summary_one_figure_synthetic_L(num_users, loc_ep1, Numb_Glob_Iters, lam
     
     glob_acc_, train_acc_, train_loss_ = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
     
-    glob_acc =  smooth(glob_acc_, window='flat')
-    train_loss = smooth(train_loss_, window='flat')
-    train_acc = smooth(train_acc_, window='flat')
+    glob_acc =  average_smooth(glob_acc_, window='flat')
+    train_loss = average_smooth(train_loss_, window='flat')
+    train_acc = average_smooth(train_acc_, window='flat')
     
     linestyles = ['-','-','-','-.','-.','-.']
     markers = ["o","v","s","*","x","P"]
@@ -287,9 +257,9 @@ def plot_summary_one_figure_synthetic_D(num_users, loc_ep1, Numb_Glob_Iters, lam
     
     glob_acc_, train_acc_, train_loss_ = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
     
-    glob_acc =  smooth(glob_acc_, window='flat')
-    train_loss = smooth(train_loss_, window='flat')
-    train_acc = smooth(train_acc_, window='flat')
+    glob_acc =  average_smooth(glob_acc_, window='flat')
+    train_loss = average_smooth(train_loss_, window='flat')
+    train_acc = average_smooth(train_acc_, window='flat')
     
     linestyles = ['-','-','-','-.','-.','-.']
     markers = ["o","v","s","*","x","P"]
@@ -324,9 +294,11 @@ def plot_summary_one_figure_synthetic_Compare(num_users, loc_ep1, Numb_Glob_Iter
     Numb_Algs = len(algorithms_list)   
     dataset = dataset
     glob_acc_, train_acc_, train_loss_ = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
-    glob_acc =  smooth(glob_acc_, window='flat')
-    train_loss = smooth(train_loss_, window='flat')
-    train_acc = smooth(train_acc_, window='flat')
+    for i in range(Numb_Algs):
+        print("max accurancy:", train_acc_[i].max())
+    glob_acc =  average_smooth(glob_acc_, window='flat')
+    train_loss = average_smooth(train_loss_, window='flat')
+    train_acc = average_smooth(train_acc_, window='flat')
     linestyles = ['-', '--', '-.','-', '--', '-.']
     linestyles = ['-','-','-','-','-','-','-']
     #linestyles = ['-','-','-','-','-','-','-']
@@ -371,10 +343,11 @@ def plot_summary_one_figure_mnist_Compare(num_users, loc_ep1, Numb_Glob_Iters, l
     dataset = dataset
     
     glob_acc_, train_acc_, train_loss_ = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
-    
-    glob_acc =  smooth(glob_acc_, window='flat')
-    train_loss = smooth(train_loss_, window='flat')
-    train_acc = smooth(train_acc_, window='flat')
+    for i in range(Numb_Algs):
+        print("max accurancy:", train_acc_[i].max())
+    glob_acc =  average_smooth(glob_acc_, window='flat')
+    train_loss = average_smooth(train_loss_, window='flat')
+    train_acc = average_smooth(train_acc_, window='flat')
     
     linestyles = ['-', '--', '-.','-', '--', '-.']
     linestyles = ['-','-','-','-','-','-','-']
@@ -422,9 +395,9 @@ def plot_summary_one_figure_mnist_K(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
     
     glob_acc_, train_acc_, train_loss_ = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
     
-    glob_acc =  smooth(glob_acc_, window='flat')
-    train_loss = smooth(train_loss_, window='flat')
-    train_acc = smooth(train_acc_, window='flat')
+    glob_acc =  average_smooth(glob_acc_, window='flat')
+    train_loss = average_smooth(train_loss_, window='flat')
+    train_acc = average_smooth(train_acc_, window='flat')
     
     linestyles = ['-','-','-','-.','-.','-.']
     #linestyles = ['-','-','-','-','-','-','-']
@@ -469,9 +442,9 @@ def plot_summary_one_figure_mnist_R(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
     
     glob_acc_, train_acc_, train_loss_ = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
     
-    glob_acc =  smooth(glob_acc_, window='flat')
-    train_loss = smooth(train_loss_, window='flat')
-    train_acc = smooth(train_acc_, window='flat')
+    glob_acc =  average_smooth(glob_acc_, window='flat')
+    train_loss = average_smooth(train_loss_, window='flat')
+    train_acc = average_smooth(train_acc_, window='flat')
     linestyles = ['-','-','-','-.','-.','-.']
     #linestyles = ['-','-','-','-','-','-','-']
     markers = ["o","v","s","*","x","P"]
@@ -513,9 +486,9 @@ def plot_summary_one_figure_mnist_L(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
 
     glob_acc_, train_acc_, train_loss_ = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
     
-    glob_acc =  smooth(glob_acc_, window='flat')
-    train_loss = smooth(train_loss_, window='flat')
-    train_acc = smooth(train_acc_, window='flat')
+    glob_acc =  average_smooth(glob_acc_, window='flat')
+    train_loss = average_smooth(train_loss_, window='flat')
+    train_acc = average_smooth(train_acc_, window='flat')
     linestyles = ['-','-','-','-.','-.','-.']
     #linestyles = ['-','-','-','-','-','-','-']
     markers = ["o","v","s","*","x","d"]
@@ -557,9 +530,9 @@ def plot_summary_one_figure_mnist_D(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
     
     glob_acc_, train_acc_, train_loss_ = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
     
-    glob_acc =  smooth(glob_acc_, window='flat')
-    train_loss = smooth(train_loss_, window='flat')
-    train_acc = smooth(train_acc_, window='flat')
+    glob_acc =  average_smooth(glob_acc_, window='flat')
+    train_loss = average_smooth(train_loss_, window='flat')
+    train_acc = average_smooth(train_acc_, window='flat')
     linestyles = ['-','-','-','-.','-.','-.']
     markers = ["o","v","s","*","x","P"]
     print(lamb)
@@ -601,9 +574,9 @@ def plot_summary_one_figure_mnist_Beta(num_users, loc_ep1, Numb_Glob_Iters, lamb
     
     glob_acc_, train_acc_, train_loss_ = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
     
-    glob_acc =  smooth(glob_acc_,window_len=10, window='flat')
-    train_loss = smooth(train_loss_,window_len=10, window='flat')
-    train_acc = smooth(train_acc_,window_len=10, window='flat')
+    glob_acc =  average_smooth(glob_acc_,window_len=10, window='flat')
+    train_loss = average_smooth(train_loss_,window_len=10, window='flat')
+    train_acc = average_smooth(train_acc_,window_len=10, window='flat')
     
     linestyles = ['-','-','-','-.','-.','-.']
     markers = ["o","v","s","*","x","P"]
