@@ -8,52 +8,44 @@ import random
 import os
 from fedl.servers.serveravg import FedAvg
 from fedl.servers.serverapfl import APFL
-from fedl.servers.serverpsnl import Persionalized
+from fedl.servers.serverpsnl import pFedMe
 from fedl.servers.serverperavg import PerAvg
-from fedl.trainmodel.models import Mclr_Logistic, Net, Mclr_CrossEntropy
-from utils.plot_utils import plot_summary_one_figure
+from fedl.trainmodel.models import *
+from utils.plot_utils import *
 import torch
 torch.manual_seed(0)
-
 def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num_glob_iters,
          local_epochs, optimizer, numusers, K, personal_learning_rate):
-    
-    algorithms = ["Persionalized","Persionalized"]
-    local_ep = [20,20,20,20,20,20,20]
-    lamda = [25,25,15,15,15,15,15]
-    learning_rate = [0.005,0.005]
-    alpha =  [0.001,0.001]
-    batch_size = [20,20,20,20,20,20,20,20]
-    K = [5,5,5,5,5,5,5,5]
-    personal_learning_rate = [0.01,0.01,0.01,0.01,0.01,0.01,0.01]
-    
-    model = Mclr_Logistic(60,10), model
-    if(1):    
-        for i in range(len(algorithms)):
-            print(algorithms[i])
-            if(algorithms[i] == "FedAvg"):
-                server = FedAvg(dataset,algorithms[i], model, batch_size[i], learning_rate[i], alpha[i], lamda[i], num_glob_iters, local_ep[i], optimizer, numusers)
+    local_ep = 20
+    lamda = 20
+    learning_rate = 0.01
+    beta =  4
+    batch_size = 20
+    K = 5
+    personal_learning_rate = 0.01
+    algorithms = "pFedMe"
+    times = 5
+    if(1):
+        model = Mclr_Logistic(60,10), model
+        for j in range(times):
+            print(algorithms)
+            if(algorithms == "FedAvg"):
+                server = FedAvg(dataset,algorithms, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_ep, optimizer, numusers,j)
                 server.train()
                 server.test()
-            if(algorithms[i] == "Persionalized"):
-                server = Persionalized(dataset,algorithms[i], model, batch_size[i], learning_rate[i], alpha[i], lamda[i], num_glob_iters, local_ep[i], optimizer, numusers, K[i], personal_learning_rate[i])
+            if(algorithms == "pFedMe"):
+                server = pFedMe(dataset,algorithms, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_ep, optimizer, numusers, K, personal_learning_rate,j)
                 server.train()
                 server.test()
-            if(algorithms[i] == "APFL"):
-                server = APFL(dataset,algorithms[i], model, batch_size[i], learning_rate[i], alpha[i], lamda[i], num_glob_iters, local_ep[i], optimizer, numusers)
+            if(algorithms == "APFL"):
+                server = APFL(dataset,algorithms, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_ep, optimizer, numusers,j)
                 server.train()
                 server.test()
-            if(algorithms[i] == "PerAvg"):
-                server = PerAvg(dataset,algorithms[i], model, batch_size[i], learning_rate[i], alpha[i], lamda[i], num_glob_iters, local_ep[i], optimizer, numusers)
+            if(algorithms == "PerAvg"):
+                server = PerAvg(dataset,algorithms, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_ep, optimizer, numusers,j)
                 server.train()
-                server.test()   
-
-    #algorithms = [ "Persionalized_p","Persionalized","PerAvg_p","FedAvg"]
-    algorithms = ["PerAvg_p"]
-    plot_summary_one_figure(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
-                               learning_rate=learning_rate, alpha = alpha, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
-
-
+                server.test()
+    average_data(num_users=numusers, loc_ep1=local_epochs, Numb_Glob_Iters=num_glob_iters, lamb=lamda,learning_rate=learning_rate, alpha = beta, algorithms=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate,times = times)
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", type=str, default="Logistic_Synthetic", choices=["Mnist", "Logistic_Synthetic"])
@@ -72,7 +64,6 @@ if __name__ == "__main__":
     parser.add_argument("--K", type=int, default=10, help="Optimization steps")
     parser.add_argument("--personal_learning_rate", type=float, default=0.01, help="Personal learning rate")
     args = parser.parse_args()
-
     print("=" * 80)
     print("Summary of training process:")
     print("Algorithm: {}".format(args.algorithm))
@@ -83,7 +74,6 @@ if __name__ == "__main__":
     print("K_g       : {}".format(args.num_global_iters))
     print("K_l       : {}".format(args.local_epochs))
     print("=" * 80)
-
     main(
         dataset=args.dataset,
         algorithm = args.algorithm,
