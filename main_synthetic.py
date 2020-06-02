@@ -16,7 +16,7 @@ import torch
 torch.manual_seed(0)
 def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num_glob_iters,
          local_epochs, optimizer, numusers, K, personal_learning_rate):
-    
+
     local_ep = 20
     lamda = 15
     learning_rate = 0.01
