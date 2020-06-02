@@ -7,7 +7,7 @@ import copy
 
 class Server:
     def __init__(self, dataset,algorithm, model, batch_size, learning_rate ,alpha, lamda,
-                 num_glob_iters, local_epochs, optimizer,num_users):
+                 num_glob_iters, local_epochs, optimizer,num_users, times):
 
         # Set up the main attributes
         self.dataset = dataset
@@ -24,7 +24,7 @@ class Server:
         self.lamda = lamda
         self.algorithm = algorithm
         self.rs_train_acc, self.rs_train_loss, self.rs_glob_acc,self.rs_train_acc_per, self.rs_train_loss_per, self.rs_glob_acc_per = [], [], [], [], [], []
-        
+        self.times = times
         # Initialize the server's grads to zeros
         #for param in self.model.parameters():
         #    param.data = torch.zeros_like(param.data)
@@ -93,7 +93,7 @@ class Server:
             return self.users
 
         num_users = min(num_users, len(self.users))
-        np.random.seed(round)
+        #np.random.seed(round)
         return np.random.choice(self.users, num_users, replace=False) #, p=pk)
 
     # define function for persionalized agegatation.
@@ -127,8 +127,9 @@ class Server:
     def save_results(self):
         alg = self.dataset + "_" + self.algorithm
         alg = alg + "_" + str(self.learning_rate) + "_" + str(self.alpha) + "_" + str(self.lamda) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b" + "_" + str(self.local_epochs)
-        if(self.algorithm == "Persionalized" or self.algorithm == "Persionalized_p"):
+        if(self.algorithm == "pFedMe" or self.algorithm == "pFedMe_p"):
             alg = alg + "_" + str(self.K) + "_" + str(self.personal_learning_rate)
+        alg = alg + "_" + str(self.times)
         if (len(self.rs_glob_acc) != 0 &  len(self.rs_train_acc) & len(self.rs_train_loss)) :
             with h5py.File("./results/"+'{}.h5'.format(alg, self.local_epochs), 'w') as hf:
                 hf.create_dataset('rs_glob_acc', data=self.rs_glob_acc)
@@ -139,8 +140,9 @@ class Server:
         # store persionalized value
         alg = self.dataset + "_" + self.algorithm + "_p"
         alg = alg  + "_" + str(self.learning_rate) + "_" + str(self.alpha) + "_" + str(self.lamda) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b"+ "_" + str(self.local_epochs)
-        if(self.algorithm == "Persionalized" or self.algorithm == "Persionalized_p"):
+        if(self.algorithm == "pFedMe" or self.algorithm == "pFedMe_p"):
             alg = alg + "_" + str(self.K) + "_" + str(self.personal_learning_rate)
+        alg = alg + "_" + str(self.times)
         if (len(self.rs_glob_acc_per) != 0 &  len(self.rs_train_acc_per) & len(self.rs_train_loss_per)) :
             with h5py.File("./results/"+'{}.h5'.format(alg, self.local_epochs), 'w') as hf:
                 hf.create_dataset('rs_glob_acc', data=self.rs_glob_acc_per)

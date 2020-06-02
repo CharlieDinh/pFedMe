@@ -11,49 +11,46 @@ from fedl.servers.serverapfl import APFL
 from fedl.servers.serverpsnl import pFedMe
 from fedl.servers.serverperavg import PerAvg
 from fedl.trainmodel.models import Mclr_Logistic, Net, Mclr_CrossEntropy, DNN
-from utils.plot_utils import plot_summary_one_figure
+from utils.plot_utils import plot_summary_one_figure, average_data
 import torch
 torch.manual_seed(0)
 
 def main(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters,
-         local_epochs, optimizer, numusers, K, personal_learning_rate):
+         local_epochs, optimizer, numusers, K, personal_learning_rate,times):
     if(1):
-        # Generate model
-        if(model == "mclr"):
-            if(dataset == "Mnist"):
-                model = Mclr_Logistic(), model
-            else:
-                model = Mclr_Logistic(60,10), model
+        for i in range(times):
+            # Generate model
+            if(model == "mclr"):
+                if(dataset == "Mnist"):
+                    model = Mclr_Logistic(), model
+                else:
+                    model = Mclr_Logistic(60,10), model
+                
+            if(model == "cnn"):
+                model = Net(), model
             
-        if(model == "cnn"):
-            model = Net(), model
+            if(model == "dnn"):
+                if(dataset == "Mnist"):
+                    model = DNN(), model
+                else: 
+                    model = DNN(60,20,10), model
+            
+            # select algorithm
+            if(algorithm == "FedAvg"):
+                server = FedAvg(dataset,algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers)
         
-        if(model == "dnn"):
-            if(dataset == "Mnist"):
-                model = DNN(), model
-            else: 
-                model = DNN(60,20,10), model
-        
-        # select algorithm
-        if(algorithm == "FedAvg"):
-            server = FedAvg(dataset,algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers)
-    
-        if(algorithm == "pFedMe"):
-            server = pFedMe(dataset,algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers,K,personal_learning_rate )
+            if(algorithm == "pFedMe"):
+                server = pFedMe(dataset,algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers,K,personal_learning_rate )
 
-        if(algorithm == "APFL"):
-            server = APFL(dataset,algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers)
+            if(algorithm == "APFL"):
+                server = APFL(dataset,algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers)
 
-        if(algorithm == "PerAvg"):
-            server = PerAvg(dataset,algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers)
+            if(algorithm == "PerAvg"):
+                server = PerAvg(dataset,algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers)
 
-        server.train()
-        server.test()
-
-    # plot the result:
-    #plot_summary_one_figure(num_users=numusers, loc_ep1=[local_epochs], Numb_Glob_Iters=num_glob_iters, lamb=[lamda],
-    #                           learning_rate=[learning_rate], alpha = [beta], algorithms_list=[algorithm], batch_size=[batch_size], dataset=dataset)
-
+            server.train()
+            server.test()
+        average_data(num_users=numusers, loc_ep1=local_epochs, Numb_Glob_Iters=num_glob_iters, lamb=lamda,learning_rate=learning_rate, alpha = beta, algorithms_list=algorithm, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate,times = times)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -70,6 +67,7 @@ if __name__ == "__main__":
     parser.add_argument("--numusers", type=int, default=20, help="Number of Users per round")
     parser.add_argument("--K", type=int, default=5, help="Computation steps")
     parser.add_argument("--personal_learning_rate", type=float, default=0.1, help="Persionalized learning rate to caculate theta aproximately using K steps")
+    parser.add_argument("--times", type=int, default=5, help="running time")
     args = parser.parse_args()
 
     print("=" * 80)
@@ -98,5 +96,6 @@ if __name__ == "__main__":
         optimizer= args.optimizer,
         numusers = args.numusers,
         K=args.K,
-        personal_learning_rate=args.personal_learning_rate
+        personal_learning_rate=args.personal_learning_rate,
+        times = args.times
         )
