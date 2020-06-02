@@ -22,25 +22,25 @@ def get_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[
     for i in range(Numb_Algs):
         string_learning_rate = str(learning_rate[i])  
         string_learning_rate = string_learning_rate + "_" +str(alpha[i]) + "_" +str(lamb[i])
-        if(algorithms_list[i] == "Persionalized" or algorithms_list[i] == "Persionalized_p"):
+        if(algorithms_list[i] == "pFedMe" or algorithms_list[i] == "pFedMe_p"):
             algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size[i]) + "b" + "_" +str(loc_ep1[i]) + "_"+ str(k[i])  + "_"+ str(personal_learning_rate[i])
         else:
             algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size[i]) + "b"  "_" +str(loc_ep1[i])
 
         train_acc[i, :], train_loss[i, :], glob_acc[i, :] = np.array(
-            simple_read_data(dataset +"_"+ algorithms_list[i]))[:, :Numb_Glob_Iters]
+            simple_read_data(dataset +"_"+ algorithms_list[i] + "_avg"))[:, :Numb_Glob_Iters]
         algs_lbl[i] = algs_lbl[i]
     return glob_acc, train_acc, train_loss
 
-def get_all_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb="", learning_rate="",alpha="",algorithms="", batch_size="", dataset="", k= "" , personal_learning_rate = "",times = 5):
+def get_all_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=0, learning_rate=0,alpha=0,algorithms="", batch_size=0, dataset="", k= 0 , personal_learning_rate =0 ,times = 5):
     train_acc = np.zeros((times, Numb_Glob_Iters))
     train_loss = np.zeros((times, Numb_Glob_Iters))
     glob_acc = np.zeros((times, Numb_Glob_Iters))
-    algorithms_list  = algorithms * 10
+    algorithms_list  = [algorithms] * times
     for i in range(times):
         string_learning_rate = str(learning_rate)  
         string_learning_rate = string_learning_rate + "_" +str(alpha) + "_" +str(lamb)
-        if(algorithms_list == "Persionalized" or algorithms_list[i] == "Persionalized_p"):
+        if(algorithms == "pFedMe" or algorithms == "pFedMe_p"):
             algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b" + "_" +str(loc_ep1) + "_"+ str(k)  + "_"+ str(personal_learning_rate[i]) +  "_" +str(i) 
         else:
             algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b"  "_" +str(loc_ep1) +  "_" +str(i)
@@ -62,21 +62,21 @@ def get_data_label_style(input_data = [], linestyles= [], algs_lbl = [], lamb = 
 
 def average_data(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb="", learning_rate="", alpha="", algorithms="", batch_size=0, dataset = "", k = "", personal_learning_rate = "", times = 5):
     glob_acc, train_acc, train_loss = get_all_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms, batch_size, dataset, k, personal_learning_rate,times)
-    np.average(glob_acc, axis=0)
-    np.average(train_acc, axis=0)
-    np.average(train_loss, axis=0)
+    glob_acc_data = np.average(glob_acc, axis=0)
+    train_acc_data = np.average(train_acc, axis=0)
+    train_loss_data = np.average(train_loss, axis=0)
     # store average value to h5 file
 
     alg = dataset + "_" + algorithms
     alg = alg + "_" + str(learning_rate) + "_" + str(alpha) + "_" + str(lamb) + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b" + "_" + str(loc_ep1)
     if(algorithms == "pFedMe" or algorithms == "pFedMe_p"):
         alg = alg + "_" + str(k) + "_" + str(personal_learning_rate)
-    alg = alg + "_" + str(times)
+    alg = alg + "_" + "avg"
     if (len(glob_acc) != 0 &  len(train_acc) & len(train_loss)) :
         with h5py.File("./results/"+'{}.h5'.format(alg,loc_ep1), 'w') as hf:
-            hf.create_dataset('rs_glob_acc', data=glob_acc)
-            hf.create_dataset('rs_train_acc', data=train_acc)
-            hf.create_dataset('rs_train_loss', data=train_loss)
+            hf.create_dataset('rs_glob_acc', data=glob_acc_data)
+            hf.create_dataset('rs_train_acc', data=train_acc_data)
+            hf.create_dataset('rs_train_loss', data=train_loss_data)
             hf.close()
 
 def plot_summary_one_figure(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], learning_rate=[], alpha=[], algorithms_list=[], batch_size=0, dataset = "", k = [], personal_learning_rate = []):
