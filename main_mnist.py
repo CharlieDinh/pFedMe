@@ -21,38 +21,38 @@ device = torch.device("cuda" if use_cuda else "cpu")
 def main(dataset, algorithm, model, batch_size, learning_rate, alpha, lamda, num_glob_iters,
          local_epochs, optimizer, numusers, K, personal_learning_rate):
     
-    local_ep = [20]
-    lamda = [15]
-    learning_rate = [0.005]
-    beta =  [0.001]
-    batch_size = [20]
-    K = [5]
-    personal_learning_rate = [0.1] 
-    algorithms = ["pFedMe"]
+    local_ep = 20
+    lamda = 15
+    learning_rate = 0.005
+    beta =  1
+    batch_size = 20
+    K = 5
+    personal_learning_rate = 0.1
+    algorithms = "pFedMe"
     times = 5
     if(1):
         model = Mclr_Logistic(), model
-        
         for i in range(len(algorithms)):
             for j in range(times):
-                print(algorithms[i])
-                if(algorithms[i] == "FedAvg"):
-                    server = FedAvg(dataset,algorithms[i], model, batch_size[i], learning_rate[i], beta[i], lamda[i], num_glob_iters, local_ep[i], optimizer, numusers,j)
+                print(algorithms)
+                if(algorithms == "FedAvg"):
+                    server = FedAvg(dataset,algorithms, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_ep, optimizer, numusers,j)
                     server.train()
                     server.test()
-                if(algorithms[i] == "pFedMe"):
-                    server = pFedMe(dataset,algorithms[i], model, batch_size[i], learning_rate[i], beta[i], lamda[i], num_glob_iters, local_ep[i], optimizer, numusers, K[i], personal_learning_rate[i],j)
+                if(algorithms == "pFedMe"):
+                    server = pFedMe(dataset,algorithms, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_ep, optimizer, numusers, K, personal_learning_rate,j)
                     server.train()
                     server.test()
-                if(algorithms[i] == "APFL"):
-                    server = APFL(dataset,algorithms[i], model, batch_size[i], learning_rate[i], beta[i], lamda[i], num_glob_iters, local_ep[i], optimizer, numusers,j)
+                if(algorithms == "APFL"):
+                    server = APFL(dataset,algorithms, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_ep, optimizer, numusers,j)
                     server.train()
                     server.test()
-                if(algorithms[i] == "PerAvg"):
-                    server = PerAvg(dataset,algorithms[i], model, batch_size[i], learning_rate[i], beta[i], lamda[i], num_glob_iters, local_ep[i], optimizer, numusers,j)
+                if(algorithms == "PerAvg"):
+                    server = PerAvg(dataset,algorithms, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_ep, optimizer, numusers,j)
                     server.train()
                     server.test()
-                    
+    average_data(num_users=numusers, loc_ep1=local_epochs, Numb_Glob_Iters=num_glob_iters, lamb=lamda,learning_rate=learning_rate, alpha = beta, algorithms=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate,times = times)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", type=str, default="Mnist", choices=["Mnist", "Logistic_Synthetic"])

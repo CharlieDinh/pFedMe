@@ -50,6 +50,7 @@ def main(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_
 
             server.train()
             server.test()
+        
         average_data(num_users=numusers, loc_ep1=local_epochs, Numb_Glob_Iters=num_glob_iters, lamb=lamda,learning_rate=learning_rate, alpha = beta, algorithms_list=algorithm, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate,times = times)
 
 if __name__ == "__main__":
