@@ -116,8 +116,8 @@ class Server:
             total_train += user.train_samples
 
         for user in self.selected_users:
-            #self.add_parameters(user, user.train_samples / total_train)
-            self.add_parameters(user, 1 / len(self.selected_users))
+            self.add_parameters(user, user.train_samples / total_train)
+            #self.add_parameters(user, 1 / len(self.selected_users))
 
         # aaggregate avergage model with previous model using parameter beta 
         for pre_param, param in zip(previous_param, self.model.parameters()):
