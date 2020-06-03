@@ -4,6 +4,7 @@ import numpy as np
 from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes, mark_inset
 from matplotlib.ticker import StrMethodFormatter
 import os
+plt.rcParams.update({'font.size': 14})
 
 def simple_read_data(alg):
     print(alg)
@@ -41,7 +42,7 @@ def get_all_training_data_value(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, la
         string_learning_rate = str(learning_rate)  
         string_learning_rate = string_learning_rate + "_" +str(alpha) + "_" +str(lamb)
         if(algorithms == "pFedMe" or algorithms == "pFedMe_p"):
-            algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b" + "_" +str(loc_ep1) + "_"+ str(k)  + "_"+ str(personal_learning_rate[i]) +  "_" +str(i) 
+            algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b" + "_" +str(loc_ep1) + "_"+ str(k)  + "_"+ str(personal_learning_rate) +  "_" +str(i) 
         else:
             algorithms_list[i] = algorithms_list[i] + "_" + string_learning_rate + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b"  "_" +str(loc_ep1) +  "_" +str(i)
 
@@ -66,6 +67,12 @@ def average_data(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb="", learning
     train_acc_data = np.average(train_acc, axis=0)
     train_loss_data = np.average(train_loss, axis=0)
     # store average value to h5 file
+    max_accurancy = []
+    for i in range(times):
+        max_accurancy.append(glob_acc[i].max())
+    
+    print("std:", np.std(max_accurancy))
+    print("Mean:", np.mean(max_accurancy))
 
     alg = dataset + "_" + algorithms
     alg = alg + "_" + str(learning_rate) + "_" + str(alpha) + "_" + str(lamb) + "_" + str(num_users) + "u" + "_" + str(batch_size) + "b" + "_" + str(loc_ep1)
@@ -141,9 +148,9 @@ def get_max_value_index(num_users=100, loc_ep1=5, Numb_Glob_Iters=10, lamb=[], l
 def get_label_name(name):
     if name.startswith("pFedMe"):
         if name.startswith("pFedMe_p"):
-            return "pFedMe"+ " (Personalized Model)"
+            return "pFedMe"+ " (PM)"
         else:
-            return "pFedMe"+ " (Global Model)"
+            return "pFedMe"+ " (GM)"
     if name.startswith("PerAvg"):
         return "Per-FedAvg"
     if name.startswith("FedAvg"):
