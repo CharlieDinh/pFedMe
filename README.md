@@ -6,16 +6,18 @@ Authors: Anonymous
 This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL algorithms. \
 (Federated Learning using Pytorch)
 
-# Software requirement:
+# Software requirements:
 - numpy
 
 - scipy
 
-- pytorch
+- torch
 
 - Pillow
 
 - matplotlib
+
+- To download the dependencies: <pre><code> pip3 install -r requirements.txt  <code>
 
 # Dataset: We use 2 datasets: MNIST and Synthetic
 - To generate non-idd MNIST Data: 
