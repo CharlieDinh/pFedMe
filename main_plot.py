@@ -6,11 +6,11 @@ import argparse
 import importlib
 import random
 import os
-from utils.plot_utils import plot_summary_one_figure_mnist_Compare, plot_summary_one_figure_synthetic_Compare
+from utils.plot_utils import *
 import torch
 torch.manual_seed(0)
 
-if(1): # plot for MNIST
+if(0): # plot for MNIST convex 
     numusers = 5
     num_glob_iters = 800
     dataset = "Mnist"
@@ -25,7 +25,7 @@ if(1): # plot for MNIST
     plot_summary_one_figure_mnist_Compare(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
                                learning_rate=learning_rate, alpha = beta, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
 
-if(0): # plot for Synthetic
+if(1): # plot for Synthetic covex
     numusers = 10
     num_glob_iters = 600
     dataset = "Synthetic"
