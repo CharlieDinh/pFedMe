@@ -9,11 +9,7 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
 # Software requirements:
 - numpy, scipy, torch, Pillow, matplotlib.
 
-- To download the dependencies:
-
-  <pre><code>
-  pip3 install -r requirements.txt 
- </code></pre>
+- To download the dependencies: pip3 install -r requirements.txt
   
 # Dataset: We use 2 datasets: MNIST and Synthetic
 - To generate non-idd MNIST Data: 
