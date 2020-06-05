@@ -35,7 +35,7 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
 - There is a main file "main.py" which allows running the experiment.
 
 - To produce the comparison experiments for pFedMe using MNIST dataset:
-![MNIST](https://user-images.githubusercontent.com/44039773/82981428-6795d080-a02f-11ea-9e0b-9da210354975.png)
+![MNIST](https://user-images.githubusercontent.com/44039773/83833168-a9f59680-a72e-11ea-9787-88cc150fdb53.png)
 
 - Strongly Convex Case:
 <pre><code>
@@ -74,7 +74,7 @@ python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.00
     </code></pre>
 
 - To produce the comparision experiment for pFedMe using Synthetic dataset:
-![SYNTHETIC](https://user-images.githubusercontent.com/44039773/82981423-65cc0d00-a02f-11ea-92e4-b4fc09989d69.png)
+![SYNTHETIC](https://user-images.githubusercontent.com/44039773/83833171-ac57f080-a72e-11ea-90c7-c8480d275fff.png)
 
 - Strongly Convex Case:
 <pre><code>
