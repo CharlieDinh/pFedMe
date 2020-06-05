@@ -44,19 +44,12 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
     python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5  --times 10
     </code></pre>
   
-  - Non-Convex case: 
-    <pre><code>
-    python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.09 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm pFedMe --numusers 5 -- times 10
-    python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5 -- times 10
-    python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5 -- times 10
-    </code></pre>
-
 - It is noted that each algorithm should be run at least 10 times and then the results are averaged.
 
 - All the train loss, testing accuracy, and training accuracy will be stored as h5py file in the folder "results". It is noted that we store the data for persionalized model and global in 2 separate files following format: DATASET_pFedMe_p_x_x_xu_xb_x_avg.h5 and DATASET_pFedMe_x_x_xu_xb_x_avg.h5 respectively. 
 
-- In order to plot the figure, set parameters in file main_plot.py similar to parameters run from previous experiments.
-  For example. To plot the 3 experiments above, in the main_plot.py set:
+- In order to plot the figure for convex case, set parameters in file main_plot.py similar to parameters run from previous experiments.
+  For example. To plot the the comparision in convex case for the above experiments, in the main_plot.py set:
    <pre><code>
     numusers = 5
     num_glob_iters = 800
@@ -72,7 +65,14 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
     plot_summary_one_figure_mnist_Compare(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
                                learning_rate=learning_rate, alpha = beta, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
     </code></pre>
-
+  
+  - Non-Convex case: To plot the figure for non-convex case, we do similar to convex case, also need to change the parameters in main_plot.
+    <pre><code>
+    python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.09 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm pFedMe --numusers 5 -- times 10
+    python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5 -- times 10
+    python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5 -- times 10
+    </code></pre>
+    
 - To produce the comparision experiment for pFedMe using Synthetic dataset:
 ![SYNTHETIC](https://user-images.githubusercontent.com/44039773/83833171-ac57f080-a72e-11ea-90c7-c8480d275fff.png)
 
