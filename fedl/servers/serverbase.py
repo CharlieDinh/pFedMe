@@ -6,7 +6,7 @@ from utils.model_utils import Metrics
 import copy
 
 class Server:
-    def __init__(self, dataset,algorithm, model, batch_size, learning_rate ,alpha, lamda,
+    def __init__(self, dataset,algorithm, model, batch_size, learning_rate ,beta, lamda,
                  num_glob_iters, local_epochs, optimizer,num_users, times):
 
         # Set up the main attributes
@@ -20,7 +20,7 @@ class Server:
         self.users = []
         self.selected_users = []
         self.num_users = num_users
-        self.alpha = alpha
+        self.beta = beta
         self.lamda = lamda
         self.algorithm = algorithm
         self.rs_train_acc, self.rs_train_loss, self.rs_glob_acc,self.rs_train_acc_per, self.rs_train_loss_per, self.rs_glob_acc_per = [], [], [], [], [], []
@@ -121,12 +121,12 @@ class Server:
 
         # aaggregate avergage model with previous model using parameter beta 
         for pre_param, param in zip(previous_param, self.model.parameters()):
-            param.data = (1 - self.alpha)*pre_param.data + self.alpha*param.data
+            param.data = (1 - self.beta)*pre_param.data + self.beta*param.data
             
     # Save loss, accurancy to h5 fiel
     def save_results(self):
         alg = self.dataset + "_" + self.algorithm
-        alg = alg + "_" + str(self.learning_rate) + "_" + str(self.alpha) + "_" + str(self.lamda) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b" + "_" + str(self.local_epochs)
+        alg = alg + "_" + str(self.learning_rate) + "_" + str(self.beta) + "_" + str(self.lamda) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b" + "_" + str(self.local_epochs)
         if(self.algorithm == "pFedMe" or self.algorithm == "pFedMe_p"):
             alg = alg + "_" + str(self.K) + "_" + str(self.personal_learning_rate)
         alg = alg + "_" + str(self.times)
@@ -139,7 +139,7 @@ class Server:
         
         # store persionalized value
         alg = self.dataset + "_" + self.algorithm + "_p"
-        alg = alg  + "_" + str(self.learning_rate) + "_" + str(self.alpha) + "_" + str(self.lamda) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b"+ "_" + str(self.local_epochs)
+        alg = alg  + "_" + str(self.learning_rate) + "_" + str(self.beta) + "_" + str(self.lamda) + "_" + str(self.num_users) + "u" + "_" + str(self.batch_size) + "b"+ "_" + str(self.local_epochs)
         if(self.algorithm == "pFedMe" or self.algorithm == "pFedMe_p"):
             alg = alg + "_" + str(self.K) + "_" + str(self.personal_learning_rate)
         alg = alg + "_" + str(self.times)

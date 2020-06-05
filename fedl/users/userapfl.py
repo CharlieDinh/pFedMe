@@ -11,9 +11,9 @@ import copy
 # Implementation for APFL clients
 
 class UserAPFL(User):
-    def __init__(self, numeric_id, train_data, test_data, model, batch_size, learning_rate,alpha,lamda,
+    def __init__(self, numeric_id, train_data, test_data, model, batch_size, learning_rate,beta,lamda,
                  local_epochs, optimizer, total_users , num_users):
-        super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, alpha, lamda,
+        super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, beta, lamda,
                          local_epochs)
         self.total_users = total_users
         self.num_users = num_users
@@ -55,12 +55,12 @@ class UserAPFL(User):
             output = self.model(X)
             loss = self.loss(output, y)
             loss.backward()
-            self.optimizer.step(self.alpha,self.total_users/self.num_users)
+            self.optimizer.step(self.beta,self.total_users/self.num_users)
             self.clone_model_paramenter(self.model.parameters(),self.persionalized_model)
 
             # # caculate persionalized bar model => this model is use to evaluate as in the paper. 
             for persionalized_bar, persionalized, local in zip(self.persionalized_model_bar, self.persionalized_model, self.local_model):
-                persionalized_bar.data = self.alpha * persionalized.data + (1 - self.alpha )* local.data
+                persionalized_bar.data = self.beta * persionalized.data + (1 - self.beta )* local.data
 
             # update local model back to model for the argegation.
             self.update_parameters(self.local_model)

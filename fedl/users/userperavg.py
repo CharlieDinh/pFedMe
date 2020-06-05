@@ -10,9 +10,9 @@ from fedl.users.userbase import User
 # Implementation for Per-FedAvg clients
 
 class UserPerAvg(User):
-    def __init__(self, numeric_id, train_data, test_data, model, batch_size, learning_rate,alpha,lamda,
+    def __init__(self, numeric_id, train_data, test_data, model, batch_size, learning_rate,beta,lamda,
                  local_epochs, optimizer, total_users , num_users):
-        super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, alpha, lamda,
+        super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, beta, lamda,
                          local_epochs)
         self.total_users = total_users
         self.num_users = num_users
@@ -53,7 +53,7 @@ class UserPerAvg(User):
             output = self.model(X)
             loss = self.loss(output, y)
             loss.backward()
-            self.optimizer.step(beta = self.alpha)
+            self.optimizer.step(beta = self.beta)
 
             # clone model to user model 
             self.clone_model_paramenter(self.model.parameters(), self.local_model)
@@ -75,4 +75,4 @@ class UserPerAvg(User):
         output = self.model(X)
         loss = self.loss(output, y)
         loss.backward()
-        self.optimizer.step(beta=self.alpha)
+        self.optimizer.step(beta=self.beta)

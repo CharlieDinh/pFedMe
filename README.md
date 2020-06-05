@@ -63,7 +63,7 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
     personal_learning_rate = [0.1,0.1,0.1,0.1]
     algorithms = [ "pFedMe_p","pFedMe","PerAvg_p","FedAvg"]
     plot_summary_one_figure_mnist_Compare(num_users=numusers, loc_ep1=local_ep, Numb_Glob_Iters=num_glob_iters, lamb=lamda,
-                               learning_rate=learning_rate, alpha = beta, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
+                               learning_rate=learning_rate, beta = beta, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
     </code></pre>
   
   - Non-Convex case: To plot the figure for non-convex case, we do similar to convex case, also need to change the parameters in main_plot.

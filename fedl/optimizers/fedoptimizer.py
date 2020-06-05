@@ -81,7 +81,7 @@ class APFLOptimizer(Optimizer):
         defaults = dict(lr=lr)
         super(APFLOptimizer, self).__init__(params, defaults)
 
-    def step(self, closure=None, alpha = 1, n_k = 1):
+    def step(self, closure=None, beta = 1, n_k = 1):
         loss = None
         if closure is not None:
             loss = closure
@@ -91,6 +91,6 @@ class APFLOptimizer(Optimizer):
             for p in group['params']:
                 if p.grad is None:
                     continue
-                d_p = alpha  * n_k * p.grad.data
+                d_p = beta  * n_k * p.grad.data
                 p.data.add_(-group['lr'], d_p)
         return loss
