@@ -92,7 +92,7 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
 
 ## Fine-tuned Parameter:
 To produce results in the table of fine-tune parameter:
-![table](https://user-images.githubusercontent.com/44039773/83839182-9fdb9400-a73e-11ea-8416-9cdfcecacd75.png)
+      ![table](https://user-images.githubusercontent.com/44039773/83839182-9fdb9400-a73e-11ea-8416-9cdfcecacd75.png)
 - MNIST:
   - Convex:
       <pre><code>
