@@ -1,5 +1,5 @@
 # Personalized Federated Learning with Moreau Envelopes
-This repository implements all experiments in the paper the <mark>Personalized Federated Learning with Moreau Envelopes<mark>.
+This repository implements all experiments in the paper the **Personalized Federated Learning with Moreau Envelopes**.
   
 Authors: Anonymous
 
@@ -9,7 +9,7 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
 # Software requirements:
 - numpy, scipy, torch, Pillow, matplotlib.
 
-- To download the dependencies: pip3 install -r requirements.txt
+- To download the dependencies: **pip3 install -r requirements.txt**
 
 - The code can be run on any pc, doesn't require 
   
