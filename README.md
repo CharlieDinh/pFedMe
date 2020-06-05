@@ -39,9 +39,9 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
 
   - Strongly Convex Case:
     <pre><code>
-    python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.1 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm pFedMe --numusers 5 -- times 10
-    python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5  -- times 10
-    python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5  -- times 10
+    python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.1 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm pFedMe --numusers 5 --times 10
+    python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5  --times 10
+    python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5  --times 10
     </code></pre>
   
   - Non-Convex case: 
@@ -85,9 +85,9 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
 
   - Non-Convex case: 
     <pre><code>
-    python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.09 --beta 1 --lamda 20 --num_global_iters 600 --local_epochs 20 --algorithm pFedMe --numusers 10 -- times 10
-    python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --num_global_iters 600 --local_epochs 20 --algorithm FedAvg --numusers 10 -- times 10
-    python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 600 --local_epochs 20 --algorithm PerAvg --numusers 10 -- times 10
+    python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.09 --beta 1 --lamda 20 --num_global_iters 600 --local_epochs 20 --algorithm pFedMe --numusers 10 --times 10
+    python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --num_global_iters 600 --local_epochs 20 --algorithm FedAvg --numusers 10 --times 10
+    python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 600 --local_epochs 20 --algorithm PerAvg --numusers 10 --times 10
     </code></pre>
 
 ## Fine-tuned Parameter:
