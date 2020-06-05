@@ -33,7 +33,7 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
 # Produce experiments and figures
 
 - There is a main file "main.py" which allows running the experiment.
-# Using same parameters
+## Using same parameters
 - To produce the comparison experiments for pFedMe using MNIST dataset:
 ![MNIST](https://user-images.githubusercontent.com/44039773/83833168-a9f59680-a72e-11ea-9787-88cc150fdb53.png)
 
@@ -89,7 +89,7 @@ python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 
 python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --num_global_iters 600 --local_epochs 20 --algorithm FedAvg --numusers 10 -- times 10
 python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 600 --local_epochs 20 --algorithm PerAvg --numusers 10 -- times 10
 </code></pre>
-# Fine-tuned Parameter:
+## Fine-tuned Parameter:
 To produce result in the table of fine-tune parameter:
 - MNIST:
   - Convex:
