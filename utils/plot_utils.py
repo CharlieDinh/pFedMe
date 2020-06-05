@@ -387,7 +387,7 @@ def plot_summary_one_figure_mnist_Compare(num_users, loc_ep1, Numb_Glob_Iters, l
     
     glob_acc_, train_acc_, train_loss_ = get_training_data_value( num_users, loc_ep1, Numb_Glob_Iters, lamb, learning_rate, alpha, algorithms_list, batch_size, dataset, k, personal_learning_rate )
     for i in range(Numb_Algs):
-        print("max accurancy:", train_acc_[i].max())
+        print("max accurancy:", glob_acc_[i].max())
     glob_acc =  average_smooth(glob_acc_, window='flat')
     train_loss = average_smooth(train_loss_, window='flat')
     train_acc = average_smooth(train_acc_, window='flat')
