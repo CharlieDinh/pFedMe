@@ -118,4 +118,4 @@ To produce results in the table of fine-tune parameter:
     </code></pre>
 
 ## Supplement figures:
-For all the figures in supplement, We use Mnist dataset, we fix  the learning_rate == 0.005 and personal_learning_rate == 0.1 for all experiments. Other parameters are changed according to the experiments.
+For all the figures in supplement, we use Mnist dataset and fix the learning_rate == 0.005 and personal_learning_rate == 0.09 for all experiments. Other parameters are changed according to the experiments.
