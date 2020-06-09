@@ -18,7 +18,7 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
   - Access data/Mnist and run: "python3 generate_niid_20users.py"
   - We can change the number of user and number of labels for each user using 2 variable NUM_USERS = 20 and NUM_LABELS = 2
 
-- To generate idd MNIST Data:
+- To generate idd MNIST Data (we do not use this in the paper):
   - Access data/Mnist and run: "python3 generate_iid_20users.py"
 
 - To generate niid Synthetic:
