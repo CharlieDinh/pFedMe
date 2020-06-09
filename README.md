@@ -28,7 +28,7 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
 
 # Produce experiments and figures
 
-- There is a main file "main.py" which allows running the experiment.
+- There is a main file "main.py" which allows running all experiments.
 ## Using same parameters
 - To produce the comparison experiments for pFedMe using MNIST dataset:
 ![MNIST](https://user-images.githubusercontent.com/44039773/83833168-a9f59680-a72e-11ea-9787-88cc150fdb53.png)
