@@ -116,3 +116,6 @@ To produce results in the table of fine-tune parameter:
     python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.03 --num_global_iters 600 --local_epochs 20 --algorithm FedAvg --numusers 10 --times 10
     python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.01 --beta 0.001  --num_global_iters 600 --local_epochs 20 --algorithm PerAvg --numusers 10 --times 10
     </code></pre>
+
+## Supplement figures:
+For all the figures in supplement, We use Mnist dataset, we fix  the learning_rate == 0.005 and personal_learning_rate == 0.1 for all experiments. Other parameters are changed according to the experiments.
