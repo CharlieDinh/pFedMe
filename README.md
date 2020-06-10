@@ -24,7 +24,7 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
 - To generate niid Synthetic:
   - Access data/Synthetic and run: "python3 generate_synthetic_05_05.py". Similar to MNIST data, the Synthetic data is configurable with number of users and the numbers of labels for each user.
 
-- The datasets also are available to download at: https://drive.google.com/drive/folders/1vTrQzE3Ww-Oc0c3apFt8tkRvw5eW07eL
+- The datasets also are available to download at: https://drive.google.com/drive/folders/1-Z3FCZYoisqnIoLLxOljMPmP70t2TGwB?usp=sharing
 
 # Produce experiments and figures
 
