@@ -352,9 +352,8 @@ def plot_summary_one_figure_synthetic_Compare(num_users, loc_ep1, Numb_Glob_Iter
     colors = ['tab:blue', 'tab:green', 'r', 'darkorange', 'tab:brown', 'm']
     plt.figure(1,figsize=(5, 5))
     plt.title("$\mu-$"+ "strongly convex")
-    #plt.figure(figsize=(20,10))
+    # plt.title("Nonconvex") # for non convex case
     plt.grid(True)
-    plt.title("$\mu-$"+ "strongly convex")
     for i in range(Numb_Algs):
         label = get_label_name(algorithms_list[i])
         plt.plot(train_loss[i, 1:], linestyle=linestyles[i], label=label, linewidth = 1, color=colors[i],marker = markers[i],markevery=0.2, markersize=5)
@@ -368,8 +367,8 @@ def plot_summary_one_figure_synthetic_Compare(num_users, loc_ep1, Numb_Glob_Iter
     plt.savefig(dataset.upper() + "Convex_Syn_train_Com.pdf", bbox_inches="tight")
     plt.figure(2,figsize=(5, 5))
     plt.title("$\mu-$"+ "strongly convex")
+    # plt.title("Nonconvex") # for non convex case
     plt.grid(True)
-    plt.title("$\mu-$"+ "strongly convex")
     # Global accurancy
     for i in range(Numb_Algs):
         label = get_label_name(algorithms_list[i])
@@ -402,8 +401,8 @@ def plot_summary_one_figure_mnist_Compare(num_users, loc_ep1, Numb_Glob_Iters, l
     colors = ['tab:blue', 'tab:green', 'r', 'darkorange', 'tab:brown', 'm']
     plt.figure(1,figsize=(5, 5))
     plt.title("$\mu-$"+ "strongly convex")
+    # plt.title("Nonconvex") # for non convex case
     plt.grid(True)
-    plt.title("$\mu-$"+ "strongly convex")
     # training loss
     marks = []
     for i in range(Numb_Algs):
@@ -412,15 +411,15 @@ def plot_summary_one_figure_mnist_Compare(num_users, loc_ep1, Numb_Glob_Iters, l
     plt.legend(loc='upper right')
     plt.ylabel('Training Loss')
     plt.xlabel('Global rounds')
-    #plt.ylim([0.05,  0.5]) # non convex-case
+    #plt.ylim([0.05,  0.6]) # non convex-case
     plt.ylim([0.19,  0.4]) # convex-case
     plt.gca().yaxis.set_major_formatter(StrMethodFormatter('{x:,.2f}')) # 2 decimal places
     plt.savefig(dataset.upper() + "Convex_Mnist_train_Com.pdf", bbox_inches="tight")
     #plt.savefig(dataset.upper() + "Non_Convex_Mnist_train_Com.pdf", bbox_inches="tight")
     plt.figure(2,figsize=(5, 5))
     plt.title("$\mu-$"+ "strongly convex")
+    # plt.title("Nonconvex") # for non convex case
     plt.grid(True)
-    plt.title("$\mu-$"+ "strongly convex")
     # Global accurancy
     for i in range(Numb_Algs):
         label = get_label_name(algorithms_list[i])
@@ -428,7 +427,7 @@ def plot_summary_one_figure_mnist_Compare(num_users, loc_ep1, Numb_Glob_Iters, l
     plt.legend(loc='lower right')
     plt.ylabel('Test Accuracy')
     plt.xlabel('Global rounds')
-    #plt.ylim([0.9,  0.985]) # non convex-case
+    #plt.ylim([0.84,  0.98]) # non convex-case
     plt.ylim([0.88,  0.95]) # Convex-case
     plt.savefig(dataset.upper() + "Convex_Mnist_test_Com.pdf", bbox_inches="tight")
     #plt.savefig(dataset.upper() + "Non_Convex_Mnist_test_Com.pdf", bbox_inches="tight")
@@ -451,8 +450,8 @@ def plot_summary_one_figure_mnist_K(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
     colors = ['tab:blue', 'tab:green', 'r', 'darkorange', 'tab:brown', 'm']
     plt.figure(1,figsize=(5, 5))
     plt.title("$\mu-$"+ "strongly convex")
+    # plt.title("Nonconvex") # for non convex case
     plt.grid(True)
-    plt.title("$\mu-$"+ "strongly convex")
     # training loss
     marks = []
     for i in range(Numb_Algs):
@@ -461,13 +460,14 @@ def plot_summary_one_figure_mnist_K(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
     plt.legend(loc='upper right')
     plt.ylabel('Training Loss')
     plt.xlabel('Global rounds')
-    #plt.ylim([0.05,  0.4]) # non convex-case
-    plt.ylim([0.2,  0.5]) # convex-case
+    #plt.ylim([0.05,  0.6]) # non convex-case
+    plt.ylim([0.19,  0.5]) # convex-case
     plt.savefig(dataset.upper() + "Convex_Mnist_train_K.pdf", bbox_inches="tight")
     #plt.savefig(dataset.upper() + "Non_Convex_Mnist_train_K.pdf", bbox_inches="tight")
     plt.figure(2,figsize=(5, 5))
     plt.grid(True)
     plt.title("$\mu-$"+ "strongly convex")
+    # plt.title("Nonconvex") # for non convex case
     # Global accurancy
     for i in range(Numb_Algs):
         label = get_label_name(algorithms_list[i])
@@ -475,8 +475,8 @@ def plot_summary_one_figure_mnist_K(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
     plt.legend(loc='lower right')
     plt.ylabel('Test Accuracy')
     plt.xlabel('Global rounds')
-    #plt.ylim([0.9,  0.985]) # non convex-case
-    plt.ylim([0.86,  0.945]) # Convex-case
+    # plt.ylim([0.84,  0.98]) # non convex-case
+    plt.ylim([0.86,  0.95]) # Convex-case
     plt.savefig(dataset.upper() + "Convex_Mnist_test_K.pdf", bbox_inches="tight")
    #plt.savefig(dataset.upper() + "Non_Convex_Mnist_test_K.pdf", bbox_inches="tight")
     plt.close()
@@ -498,6 +498,7 @@ def plot_summary_one_figure_mnist_R(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
     plt.figure(1,figsize=(5, 5))
     plt.grid(True)
     plt.title("$\mu-$"+ "strongly convex")
+    # plt.title("Nonconvex") # for non convex case
     # training loss
     for i in range(Numb_Algs):
         label = get_label_name(algorithms_list[i])
@@ -505,13 +506,14 @@ def plot_summary_one_figure_mnist_R(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
     plt.legend(loc='upper right')
     plt.ylabel('Training Loss')
     plt.xlabel('Global rounds')
-    #plt.ylim([0.05,  0.4]) # non convex-case
-    plt.ylim([0.18,  0.5]) # convex-case
+    #plt.ylim([0.05,  0.6]) # non convex-case
+    plt.ylim([0.17,  0.5]) # convex-case
     plt.savefig(dataset.upper() + "Convex_Mnist_train_R.pdf", bbox_inches="tight")
     #plt.savefig(dataset.upper() + "Non_Convex_Mnist_train_R.pdf", bbox_inches="tight")
     plt.figure(2,figsize=(5, 5))
     plt.grid(True)
     plt.title("$\mu-$"+ "strongly convex")
+    # plt.title("Nonconvex") # for non convex case
     # Global accurancy
     for i in range(Numb_Algs):
         label = get_label_name(algorithms_list[i])
@@ -519,8 +521,8 @@ def plot_summary_one_figure_mnist_R(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
     plt.legend(loc='lower right')
     plt.ylabel('Test Accuracy')
     plt.xlabel('Global rounds')
-    #plt.ylim([0.9,  0.985]) # non convex-case
-    plt.ylim([0.86,  0.95]) # Convex-case
+    # plt.ylim([0.84,  0.985]) # non convex-case
+    plt.ylim([0.86,  0.955]) # Convex-case
     plt.savefig(dataset.upper() + "Convex_Mnist_test_R.pdf", bbox_inches="tight")
     #plt.savefig(dataset.upper() + "Non_Convex_Mnist_test_R.pdf", bbox_inches="tight")
     plt.close()
@@ -542,6 +544,7 @@ def plot_summary_one_figure_mnist_L(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
     plt.figure(1,figsize=(5, 5))
     plt.grid(True)
     plt.title("$\mu-$"+ "strongly convex")
+    # plt.title("Nonconvex") # for non convex case
     # training loss
     for i in range(Numb_Algs):
         label = get_label_name(algorithms_list[i])
@@ -549,13 +552,14 @@ def plot_summary_one_figure_mnist_L(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
     plt.legend(loc='upper right')
     plt.ylabel('Training Loss')
     plt.xlabel('Global rounds')
-    #plt.ylim([0.05,  0.4]) # non convex-case
-    plt.ylim([0.2,  0.5]) # convex-case
+    #plt.ylim([0.05,  0.6]) # non convex-case
+    plt.ylim([0.19,  0.5]) # convex-case
     plt.savefig(dataset.upper() + "Convex_Mnist_train_L.pdf", bbox_inches="tight")
     #plt.savefig(dataset.upper() + "Non_Convex_Mnist_train_L.pdf", bbox_inches="tight")
     plt.figure(2,figsize=(5, 5))
     plt.grid(True)
     plt.title("$\mu-$"+ "strongly convex")
+    # plt.title("Nonconvex") # for non convex case
     # Global accurancy
     for i in range(Numb_Algs):
         label = get_label_name(algorithms_list[i])
@@ -563,8 +567,8 @@ def plot_summary_one_figure_mnist_L(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
     plt.legend(loc='lower right')
     plt.ylabel('Test Accuracy')
     plt.xlabel('Global rounds')
-    #plt.ylim([0.9,  0.985]) # non convex-case
-    plt.ylim([0.86,  0.945]) # Convex-case
+    #plt.ylim([0.84,  0.98]) # non convex-case
+    plt.ylim([0.86,  0.95]) # Convex-case
     plt.savefig(dataset.upper() + "Convex_Mnist_test_L.pdf", bbox_inches="tight")
     #plt.savefig(dataset.upper() + "Non_Convex_Mnist_test_L.pdf", bbox_inches="tight")
     plt.close()
@@ -585,6 +589,7 @@ def plot_summary_one_figure_mnist_D(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
     plt.figure(1,figsize=(5, 5))
     plt.grid(True)
     plt.title("$\mu-$"+ "strongly convex")
+    # plt.title("Nonconvex") # for non convex case
     # training loss
     for i in range(Numb_Algs):
         label = get_label_name(algorithms_list[i])
@@ -592,13 +597,14 @@ def plot_summary_one_figure_mnist_D(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
     plt.legend(loc='upper right')
     plt.ylabel('Training Loss')
     plt.xlabel('Global rounds')
-    #plt.ylim([0.05,  0.4]) # non convex-case
-    plt.ylim([0.2,  0.5]) # convex-case
+    #plt.ylim([0.05,  0.6]) # non convex-case
+    plt.ylim([0.19,  0.5]) # convex-case
     plt.savefig(dataset.upper() + "Convex_Mnist_train_D.pdf", bbox_inches="tight")
     #plt.savefig(dataset.upper() + "Non_Convex_Mnist_train_D.pdf", bbox_inches="tight")
     plt.figure(2,figsize=(5, 5))
     plt.grid(True)
     plt.title("$\mu-$"+ "strongly convex")
+    # plt.title("Nonconvex") # for non convex case
     # Global accurancy
     for i in range(Numb_Algs):
         label = get_label_name(algorithms_list[i])
@@ -606,8 +612,8 @@ def plot_summary_one_figure_mnist_D(num_users, loc_ep1, Numb_Glob_Iters, lamb, l
     plt.legend(loc='lower right')
     plt.ylabel('Test Accuracy')
     plt.xlabel('Global rounds')
-    #plt.ylim([0.9,  0.985]) # non convex-case
-    plt.ylim([0.86,  0.945]) # Convex-case
+    # plt.ylim([0.84,  0.98]) # non convex-case
+    plt.ylim([0.86,  0.95]) # Convex-case
     plt.savefig(dataset.upper() + "Convex_Mnist_test_D.pdf", bbox_inches="tight")
     #plt.savefig(dataset.upper() + "Non_Convex_Mnist_test_D.pdf", bbox_inches="tight")
     plt.close()
@@ -630,7 +636,7 @@ def plot_summary_one_figure_mnist_Beta(num_users, loc_ep1, Numb_Glob_Iters, lamb
     plt.figure(1,figsize=(5, 5))
     plt.grid(True)
     plt.title("$\mu-$"+ "strongly convex")
-    plt.title("$\mu-$"+ "strongly convex")
+    # plt.title("Nonconvex") # for non convex case
     # training loss
     marks = []
     for i in range(Numb_Algs):
@@ -639,14 +645,14 @@ def plot_summary_one_figure_mnist_Beta(num_users, loc_ep1, Numb_Glob_Iters, lamb
     plt.legend(loc='upper right')
     plt.ylabel('Training Loss')
     plt.xlabel('Global rounds')
-    #plt.ylim([0.05,  0.4]) # non convex-case
-    plt.ylim([0.17,  0.4]) # convex-case
+    #plt.ylim([0.05,  0.6]) # non convex-case
+    plt.ylim([0.18,  0.5]) # convex-case
     plt.savefig(dataset.upper() + "Convex_Mnist_train_Beta.pdf", bbox_inches="tight")
     #plt.savefig(dataset.upper() + "Non_Convex_Mnist_train_Beta.pdf", bbox_inches="tight")
     plt.figure(2,figsize=(5, 5))
     plt.grid(True)
     plt.title("$\mu-$"+ "strongly convex")
-    plt.title("$\mu-$"+ "strongly convex")
+    # plt.title("Nonconvex") # for non convex case
     # Global accurancy
     for i in range(Numb_Algs):
         label = get_label_name(algorithms_list[i])
@@ -654,8 +660,8 @@ def plot_summary_one_figure_mnist_Beta(num_users, loc_ep1, Numb_Glob_Iters, lamb
     plt.legend(loc='lower right')
     plt.ylabel('Test Accuracy')
     plt.xlabel('Global rounds')
-    #plt.ylim([0.9,  0.985]) # non convex-case
-    plt.ylim([0.88,  0.95]) # Convex-case
+    # plt.ylim([0.84,  0.985]) # non convex-case
+    plt.ylim([0.88,  0.946]) # Convex-case
     plt.savefig(dataset.upper() + "Convex_Mnist_test_Beta.pdf", bbox_inches="tight")
     #plt.savefig(dataset.upper() + "Non_Convex_Mnist_test_Beta.pdf", bbox_inches="tight")
     plt.close()
