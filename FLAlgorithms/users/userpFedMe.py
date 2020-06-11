@@ -4,8 +4,8 @@ import torch.nn.functional as F
 import os
 import json
 from torch.utils.data import DataLoader
-from fedl.optimizers.fedoptimizer import pFedMeOptimizer
-from fedl.users.userbase import User
+from FLAlgorithms.optimizers.fedoptimizer import pFedMeOptimizer
+from FLAlgorithms.users.userbase import User
 import copy
 
 # Implementation for pFeMe clients
