@@ -4,13 +4,12 @@ import torch.nn.functional as F
 import os
 import json
 from torch.utils.data import DataLoader
-from fedl.users.userbase import User
-from fedl.optimizers.fedoptimizer import APFLOptimizer
-import copy
+from FLAlgorithms.optimizers.fedoptimizer import MySGD, FEDLOptimizer
+from FLAlgorithms.users.userbase import User
 
-# Implementation for APFL clients
+# Implementation for Per-FedAvg clients
 
-class UserAPFL(User):
+class UserPerAvg(User):
     def __init__(self, numeric_id, train_data, test_data, model, batch_size, learning_rate,beta,lamda,
                  local_epochs, optimizer, total_users , num_users):
         super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, beta, lamda,
@@ -23,7 +22,7 @@ class UserAPFL(User):
         else:
             self.loss = nn.NLLLoss()
 
-        self.optimizer = APFLOptimizer(self.model.parameters(), lr=self.learning_rate)
+        self.optimizer = MySGD(self.model.parameters(), lr=self.learning_rate)
 
     def set_grads(self, new_grads):
         if isinstance(new_grads, nn.Parameter):
@@ -37,32 +36,43 @@ class UserAPFL(User):
         LOSS = 0
         self.model.train()
         for epoch in range(1, self.local_epochs + 1):  # local update 
-
-            self.model.train()
-            X, y = self.get_next_train_batch()
             
-            # caculate local model 
+            self.model.train()
+
+            #step 1
+            X, y = self.get_next_train_batch()
             self.optimizer.zero_grad()
             output = self.model(X)
             loss = self.loss(output, y)
             loss.backward()
             self.optimizer.step()
-            self.clone_model_paramenter(self.model.parameters(), self.local_model)
 
-            # caculate persionalized model
-            self.update_parameters(self.persionalized_model)
+            #step 2
+            X, y = self.get_next_train_batch()
             self.optimizer.zero_grad()
             output = self.model(X)
             loss = self.loss(output, y)
             loss.backward()
-            self.optimizer.step(self.beta,self.total_users/self.num_users)
-            self.clone_model_paramenter(self.model.parameters(),self.persionalized_model)
+            self.optimizer.step(beta = self.beta)
 
-            # # caculate persionalized bar model => this model is use to evaluate as in the paper. 
-            for persionalized_bar, persionalized, local in zip(self.persionalized_model_bar, self.persionalized_model, self.local_model):
-                persionalized_bar.data = self.beta * persionalized.data + (1 - self.beta )* local.data
+            # clone model to user model 
+            self.clone_model_paramenter(self.model.parameters(), self.local_model)
 
-            # update local model back to model for the argegation.
-            self.update_parameters(self.local_model)
+        return LOSS    
 
-        return LOSS
+    def train_one_step(self):
+        self.model.train()
+        #step 1
+        X, y = self.get_next_test_batch()
+        self.optimizer.zero_grad()
+        output = self.model(X)
+        loss = self.loss(output, y)
+        loss.backward()
+        self.optimizer.step()
+            #step 2
+        X, y = self.get_next_train_batch()
+        self.optimizer.zero_grad()
+        output = self.model(X)
+        loss = self.loss(output, y)
+        loss.backward()
+        self.optimizer.step(beta=self.beta)

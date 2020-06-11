@@ -3,7 +3,7 @@ This repository implements all experiments in the paper the **Personalized Feder
   
 Authors: Anonymous
 
-This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL algorithms. \
+This repository not only implements pFedMe but also FedAvg, and Per-FedAvg algorithms.
 (Federated Learning using Pytorch)
 
 # Software requirements:
@@ -11,24 +11,25 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
 
 - To download the dependencies: **pip3 install -r requirements.txt**
 
-- The code can be run on any pc, doesn't require GPU
+- The code can be run on any pc, doesn't require GPU.
   
 # Dataset: We use 2 datasets: MNIST and Synthetic
 - To generate non-idd MNIST Data: 
   - Access data/Mnist and run: "python3 generate_niid_20users.py"
   - We can change the number of user and number of labels for each user using 2 variable NUM_USERS = 20 and NUM_LABELS = 2
 
-- To generate idd MNIST Data (we do not use this in the paper):
+- To generate idd MNIST Data (we do not use iid data in the paper):
   - Access data/Mnist and run: "python3 generate_iid_20users.py"
 
 - To generate niid Synthetic:
-  - Access data/Synthetic and run: "python3 generate_synthetic_05_05.py". Similar to MNIST data, the Synthetic data is configurable with number of users and the numbers of labels for each user.
+  - Access data/Synthetic and run: "python3 generate_synthetic_05_05.py". Similar to MNIST data, the Synthetic data is configurable with the number of users and the numbers of labels for each user.
 
 - The datasets also are available to download at: https://drive.google.com/drive/folders/1-Z3FCZYoisqnIoLLxOljMPmP70t2TGwB?usp=sharing
 
 # Produce experiments and figures
 
 - There is a main file "main.py" which allows running all experiments.
+
 ## Using same parameters
 - To produce the comparison experiments for pFedMe using MNIST dataset:
 ![MNIST](https://user-images.githubusercontent.com/44039773/83833168-a9f59680-a72e-11ea-9787-88cc150fdb53.png)
@@ -42,10 +43,10 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
   
 - It is noted that each algorithm should be run at least 10 times and then the results are averaged.
 
-- All the train loss, testing accuracy, and training accuracy will be stored as h5py file in the folder "results". It is noted that we store the data for persionalized model and global in 2 separate files following format: DATASET_pFedMe_p_x_x_xu_xb_x_avg.h5 and DATASET_pFedMe_x_x_xu_xb_x_avg.h5 respectively. 
+- All the train loss, testing accuracy, and training accuracy will be stored as h5py file in the folder "results". It is noted that we store the data for persionalized model and global of pFedMe in 2 separate files following format: DATASET_pFedMe_p_x_x_xu_xb_x_avg.h5 and DATASET_pFedMe_x_x_xu_xb_x_avg.h5 respectively (pFedMe for global model, pFedMe_p for personalized model of pFedMe, PerAvg_p is for personalized model of PerAvg).
 
-- In order to plot the figure for convex case, set parameters in file main_plot.py similar to parameters run from previous experiments. It is note that each experiment with different parameters will have different results, the configuration in the plot function should be modified for each specific case.
-  For example. To plot the the comparision in convex case for the above experiments, in the main_plot.py set:
+- In order to plot the figure for convex case, set parameters in file main_plot.py similar to parameters run from previous experiments. It is noted that each experiment with different parameters will have different results, the configuration in the plot function should be modified for each specific case.
+  For example. To plot the comparision in convex case for the above experiments, in the main_plot.py set:
    <pre><code>
     numusers = 5
     num_glob_iters = 800
@@ -62,7 +63,7 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
                                learning_rate=learning_rate, beta = beta, algorithms_list=algorithms, batch_size=batch_size, dataset=dataset, k = K, personal_learning_rate = personal_learning_rate)
     </code></pre>
 
-  - Non-Convex case: To plot the figure for non-convex case, we do similar to convex case, also need to change the parameters in main_plot.
+  - NonConvex case: To plot the figure for non-convex case, we do similar to convex case, also need to change the parameters in main_plot.
     <pre><code>
     python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.09 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm pFedMe --numusers 5 --times 10
     python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5 --times 10
@@ -79,43 +80,45 @@ This repository not only implements pFedMe but also FedAvg, Per-FedAvg, and APFL
     python3 main.py --dataset Synthetic --model mclr --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 600 --local_epochs 20 --algorithm PerAvg --numusers 10 --times 10
     </code></pre>
 
-  - Non-Convex case: 
+  - NonConvex case: 
     <pre><code>
-    python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.09 --beta 1 --lamda 20 --num_global_iters 600 --local_epochs 20 --algorithm pFedMe --numusers 10 --times 10
+    python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.01 --beta 1 --lamda 20 --num_global_iters 600 --local_epochs 20 --algorithm pFedMe --numusers 10 --times 10
     python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --num_global_iters 600 --local_epochs 20 --algorithm FedAvg --numusers 10 --times 10
     python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.005 --beta 0.001  --num_global_iters 600 --local_epochs 20 --algorithm PerAvg --numusers 10 --times 10
     </code></pre>
 
-## Fine-tuned Parameter:
+## Fine-tuned Parameters:
 To produce results in the table of fine-tune parameter:
-      ![table](https://user-images.githubusercontent.com/44039773/83839182-9fdb9400-a73e-11ea-8416-9cdfcecacd75.png)
+![table](https://user-images.githubusercontent.com/44039773/83839182-9fdb9400-a73e-11ea-8416-9cdfcecacd75.png)
 - MNIST:
-  - Convex:
-      <pre><code>
+  - Strongly Convex Case:
+    <pre><code>
     python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.01 --personal_learning_rate 0.1 --beta 2 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm pFedMe --numusers 5 --times 10
     python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.02 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5 --times 10
     python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.03 --beta 0.003  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5 --times 10
     </code></pre>
-  - NonConvex:
+  
+  - NonConvex Case:
     <pre><code>
     python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.01 --personal_learning_rate 0.05 --beta 2 --lamda 30 --num_global_iters 800 --local_epochs 20 --algorithm pFedMe --numusers 5 --times 10
     python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.02 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5 --times 10
     python3 main.py --dataset Mnist --model dnn --batch_size 20 --learning_rate 0.02 --beta 0.001  --num_global_iters 800 --local_epochs 20 --algorithm PerAvg --numusers 5 --times 10
     </code></pre>
+
 - Sythetic:
-  - Convex:
-          <pre><code>
+  - Strongly Convex Case:
+    <pre><code>
     python3 main.py --dataset Synthetic --model mclr --batch_size 20 --learning_rate 0.01 --personal_learning_rate 0.01 --beta 2 --lamda 20 --num_global_iters 600 --local_epochs 20 --algorithm pFedMe --numusers 10 --times 10
     python3 main.py --dataset Synthetic --model mclr --batch_size 20 --learning_rate 0.02 --num_global_iters 600 --local_epochs 20 --algorithm FedAvg --numusers 10 --times 10
     python3 main.py --dataset Synthetic --model mclr --batch_size 20 --learning_rate 0.02 --beta 0.002  --num_global_iters 600 --local_epochs 20 --algorithm PerAvg --numusers 10 --times 10
     </code></pre>
     
-  - NonConvex:
-      <pre><code>
+  - NonConvex Case:
+    <pre><code>
     python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.01 --personal_learning_rate 0.01 --beta 2 --lamda 30 --num_global_iters 600 --local_epochs 20 --algorithm pFedMe --numusers 10 --times 10
     python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.03 --num_global_iters 600 --local_epochs 20 --algorithm FedAvg --numusers 10 --times 10
     python3 main.py --dataset Synthetic --model dnn --batch_size 20 --learning_rate 0.01 --beta 0.001  --num_global_iters 600 --local_epochs 20 --algorithm PerAvg --numusers 10 --times 10
     </code></pre>
 
 ## Supplement figures:
-For all the figures in supplement, we use Mnist dataset and fix the learning_rate == 0.005 and personal_learning_rate == 0.09 for all experiments. Other parameters are changed according to the experiments.
+For all the figures in supplement, we use Mnist dataset and fix the learning_rate == 0.005 and personal_learning_rate == 0.09 for all experiments. Other parameters are changed according to the experiments. Only in the experiments for the effects of $\beta$, in case $\beta = 4$, we use learning_rate == 0.003 to stable the algorithm.

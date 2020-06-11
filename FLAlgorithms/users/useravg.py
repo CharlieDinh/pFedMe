@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import os
 import json
 from torch.utils.data import DataLoader
-from fedl.users.userbase import User
+from FLAlgorithms.users.userbase import User
 
 # Implementation for FedAvg clients
 
