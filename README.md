@@ -3,7 +3,7 @@ This repository implements all experiments in the paper the **Personalized Feder
   
 Authors: Canh T. Dinh, Nguyen H. Tran, Tuan Dung Nguyen
 
-Link: https://arxiv.org/pdf/2006.08848.pdf
+Full paper: https://arxiv.org/pdf/2006.08848.pdf
 
 This repository not only implements pFedMe but also FedAvg, and Per-FedAvg algorithms.
 (Federated Learning using Pytorch)
@@ -123,4 +123,4 @@ To produce results in the table of fine-tune parameter:
     </code></pre>
 
 ## Effect of hyper-parameters:
-For all the figures for effect of hyper-, we use Mnist dataset and fix the learning_rate == 0.005 and personal_learning_rate == 0.09 for all experiments. Other parameters are changed according to the experiments. Only in the experiments for the effects of $\beta$, in case $\beta = 4$, we use learning_rate == 0.003 to stable the algorithm.
+For all the figures for effect of hyper-parameters, we use Mnist dataset and fix the learning_rate == 0.005 and personal_learning_rate == 0.09 for all experiments. Other parameters are changed according to the experiments. Only in the experiments for the effects of $\beta$, in case $\beta = 4$, we use learning_rate == 0.003 to stable the algorithm.
