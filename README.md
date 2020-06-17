@@ -3,6 +3,8 @@ This repository implements all experiments in the paper the **Personalized Feder
   
 Authors: Canh T. Dinh, Nguyen H. Tran, Tuan Dung Nguyen
 
+Link: https://arxiv.org/pdf/2006.08848.pdf
+
 This repository not only implements pFedMe but also FedAvg, and Per-FedAvg algorithms.
 (Federated Learning using Pytorch)
 
