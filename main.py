@@ -69,7 +69,7 @@ if __name__ == "__main__":
     parser.add_argument("--algorithm", type=str, default="pFedMe",choices=["pFedMe", "PerAvg", "FedAvg"]) 
     parser.add_argument("--numusers", type=int, default=20, help="Number of Users per round")
     parser.add_argument("--K", type=int, default=5, help="Computation steps")
-    parser.add_argument("--personal_learning_rate", type=float, default=0.1, help="Persionalized learning rate to caculate theta aproximately using K steps")
+    parser.add_argument("--personal_learning_rate", type=float, default=0.09, help="Persionalized learning rate to caculate theta aproximately using K steps")
     parser.add_argument("--times", type=int, default=5, help="running time")
     args = parser.parse_args()
 
