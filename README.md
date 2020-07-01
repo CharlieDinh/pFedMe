@@ -36,7 +36,7 @@ This repository not only implements pFedMe but also FedAvg, and Per-FedAvg algor
 - To produce the comparison experiments for pFedMe using MNIST dataset:
 ![MNIST](https://user-images.githubusercontent.com/44039773/83833168-a9f59680-a72e-11ea-9787-88cc150fdb53.png)
 
-  - Strongly Convex Case run below commands:
+  - Strongly Convex Case, run below commands:
     <pre><code>
     python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --personal_learning_rate 0.1 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm pFedMe --numusers 5 --times 10
     python3 main.py --dataset Mnist --model mclr --batch_size 20 --learning_rate 0.005 --num_global_iters 800 --local_epochs 20 --algorithm FedAvg --numusers 5  --times 10
