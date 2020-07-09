@@ -91,7 +91,10 @@ This repository not only implements pFedMe but also FedAvg, and Per-FedAvg algor
 
 ## Fine-tuned Parameters:
 To produce results in the table of fine-tune parameter:
-![table](https://user-images.githubusercontent.com/44039773/83839182-9fdb9400-a73e-11ea-8416-9cdfcecacd75.png)
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/44039773/83839182-9fdb9400-a73e-11ea-8416-9cdfcecacd75.png">
+</p>
 - MNIST:
   - Strongly Convex Case:
     <pre><code>
