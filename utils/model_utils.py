@@ -8,6 +8,9 @@ IMAGE_SIZE = 28
 IMAGE_PIXELS = IMAGE_SIZE * IMAGE_SIZE
 NUM_CHANNELS = 1
 
+IMAGE_SIZE_CIFAR = 32
+NUM_CHANNELS_CIFAR = 3
+
 def suffer_data(data):
     data_x = data['x']
     data_y = data['y']
@@ -122,6 +125,12 @@ def read_user_data(index,data,dataset):
         X_train = torch.Tensor(X_train).view(-1, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE).type(torch.float32)
         y_train = torch.Tensor(y_train).type(torch.int64)
         X_test = torch.Tensor(X_test).view(-1, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE).type(torch.float32)
+        y_test = torch.Tensor(y_test).type(torch.int64)
+    elif(dataset == "Cifar10"):
+        X_train, y_train, X_test, y_test = train_data['x'], train_data['y'], test_data['x'], test_data['y']
+        X_train = torch.Tensor(X_train).view(-1, NUM_CHANNELS_CIFAR, IMAGE_SIZE_CIFAR, IMAGE_SIZE_CIFAR).type(torch.float32)
+        y_train = torch.Tensor(y_train).type(torch.int64)
+        X_test = torch.Tensor(X_test).view(-1, NUM_CHANNELS_CIFAR, IMAGE_SIZE_CIFAR, IMAGE_SIZE_CIFAR).type(torch.float32)
         y_test = torch.Tensor(y_test).type(torch.int64)
     else:
         X_train = torch.Tensor(X_train).type(torch.float32)
