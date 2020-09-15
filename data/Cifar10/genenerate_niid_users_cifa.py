@@ -15,7 +15,7 @@ testset = torchvision.datasets.CIFAR10(root='./data', train=False,download=True,
 random.seed(1)
 np.random.seed(1)
 NUM_USERS = 20 # should be muitiple of 10
-NUM_LABELS = 2
+NUM_LABELS = 3
 # Setup directory for train/test data
 train_path = './data/train/cifa_train.json'
 test_path = './data/test/cifa_test.json'
