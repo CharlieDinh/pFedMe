@@ -4,13 +4,20 @@ import numpy as np
 import random
 import json
 import os
-
+import torch
 import torchvision
 import torchvision.transforms as transforms
 transform = transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True,download=True, transform=transform)
 testset = torchvision.datasets.CIFAR10(root='./data', train=False,download=True, transform=transform)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=len(trainset.data),shuffle=False)
+testloader = torch.utils.data.DataLoader(testset, batch_size=len(testset.data),shuffle=False)
+
+for _, train_data in enumerate(trainloader,0):
+    trainset.data, trainset.targets = train_data
+for _, train_data in enumerate(testloader,0):
+    testset.data, testset.targets = train_data
 
 random.seed(1)
 np.random.seed(1)
@@ -29,12 +36,13 @@ if not os.path.exists(dir_path):
 cifa_data_image = []
 cifa_data_label = []
 
-cifa_data_image.extend(trainset.data)
-cifa_data_image.extend(testset.data)
-cifa_data_label.extend(trainset.targets)
-cifa_data_label.extend(testset.targets)
+cifa_data_image.extend(trainset.data.cpu().detach().numpy())
+cifa_data_image.extend(testset.data.cpu().detach().numpy())
+cifa_data_label.extend(trainset.targets.cpu().detach().numpy())
+cifa_data_label.extend(testset.targets.cpu().detach().numpy())
 cifa_data_image = np.array(cifa_data_image)
 cifa_data_label = np.array(cifa_data_label)
+
 cifa_data = []
 for i in trange(10):
     idx = cifa_data_label==i
