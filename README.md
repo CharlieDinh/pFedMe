@@ -7,7 +7,7 @@ Full paper: https://arxiv.org/pdf/2006.08848.pdf
 
 **Paper is accepted by NeurIPS 2020.**
 
-This repository not only implements pFedMe but also FedAvg, and Per-FedAvg algorithms.
+This repository does not only implement pFedMe but also FedAvg, and Per-FedAvg algorithms.
 (Federated Learning using Pytorch)
 
 # Software requirements:
