@@ -1,11 +1,12 @@
-# Personalized Federated Learning with Moreau Envelopes (accepted by NeurIPS 2020)
+# Personalized Federated Learning with Moreau Envelopes (NeurIPS 2020)
 This repository implements all experiments in the paper the **Personalized Federated Learning with Moreau Envelopes**.
   
 Authors: Canh T. Dinh, Nguyen H. Tran, Tuan Dung Nguyen
 
 Full paper: https://arxiv.org/pdf/2006.08848.pdf
+https://proceedings.neurips.cc/paper/2020/file/f4f1f13c8289ac1b1ee0ff176b56fc60-Paper.pdf
 
-**Paper is accepted by NeurIPS 2020.**
+**Paper has been accepted by NeurIPS 2020.**
 
 This repository does not only implement pFedMe but also FedAvg, and Per-FedAvg algorithms.
 (Federated Learning using Pytorch)
