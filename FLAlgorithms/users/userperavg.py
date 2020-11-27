@@ -70,7 +70,7 @@ class UserPerAvg(User):
         loss.backward()
         self.optimizer.step()
             #step 2
-        X, y = self.get_next_train_batch()
+        X, y = self.get_next_test_batch()
         self.optimizer.zero_grad()
         output = self.model(X)
         loss = self.loss(output, y)
