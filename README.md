@@ -1,5 +1,5 @@
 # Personalized Federated Learning with Moreau Envelopes (NeurIPS 2020)
-This repository implements all experiments in the paper the **Personalized Federated Learning with Moreau Envelopes**.
+This repository implements all experiments in the paper **Personalized Federated Learning with Moreau Envelopes**.
   
 Authors: Canh T. Dinh, Nguyen H. Tran, Tuan Dung Nguyen
 
