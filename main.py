@@ -15,38 +15,41 @@ import torch
 torch.manual_seed(0)
 
 def main(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters,
-         local_epochs, optimizer, numusers, K, personal_learning_rate, times):\
+         local_epochs, optimizer, numusers, K, personal_learning_rate, times, gpu):
+
+    # Get device status: Check GPU or CPU
+    device = torch.device("cuda:{}".format(gpu) if torch.cuda.is_available() and gpu != -1 else "cpu")
 
     for i in range(times):
         print("---------------Running time:------------",i)
         # Generate model
         if(model == "mclr"):
             if(dataset == "Mnist"):
-                model = Mclr_Logistic(), model
+                model = Mclr_Logistic().to(device), model
             else:
-                model = Mclr_Logistic(60,10), model
+                model = Mclr_Logistic(60,10).to(device), model
                 
         if(model == "cnn"):
             if(dataset == "Mnist"):
-                model = Net(), model
+                model = Net().to(device), model
             elif(dataset == "Cifar10"):
-                model = CifarNet(), model
+                model = CifarNet().to(device), model
             
         if(model == "dnn"):
             if(dataset == "Mnist"):
-                model = DNN(), model
+                model = DNN().to(device), model
             else: 
-                model = DNN(60,20,10), model
+                model = DNN(60,20,10).to(device), model
 
         # select algorithm
         if(algorithm == "FedAvg"):
-            server = FedAvg(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, i)
+            server = FedAvg(device, dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, i)
         
         if(algorithm == "pFedMe"):
-            server = pFedMe(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
+            server = pFedMe(device, dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, K, personal_learning_rate, i)
 
         if(algorithm == "PerAvg"):
-            server = PerAvg(dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, i)
+            server = PerAvg(device, dataset, algorithm, model, batch_size, learning_rate, beta, lamda, num_glob_iters, local_epochs, optimizer, numusers, i)
 
         server.train()
         server.test()
@@ -74,6 +77,7 @@ if __name__ == "__main__":
     parser.add_argument("--K", type=int, default=5, help="Computation steps")
     parser.add_argument("--personal_learning_rate", type=float, default=0.09, help="Persionalized learning rate to caculate theta aproximately using K steps")
     parser.add_argument("--times", type=int, default=5, help="running time")
+    parser.add_argument("--gpu", type=int, default=0, help="Which GPU to run the experiments, -1 mean CPU, 0,1,2 for GPU")
     args = parser.parse_args()
 
     print("=" * 80)
@@ -103,5 +107,6 @@ if __name__ == "__main__":
         numusers = args.numusers,
         K=args.K,
         personal_learning_rate=args.personal_learning_rate,
-        times = args.times
+        times = args.times,
+        gpu=args.gpu
         )

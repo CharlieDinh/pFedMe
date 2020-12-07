@@ -11,9 +11,9 @@ import copy
 # Implementation for pFeMe clients
 
 class UserpFedMe(User):
-    def __init__(self, numeric_id, train_data, test_data, model, batch_size, learning_rate,beta,lamda,
+    def __init__(self, device, numeric_id, train_data, test_data, model, batch_size, learning_rate,beta,lamda,
                  local_epochs, optimizer, K, personal_learning_rate):
-        super().__init__(numeric_id, train_data, test_data, model[0], batch_size, learning_rate, beta, lamda,
+        super().__init__(device, numeric_id, train_data, test_data, model[0], batch_size, learning_rate, beta, lamda,
                          local_epochs)
 
         if(model[1] == "Mclr_CrossEntropy"):

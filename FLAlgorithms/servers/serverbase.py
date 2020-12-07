@@ -6,10 +6,11 @@ from utils.model_utils import Metrics
 import copy
 
 class Server:
-    def __init__(self, dataset,algorithm, model, batch_size, learning_rate ,beta, lamda,
+    def __init__(self, device, dataset,algorithm, model, batch_size, learning_rate ,beta, lamda,
                  num_glob_iters, local_epochs, optimizer,num_users, times):
 
         # Set up the main attributes
+        self.device = device
         self.dataset = dataset
         self.num_glob_iters = num_glob_iters
         self.local_epochs = local_epochs

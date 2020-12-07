@@ -11,8 +11,9 @@ class User:
     """
     Base class for users in federated learning.
     """
-    def __init__(self, id, train_data, test_data, model, batch_size = 0, learning_rate = 0, beta = 0 , lamda = 0, local_epochs = 0):
-        # from fedprox
+    def __init__(self, device, id, train_data, test_data, model, batch_size = 0, learning_rate = 0, beta = 0 , lamda = 0, local_epochs = 0):
+
+        self.device = device
         self.model = copy.deepcopy(model)
         self.id = id  # integer
         self.train_samples = len(train_data)
@@ -70,6 +71,7 @@ class User:
         self.model.eval()
         test_acc = 0
         for x, y in self.testloaderfull:
+            x, y = x.to(self.device), y.to(self.device)
             output = self.model(x)
             test_acc += (torch.sum(torch.argmax(output, dim=1) == y)).item()
             #@loss += self.loss(output, y)
@@ -82,6 +84,7 @@ class User:
         train_acc = 0
         loss = 0
         for x, y in self.trainloaderfull:
+            x, y = x.to(self.device), y.to(self.device)
             output = self.model(x)
             train_acc += (torch.sum(torch.argmax(output, dim=1) == y)).item()
             loss += self.loss(output, y)
@@ -94,6 +97,7 @@ class User:
         test_acc = 0
         self.update_parameters(self.persionalized_model_bar)
         for x, y in self.testloaderfull:
+            x, y = x.to(self.device), y.to(self.device)
             output = self.model(x)
             test_acc += (torch.sum(torch.argmax(output, dim=1) == y)).item()
             #@loss += self.loss(output, y)
@@ -108,6 +112,7 @@ class User:
         loss = 0
         self.update_parameters(self.persionalized_model_bar)
         for x, y in self.trainloaderfull:
+            x, y = x.to(self.device), y.to(self.device)
             output = self.model(x)
             train_acc += (torch.sum(torch.argmax(output, dim=1) == y)).item()
             loss += self.loss(output, y)
@@ -124,7 +129,7 @@ class User:
             # restart the generator if the previous generator is exhausted.
             self.iter_trainloader = iter(self.trainloader)
             (X, y) = next(self.iter_trainloader)
-        return (X, y)
+        return (X.to(self.device), y.to(self.device))
     
     def get_next_test_batch(self):
         try:
@@ -134,7 +139,7 @@ class User:
             # restart the generator if the previous generator is exhausted.
             self.iter_testloader = iter(self.testloader)
             (X, y) = next(self.iter_testloader)
-        return (X, y)
+        return (X.to(self.device), y.to(self.device))
 
     def save_model(self):
         model_path = os.path.join("models", self.dataset)
