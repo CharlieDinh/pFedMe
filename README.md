@@ -130,3 +130,10 @@ To produce results in the table of fine-tune parameter:
 
 ## Effect of hyper-parameters:
 For all the figures for effect of hyper-parameters, we use Mnist dataset and fix the learning_rate == 0.005 and personal_learning_rate == 0.09 for all experiments. Other parameters are changed according to the experiments. Only in the experiments for the effects of $\beta$, in case $\beta = 4$, we use learning_rate == 0.003 to stable the algorithm.
+
+## CIFAR10:
+The implementation of Cifar10 has been finished. However, we haven't fine-tuned the parameters for all algorithms on Cifar10. Below is the comment to run cifar10 on pFedMe.
+
+<pre><code>
+python3 main.py --dataset Cifar10 --model cnn --batch_size 20 --learning_rate 0.01 --personal_learning_rate 0.01 --beta 1 --lamda 15 --num_global_iters 800 --local_epochs 20 --algorithm pFedMe --numusers 5 
+</code></pre>
