@@ -1,4 +1,5 @@
 from sklearn.datasets import fetch_mldata
+from sklearn.model_selection import train_test_split
 from tqdm import trange
 import numpy as np
 import random
@@ -23,6 +24,11 @@ random.seed(1)
 np.random.seed(1)
 NUM_USERS = 20 # should be muitiple of 10
 NUM_LABELS = 3
+
+# numran1 = random.randint(10, 50)
+# numran2 = random.randint(1, 10)
+# num_samples = (num_samples) * numran2 + numran1 #+ 100
+
 # Setup directory for train/test data
 train_path = './data/train/cifa_train.json'
 test_path = './data/test/cifa_test.json'
@@ -84,9 +90,8 @@ for user in trange(NUM_USERS):
         # l = (2*user+j)%10
         l = (user + j) % 10
         num_samples = int(props[l, user//int(NUM_USERS/10), j])
-        numran1 = random.randint(10, 200)
-        numran2 = random.randint(1, 10)
-        num_samples = (num_samples) * numran2 + numran1 + 200
+        numran1 = random.randint(300, 600)
+        num_samples = (num_samples)  + numran1 #+ 200
         if(NUM_USERS <= 20): 
             num_samples = num_samples * 2
         if idx[l] + num_samples < len(cifa_data[l]):
@@ -106,22 +111,19 @@ test_data = {'users': [], 'user_data':{}, 'num_samples':[]}
 # for i in trange(5, ncols=120):
 for i in range(NUM_USERS):
     uname = 'f_{0:05d}'.format(i)
-    
-    combined = list(zip(X[i], y[i]))
-    random.shuffle(combined)
-    X[i][:], y[i][:] = zip(*combined)
-    num_samples = len(X[i])
-    train_len = int(0.75*num_samples)
-    test_len = num_samples - train_len
-    
-    train_data['users'].append(uname) 
-    train_data['user_data'][uname] = {'x': X[i][:train_len], 'y': y[i][:train_len]}
-    train_data['num_samples'].append(train_len)
-    test_data['users'].append(uname)
-    test_data['user_data'][uname] = {'x': X[i][train_len:], 'y': y[i][train_len:]}
-    test_data['num_samples'].append(test_len)
 
-print("Num_samples:", train_data['num_samples'])
+    X_train, X_test, y_train, y_test = train_test_split(X[i], y[i], train_size=0.75, stratify=y[i])
+
+    train_data["user_data"][uname] = {'x': X_train, 'y': y_train}
+    train_data['users'].append(uname)
+    train_data['num_samples'].append(len(y_train))
+    
+    test_data['users'].append(uname)
+    test_data["user_data"][uname] = {'x': X_test, 'y': y_test}
+    test_data['num_samples'].append(len(y_test))
+
+print("Num_samples train :", train_data['num_samples'])
+print("Num_samples test :", test_data['num_samples'])
 print("Total_samples:",sum(train_data['num_samples'] + test_data['num_samples']))
     
 with open(train_path,'w') as outfile:
