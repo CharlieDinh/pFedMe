@@ -36,7 +36,7 @@ print("idx",idx)
 # devide for label for each users:
 for user in trange(NUM_USERS):
     for j in range(NUM_LABELS):  # 4 labels for each users
-        l = (user + j) % 10
+        l = (user * NUM_USERS + j) % 10
         users_lables.append(l)
 unique, counts = np.unique(users_lables, return_counts=True)
 print("--------------")
@@ -74,6 +74,7 @@ print(number_samples)
 # Assign 100 samples to each user
 X = [[] for _ in range(NUM_USERS)]
 y = [[] for _ in range(NUM_USERS)]
+idx = np.zeros(10, dtype=np.int64)
 count = 0
 for user in trange(NUM_USERS):
     for j in range(NUM_LABELS):  # 4 labels for each users
@@ -83,7 +84,7 @@ for user in trange(NUM_USERS):
         num_samples =  number_samples[count] # num sample
         count = count + 1
         if idx[l] + num_samples < len(mnist_data[l]):
-            X[user] += mnist_data[l][idx[l]:num_samples].tolist()
+            X[user] += mnist_data[l][idx[l]:idx[l]+num_samples].values.tolist()
             y[user] += (l*np.ones(num_samples)).tolist()
             idx[l] += num_samples
             print("check len os user:", user, j,"len data", len(X[user]), num_samples)
