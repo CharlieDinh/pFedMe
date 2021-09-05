@@ -73,14 +73,14 @@ class UserPerAvg(User):
     def train_one_step(self):
         self.model.train()
         #step 1
-        X, y = self.get_next_test_batch()
+        X, y = self.get_next_train_batch()
         self.optimizer.zero_grad()
         output = self.model(X)
         loss = self.loss(output, y)
         loss.backward()
         self.optimizer.step()
             #step 2
-        X, y = self.get_next_test_batch()
+        X, y = self.get_next_train_batch()
         self.optimizer.zero_grad()
         output = self.model(X)
         loss = self.loss(output, y)
