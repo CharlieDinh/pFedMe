@@ -127,3 +127,16 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+#Dataset
+#General
+.tar.gz
+train/
+test/
+
+#Cifar10
+cifar-10-batches-py/
+
+#Mnist
+openml/
