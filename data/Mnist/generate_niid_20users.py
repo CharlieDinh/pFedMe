@@ -20,7 +20,7 @@ if not os.path.exists(dir_path):
     os.makedirs(dir_path)
 
 # Get MNIST data, normalize, and divide by level
-mnist = fetch_openml('mnist_784', data_home='./data')
+mnist = fetch_openml('mnist_784', data_home='./data/Mnist')
 mu = np.mean(mnist.data.astype(np.float32), 0)
 sigma = np.std(mnist.data.astype(np.float32), 0)
 mnist.data = (mnist.data.astype(np.float32) - mu)/(sigma+0.001)
